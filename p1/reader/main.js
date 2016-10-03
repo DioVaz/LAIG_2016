@@ -4,33 +4,33 @@ serialInclude=function(a){var b=console,c=serialInclude.l;if(a.length>0)c.splice
 
 function getUrlVars() {
     var vars = {};
-    var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi,    
+    var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi,
     function(m,key,value) {
       vars[decodeURIComponent(key)] = decodeURIComponent(value);
     });
     return vars;
-}	 
+}
 
-serialInclude(['../lib/CGF.js', 
+serialInclude(['../lib/CGF.js',
 'primitives/MyTriangle.js',
-'primitives/MyRectangle.js', 
+'primitives/MyRectangle.js',
 'primitives/MyFullCylinder.js',
 'primitives/MyCircle.js',
 'primitives/MyCylinder.js',
 'primitives/MySphere.js',
 'LSXSceneGraph.js',
-'LSXReader.js', 
-'LSXScene.js', 
+'LSXReader.js',
+'LSXScene.js',
 'MyInterface.js',
-'Initials.js', 
+'Initials.js',
 'Illumination.js',
-'Light.js', 
-'Texture.js', 
+'Light.js',
+'Texture.js',
 'Leaf.js',
-'LeafCylinder.js', 
+'LeafCylinder.js',
 'LeafRectangle.js',
 'LeafSphere.js',
-'LeafTriangle.js', 
+'LeafTriangle.js',
 'Material.js',
 'Node.js',
 
@@ -50,14 +50,14 @@ main=function()
 
     myInterface.setActiveCamera(myScene.camera);
 
-	// get file name provided in URL, e.g. http://localhost/myproj/?file=myfile.xml 
-	// or use "demo.xml" as default (assumes files in subfolder "scenes", check MySceneGraph constructor) 
-	
-	var filename=getUrlVars()['file'] || "worldScene.lsx";
+	// get file name provided in URL, e.g. http://localhost/myproj/?file=myfile.xml
+	// or use "demo.xml" as default (assumes files in subfolder "scenes", check MySceneGraph constructor)
+
+	var filename=getUrlVars()['file'] || "t1.lsx";
 
 	//Loads the graph from lsx filename
 	var myGraph = new LSXSceneGraph(filename, myScene);
-	
+
 	// start
     app.run();
 }
