@@ -3,7 +3,7 @@
 <views default="inicial" >
 
     <perspective id="primeira" near="1" far="2" angle="3">
-        <from x="4" y="5" z="6" />
+        <from x="4.0" y="5.0" z="6.0" />
         <to x="7" y="8" z="9" />
     </perspective>
 

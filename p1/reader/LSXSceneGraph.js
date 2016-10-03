@@ -65,7 +65,7 @@ LSXSceneGraph.prototype.parseSceneGraph = function(rootElement) {
     if (rootElement.nodeName != "SCENE") {
         return "Not a SCENE file";
     }
-
+	/*
 	//The order must be correct
 	if (rootElement.children[0].nodeName != "views" ||
 		rootElement.children[1].nodeName != "ILLUMINATION" ||
@@ -77,9 +77,9 @@ LSXSceneGraph.prototype.parseSceneGraph = function(rootElement) {
 			error = "The order of the TAGS is wrong";
 			return error;
 	}
-
+	*/
   console.log("*******VIEWS*******");
-    var error = this.parseViewsnitials(rootElement);
+    var error = this.parseViews(rootElement);
     if (error) {
         return error;
     }
@@ -139,12 +139,79 @@ LSXSceneGraph.prototype.parseViews = function (rootElement) {
   var perspectivesLength = perspectivesCollection.length;
 
   console.log(perspectivesLength);
-}
+    var i, id, near, far, angle;
+    var to = [];
+	var from = [];
+    var fromTag, toTag;
+
+
+    for(i=0;i<perspectivesLength;i++){
+        id = this.reader.getString(perspectivesCollection[i],'id',1);
+        console.log("id: "+id);
+
+        near = this.reader.getFloat(perspectivesCollection[i], 'near', 1);
+        console.log("near: "+near);
+
+
+        far = this.reader.getFloat(perspectivesCollection[i], 'far', 1);
+        console.log("far: "+ far);
+
+
+        angle = this.reader.getFloat(perspectivesCollection[i], 'angle', 1);
+        console.log("angle: "+ angle);
+
+        fromTag = perspectivesCollection[0].getElementsByTagName('from');
+        console.log(fromTag[0]);
+        if(fromTag != null && fromTag.length != 0){
+            if(this.reader.hasAttribute(fromTag[0],'x')) {
+				console.log("entrou111");
+			}
+
+            from[0] = this.reader.getFloat(fromTag[0], 'x', 1);
+            console.log("passou");
+
+            from[1] = this.reader.getFloat(fromTag[0],'y',1);
+            from[2] = this.reader.getFloat(fromTag[0],'z',1);
+            console.log(from);
+
+        }
+
+		toTag = perspectivesCollection[0].getElementsByTagName('to');
+		console.log(toTag[0]);
+		if(toTag != null && toTag.length != 0){
+			if(this.reader.hasAttribute(toTag[0],'x')) {
+				console.log("entrou111");
+			}
+
+			to[0] = this.reader.getFloat(toTag[0], 'x', 1);
+			console.log("passou");
+
+			to[1] = this.reader.getFloat(toTag[0],'y',1);
+			to[2] = this.reader.getFloat(toTag[0],'z',1);
+			console.log(to);
+
+		}
+
+		fromTag = null;
+		toTag = null;
+		from = null;
+		to = null;
+		id = null;
+		near = null;
+		far = null;
+		angle = null;
+
+	}
+
+
+};
 
 /*
  *@param rootElement SCENE tag from LSX
  * Parse tag INITIALS from LSX
  */
+
+/*
 LSXSceneGraph.prototype.parseInitials = function(rootElement) {
 
 	//Get INITIAlS
@@ -276,6 +343,7 @@ LSXSceneGraph.prototype.parseInitials = function(rootElement) {
 	this.initials.referenceLength = this.reader.getFloat(reference, "length");
 
 };
+*/
 
 /*
  *@param rootElement SCENE tag from LSX
