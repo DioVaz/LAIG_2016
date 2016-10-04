@@ -27,7 +27,7 @@ function LSXSceneGraph(filename, scene) {
 	scene.graph=this;
 
 	//File reader
-	this.reader = new LSXReader();
+	this.reader = new DSXReader();
 
 
 	//Reads content of filename. Returns message erros in case of fail
@@ -67,29 +67,35 @@ LSXSceneGraph.prototype.parseSceneGraph = function(rootElement) {
     }
 	/*
 	//The order must be correct
-	if (rootElement.children[0].nodeName != "views" ||
-		rootElement.children[1].nodeName != "ILLUMINATION" ||
-		rootElement.children[2].nodeName != "LIGHTS" ||
-		rootElement.children[3].nodeName != "TEXTURES" ||
-		rootElement.children[4].nodeName != "MATERIALS" ||
-		rootElement.children[5].nodeName != "LEAVES" ||
-		rootElement.children[6].nodeName != "NODES"){
+  //
+	if (
+      rootElement.children[0].nodeName != "scene" ||
+  		rootElement.children[1].nodeName != "views" ||
+  		rootElement.children[2].nodeName != "illumination" ||
+  		rootElement.children[3].nodeName != "lights" ||
+  		rootElement.children[4].nodeName != "textures" ||
+  		rootElement.children[5].nodeName != "materials" ||
+      rootElement.children[6].nodeName != "transformations" ||
+      rootElement.children[7].nodeName != "primitives" ||
+  		rootElement.children[8].nodeName != "components"){
 			error = "The order of the TAGS is wrong";
 			return error;
 	}
 	*/
+
+  /*
+  console.log("*******SCENE*******");
+    //var error = this.parseScene(rootElement);
+    if (error) {
+        return error;
+    }
+  */
   console.log("*******VIEWS*******");
     var error = this.parseViews(rootElement);
     if (error) {
         return error;
     }
   /*
-	console.log("*******INITIALS*******");
-    var error = this.parseInitials(rootElement);
-    if (error) {
-        return error;
-    }
-
 	console.log("*******ILLUMINATION*******");
     error = this.parseIllumination(rootElement);
     if (error) {
@@ -114,14 +120,20 @@ LSXSceneGraph.prototype.parseSceneGraph = function(rootElement) {
         return error;
     }
 
-	console.log("*******LEAVES*******");
-    error = this.parseLeaves(rootElement);
+    console.log("*******TRANSFORMATIONS*******");
+    //  error = this.parseTransformations(rootElement);
+      if (error) {
+          return error;
+      }
+
+	console.log("*******PRIMITIVES*******");
+    //error = this.parsePrimitives(rootElement);
     if (error) {
         return error;
     }
 
-	console.log("*******NODES*******");
-    error = this.parseNodes(rootElement);
+	console.log("*******COMPONENTS*******");
+    //error = this.parseNodes(rootElement);
     if (error) {
         return error;
     }

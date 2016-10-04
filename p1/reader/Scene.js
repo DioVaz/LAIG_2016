@@ -1,8 +1,8 @@
 /**
- * Initials
+ * Scene
  * @constructor
  */
-function Initials() {
+function Scene() {
     this.frustum = {near: 0, far: 0};
 
     this.localTransformations = mat4.create();
@@ -11,5 +11,5 @@ function Initials() {
     this.referenceLength = 0;
 };
 
-Initials.prototype = Object.create(Object.prototype);
-Initials.prototype.constructor = Initials;
+Scene.prototype = Object.create(Object.prototype);
+Scene.prototype.constructor = Scene;

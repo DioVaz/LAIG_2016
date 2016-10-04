@@ -1,18 +1,18 @@
 /*
- * LSXReader extends CGFXMLreader
+ * DSXReader extends CGFXMLreader
 */
-function LSXReader() {
+function DSXReader() {
     CGFXMLreader.call(this);
 }
 
-LSXReader.prototype = Object.create(CGFXMLreader.prototype);
-LSXReader.prototype.constructor = LSXReader;
+DSXReader.prototype = Object.create(CGFXMLreader.prototype);
+DSXReader.prototype.constructor = DSXReader;
 
 /*
  * Reads elemet from LSX of type r,g,b,a
 */
-LSXReader.prototype.getRGBA = function(color) {
-    
+DSXReader.prototype.getRGBA = function(color) {
+
     if (color == null) {
         console.error("color is null");
         return null;
@@ -30,7 +30,7 @@ LSXReader.prototype.getRGBA = function(color) {
         console.error("G is null");
         return null;
     }
-    
+
     rgba[2] = color.getAttribute("b");
     if (rgba[2] == null) {
         console.error("B is null");
@@ -49,8 +49,8 @@ LSXReader.prototype.getRGBA = function(color) {
 /*
  * Process element with various floats attributes
  */
-LSXReader.prototype.getArrayOfFloats = function(element, name, num) {
-  
+DSXReader.prototype.getArrayOfFloats = function(element, name, num) {
+
     if (element == null) {
         console.error("Element is null");
         return null;
@@ -66,7 +66,7 @@ LSXReader.prototype.getArrayOfFloats = function(element, name, num) {
     }
 
     var nFloats = attribute.match(/\S+/g);
-    
+
     if (nFloats.length != num) {
         console.error("Number of attributes is wrong for " + name);
         return null;
@@ -78,7 +78,7 @@ LSXReader.prototype.getArrayOfFloats = function(element, name, num) {
         var value = parseFloat(nFloats[i]);
         if (isNaN(value)) {
             console.error("Value is not float for" + name);
-            return null;       
+            return null;
         }
         makeArray.push(value);
     }

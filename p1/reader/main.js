@@ -19,18 +19,18 @@ serialInclude(['../lib/CGF.js',
 'primitives/MyCylinder.js',
 'primitives/MySphere.js',
 'LSXSceneGraph.js',
-'LSXReader.js',
-'LSXScene.js',
+'DSXReader.js',
+'DSXScene.js',
 'MyInterface.js',
 'Initials.js',
 'Illumination.js',
 'Light.js',
 'Texture.js',
-'Leaf.js',
-'LeafCylinder.js',
-'LeafRectangle.js',
-'LeafSphere.js',
-'LeafTriangle.js',
+'leafs/Leaf.js',
+'leafs/LeafCylinder.js',
+'leafs/LeafRectangle.js',
+'leafs/LeafSphere.js',
+'leafs/LeafTriangle.js',
 'Material.js',
 'Node.js',
 
@@ -38,22 +38,22 @@ main=function()
 {
 	// Standard application, scene and interface setup
     var app = new CGFapplication(document.body);
-    var myScene = new LSXScene();
+    var myScene = new DSXScene();
     var myInterface = new MyInterface();
 
     app.init();
 
     app.setInterface(myInterface);
     app.setScene(myScene);
-	myScene.setInterface(myInterface);
-	myInterface.setScene(myScene);
+	  myScene.setInterface(myInterface);
+	  myInterface.setScene(myScene);
 
     myInterface.setActiveCamera(myScene.camera);
 
 	// get file name provided in URL, e.g. http://localhost/myproj/?file=myfile.xml
 	// or use "demo.xml" as default (assumes files in subfolder "scenes", check MySceneGraph constructor)
 
-	var filename=getUrlVars()['file'] || "t1.lsx";
+	var filename=getUrlVars()['file'] || "t1.dsx";
 
 	//Loads the graph from lsx filename
 	var myGraph = new LSXSceneGraph(filename, myScene);
