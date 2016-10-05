@@ -21,6 +21,7 @@ function DSXSceneGraph(filename, scene) {
   this.spots = [];
   this.textures = [];
   this.materials = [];
+  this.transformations = [];
   this.leaves = [];
   this.nodes = [];
   this.scene = scene;
@@ -487,19 +488,66 @@ DSXSceneGraph.prototype.parseMaterials = function(rootElement) {
 
 		this.materials[id] = new Material(this.scene,id);
 
-		data = this.reader.getRGBA(material.children[0]);
+		var data = this.reader.getRGBA(material.children[0]);
 		this.materials[id].setEmission(data[0],data[1],data[2],data[3]);
     data = this.reader.getRGBA(material.children[1]);
 		this.materials[id].setAmbient(data[0],data[1],data[2],data[3]);
     data = this.reader.getRGBA(material.children[2]);
 		this.materials[id].setDiffuse(data[0],data[1],data[2],data[3]);
-    var data = this.reader.getRGBA(material.children[3]);
+    data = this.reader.getRGBA(material.children[3]);
 		this.materials[id].setSpecular(data[0],data[1],data[2],data[3]);
     var shininess = this.reader.getFloat(material.children[4],"value");
     this.materials[id].setShininess(shininess);
 	}
 }
 
+/*
+ *@param rootElement SCENE tag from DSX
+ * Parse tag TRANSFORMATIONS from DSX
+ */
+DSXSceneGraph.prototype.parseTransformations = function(rootElement) {
+	//Get TRANSFORMATIONS
+    var tempMat =  rootElement.getElementsByTagName("transformations");
+	if (tempMat == null) {
+		return "TRANSFORMATIONS is missing.";
+	}
+
+	if (tempMat.length != 1) {
+		return "Only one TRANSFORMATIONS is allowed.";
+	}
+
+	var transformations = tempMat[0];
+
+	//Get each transformation
+	for(var i = 0; i < transformations.children.length; ++i){
+		var transformation = transformations.children[i];
+		var id = this.reader.getString(transformation,"id");
+		if (id in this.transformations)
+			return "Duplicate transformation id: " + id;
+
+		//this.transformations[id] = new Transformation(this.scene,id); CRIAR CLASSE
+
+    var translate = [];
+    //translate of transformation
+    translate.push(this.reader.getFloat(transformation.children[0], "x"));
+    translate.push(this.reader.getFloat(transformation.children[0], "y"));
+    translate.push(this.reader.getFloat(transformation.children[0], "z"));
+    translate.push(this.reader.getFloat(transformation.children[0], "w"));
+    //this.transformations[id].settranslate(translate[0], translate[1], translate[2], translate[3]);
+
+    var axis = this.reader.getString(transformation.children[1],"axis");
+    var angle = this.reader.getFloat(transformation.children[1],"angle");
+
+    var scale = [];
+    //scale of transformation
+    scale.push(this.reader.getFloat(transformation.children[2], "x"));
+    scale.push(this.reader.getFloat(transformation.children[2], "y"));
+    scale.push(this.reader.getFloat(transformation.children[2], "z"));
+    scale.push(this.reader.getFloat(transformation.children[2], "w"));
+    //this.transformations[id].setscale(scale[0], scale[1], scale[2], scale[3]);
+
+	}
+}
 /*
  *@param rootElement SCENE tag from DSX
  * Parse tag LEAVES from DSX - sets all primitives for the scene
