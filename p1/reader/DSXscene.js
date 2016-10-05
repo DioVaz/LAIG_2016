@@ -18,7 +18,7 @@ DSXScene.prototype.init = function (application) {
     CGFscene.prototype.init.call(this, application);
 
     this.myinterface = null;
- DSXScenegraph = null;
+    DSXScenegraph = null;
 
     this.initCameras(); //Set default configuration of camera view
 
@@ -69,11 +69,9 @@ DSXScene.prototype.setDefaultAppearance = function () {
  */
 DSXScene.prototype.onGraphLoaded = function ()
 {
-	this.camera.near = this.graph.initials.frustum.near;
-	this.camera.far = this.graph.initials.frustum.far;
 
-    if (this.graph.initials.referenceLength > 0)
-	   this.axis = new CGFaxis(this, this.graph.initials.referenceLength);
+    if (this.graph.scene.referenceLength > 0)
+	   this.axis = new CGFaxis(this, this.graph.scene.referenceLength);
 
 	this.gl.clearColor(this.graph.illumination.background[0],this.graph.illumination.background[1],this.graph.illumination.background[2],this.graph.illumination.background[3]);
 	this.setGlobalAmbientLight(this.graph.illumination.ambient[0],this.graph.illumination.ambient[1],this.graph.illumination.ambient[2],this.graph.illumination.ambient[3]);
@@ -81,7 +79,7 @@ DSXScene.prototype.onGraphLoaded = function ()
 	this.lights = [];
 
 	//load lights from the Grahps
-	//All lights are invisible, enabled or not depends from the lsx
+	//All lights are invisible, enabled or not depends from the DSX
     for (var i = 0; i < this.graph.lights.length; ++i) {
     	this.lights.push(this.graph.lights[i]);
     	this.lights[i].setVisible(false);
@@ -138,10 +136,10 @@ DSXScene.prototype.display = function () {
 	this.applyViewMatrix();
 
 
-	//Process scene if LSX read ok
+	//Process scene if DSX read ok
 	if (this.graph != null && this.graph.loadedOk)
 	{
-		this.multMatrix(this.graph.initials.localTransformations);
+
 
 		for (var i = 0; i < this.lights.length; ++i)
 			this.lights[i].update();
@@ -228,7 +226,7 @@ DSXScene.prototype.processNode = function(node, parentTexture, parentMaterial) {
  * @param lightId
  * @param enable boolean
  */
-LSXScene.prototype.updateLight = function(lightId, enable) {
+DSXScene.prototype.updateLight = function(lightId, enable) {
 
 	//Switch only one light
 	if(lightId != this.allLights){

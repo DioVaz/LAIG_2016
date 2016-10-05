@@ -1,12 +1,12 @@
 //Constant to convert degrees in radians
 deg2rad = Math.PI / 180
 /*
- * LSXSceneGraph
+ * DSXSceneGraph
  * @constructor
  * @param filename filename of the scene
  * @param CGFscene object
 */
-function LSXSceneGraph(filename, scene) {
+function DSXSceneGraph(filename, scene) {
     if (typeof scene.onGraphLoaded !== 'function') {
 		console.error("onGraphLoaded not defined in scene");
 		return;
@@ -14,17 +14,18 @@ function LSXSceneGraph(filename, scene) {
 	this.loadedOk = null;
 	this.filename = 'scenes/'+filename;
 
-    this.initials = new Initials();
-    this.illumination = new Illumination();
-    this.lights = [];
-    this.textures = [];
-    this.materials = [];
-    this.leaves = [];
-    this.nodes = [];
-
-
-	this.scene = scene;
-	scene.graph=this;
+  //***************UPDATE LATER*************
+  this.scene = new Scene();
+  this.illumination = new Illumination();
+  this.omni = [];
+  this.spots = [];
+  this.textures = [];
+  this.materials = [];
+  this.leaves = [];
+  this.nodes = [];
+  this.scene = scene;
+  scene.graph=this;
+  //***************UPDATE LATER*************
 
 	//File reader
 	this.reader = new DSXReader();
@@ -37,7 +38,7 @@ function LSXSceneGraph(filename, scene) {
 /*
  * Function called if the XML was sucessful read
  */
-LSXSceneGraph.prototype.onXMLReady=function()
+DSXSceneGraph.prototype.onXMLReady=function()
 {
 	console.log("XML Loading finished.");
 	var rootElement = this.reader.xmlDoc.documentElement;
@@ -56,10 +57,10 @@ LSXSceneGraph.prototype.onXMLReady=function()
 };
 
 /*
- *@param rootElement SCENE tag from LSX
- * Parser of the LSX file
+ *@param rootElement SCENE tag from DSX
+ * Parser of the DSX file
  */
-LSXSceneGraph.prototype.parseSceneGraph = function(rootElement) {
+DSXSceneGraph.prototype.parseSceneGraph = function(rootElement) {
 
 
     if (rootElement.nodeName != "SCENE") {
@@ -145,7 +146,7 @@ LSXSceneGraph.prototype.parseSceneGraph = function(rootElement) {
 
 
 
-LSXSceneGraph.prototype.parseViews = function (rootElement) {
+DSXSceneGraph.prototype.parseViews = function (rootElement) {
   var viewsElement = rootElement.getElementsByTagName('views');
   var perspectivesCollection = viewsElement[0].getElementsByTagName('perspective');
   var perspectivesLength = perspectivesCollection.length;
@@ -219,151 +220,47 @@ LSXSceneGraph.prototype.parseViews = function (rootElement) {
 };
 
 /*
- *@param rootElement SCENE tag from LSX
- * Parse tag INITIALS from LSX
+ *@param rootElement SCENE tag from DSX
+ * Parse tag SCENE from DSX
  */
 
-/*
-LSXSceneGraph.prototype.parseInitials = function(rootElement) {
 
-	//Get INITIAlS
-	var initialsTemp =  rootElement.getElementsByTagName("INITIALS");
-	if (initialsTemp == null) {
-		return "INITIALS is missing";
-	}
+DSXSceneGraph.prototype.parseScene = function(rootElement) {
+  //Get SCENE
+  var sceneTemp =  rootElement.getElementsByTagName("SCENE");
+  if (sceneTemp == null) {
+    return "SCENE is missing";
+  }
 
-	if (initialsTemp.length != 1) {
-		return "Only one INITIALS is allowed";
-	}
+  if (sceneTemp.length != 1) {
+    return "Only one SCENE is allowed";
+  }
 
-	var initials = initialsTemp[0];
+  var scene = sceneTemp[0];
 
-
-	if (initials.children[1].nodeName != "translation" ||
-	    initials.children[2].nodeName != "rotation" ||
-	    initials.children[3].nodeName != "rotation" ||
-	    initials.children[4].nodeName != "rotation" ||
-	    initials.children[5].nodeName != "scale")
-			return "Write in order: Translation, Rotation, Scale";
+  //Get SCENE - root
+  this.scene.root = this.reader.getString(scene, "root");
+  if (this.scene.root == null)
+    return "Root is missing.";
+  if (isNaN(this.scene.root))
+    return "Root is NaN.";
 
 
+  //Get SCENE - axis_length
+  this.scene.axis_length = this.reader.getString(scene, "axis_length");
+  if (this.scene.axis_length == null)
+    return "axis_length is missing.";
+  if (isNaN(this.scene.axis_length))
+    return "axis_length is NaN.";
+}
 
-	//Get INITIALS - frustrum
-	frustTemp = initials.getElementsByTagName("frustum");
-	if (frustTemp == null) {
-	    return "frustum in INITIALS is missing.";
-	}
-	if (frustTemp.length != 1) {
-	    return "Only one frustum is allowed in INITIALS.";
-	}
 
-	var frustum = frustTemp[0];
-
-	this.initials.frustum.near = this.reader.getFloat(frustum, "near");
-
-	if (this.initials.frustum.near == null)
-		return "Frustum near is missing.";
-	if (isNaN(this.initials.frustum.near))
-		return "Frustum near is NaN.";
-
-	this.initials.frustum.far = this.reader.getFloat(frustum, "far");
-	if (this.initials.frustum.far == null)
-		return "Frustum far is missing.";
-	if (isNaN(this.initials.frustum.far))
-		return "Frustum far is NaN.";
-
-	//Get INITIALS - translation
-    transTemp = initials.getElementsByTagName("translation");
-	if (transTemp == null) {
-	    return "translation in INITIALS is missing.";
-	}
-	if (transTemp.length != 1) {
-	    return "Only one translation in INITIALS is allowed.";
-	}
-
-    var translation = transTemp[0];
-    var translationData = vec3.create();
-    translationData[0] = this.reader.getFloat(translation, "x");
-    if (translationData[0] == null)
-		return "Translation x attribute missing";
-	if (isNaN(translationData[0]))
-		return "Translation x is NaN";
-    translationData[1] = this.reader.getFloat(translation, "y");
-    if (translationData[1] == null)
-		return "Translation y attribute missing";
-	if (isNaN(translationData[1]))
-		return "Translation y is NaN";
-    translationData[2] = this.reader.getFloat(translation, "z");
-    if (translationData[2] == null)
-		return "Translation z attribute missing";
-	if (isNaN(translationData[2]))
-		return "Translation z is NaN";
-
-    mat4.translate(this.initials.localTransformations, this.initials.localTransformations, translationData);
-
-	//Get INITIALS - rotation
-    rotTemp = initials.getElementsByTagName("rotation");
-	if (rotTemp == null) {
-	    return "rotation in INITIALS is missing.";
-	}
-    if (rotTemp.length != 3) {
-        return "3 'rotation' elements needed in INITIALS";
-    }
-
-	var rotations = []
-    for (var i = 0; i < rotTemp.length; ++i) {
-    	var rotation = rotTemp[i];
-    	var axis = this.reader.getString(rotation, "axis");
-    	if (["x", "y", "z"].indexOf(axis) == -1)
-    		return "Unknow axis: " + axis;
-		if (axis in rotations)
-			return "Duplicate axis rotation in INITIALS " + axis;
-
-    	var angle = this.reader.getString(rotation, "angle");
-    	rotations[axis] = angle;
-    }
-	mat4.rotateX(this.initials.localTransformations, this.initials.localTransformations, rotations["x"] * Math.PI / 180);
-	mat4.rotateY(this.initials.localTransformations, this.initials.localTransformations, rotations["y"] * Math.PI / 180);
-	mat4.rotateZ(this.initials.localTransformations, this.initials.localTransformations, rotations["z"] * Math.PI / 180);
-
-	//Get INITIALS - scale
-    scaleTemp = initials.getElementsByTagName("scale");
-	if (scaleTemp == null) {
-	    return "scale in INITIALS is missing.";
-	}
-	if (scaleTemp.length != 1) {
-	    return "Only one scale is allowed in INITIALS.";
-	}
-
-	var scale = scaleTemp[0];
-    var scaleData = vec3.create();
-    scaleData[0] = this.reader.getFloat(scale, "sx");
-    scaleData[1] = this.reader.getFloat(scale, "sy");
-    scaleData[2] = this.reader.getFloat(scale, "sz");
-    mat4.scale(this.initials.localTransformations, this.initials.localTransformations, scaleData);
-
-	//Get INITIALS - reference -> reference length of axis
-    refTemp = initials.getElementsByTagName("reference");
-	if (refTemp == null) {
-	    return "reference in INITIALS is missing.";
-	}
-	if (refTemp.length != 1) {
-	    return "Only one reference in INITIALS is allowed";
-	}
-
-	var reference = refTemp[0];
-	this.initials.referenceLength = this.reader.getFloat(reference, "length");
-
-};
-*/
-
-/*
- *@param rootElement SCENE tag from LSX
- * Parse tag ILLUMINATION from LSX
+ *@param rootElement SCENE tag from DSX
+ * Parse tag ILLUMINATION from DSX
  */
-LSXSceneGraph.prototype.parseIllumination = function(rootElement) {
+DSXSceneGraph.prototype.parseIllumination = function(rootElement) {
 	//Get ILLUMINATION
-	var tempIllum =  rootElement.getElementsByTagName("ILLUMINATION");
+	var tempIllum =  rootElement.getElementsByTagName("illumination");
 	if (tempIllum == null) {
 		return "ILLUMINATION is missing.";
 	}
@@ -373,6 +270,16 @@ LSXSceneGraph.prototype.parseIllumination = function(rootElement) {
 	}
 
 	var illumination = tempIllum[0];
+
+  //Get ILLUMINATION - doublesided
+  this.illumination.doublesided = this.reader.getString(illumination, "doublesided");
+  if (this.illumination.doublesided == null)
+    return "ILLUMINATION without doublesided.";
+
+  //Get ILLUMINATION - local
+  this.illumination.local = this.reader.getString(illumination, "local");
+  if (this.illumination.local == null)
+    return "ILLUMINATION without local.";
 
 	//Get global ambient light
     tempAmb = illumination.getElementsByTagName("ambient");
@@ -403,12 +310,12 @@ LSXSceneGraph.prototype.parseIllumination = function(rootElement) {
 }
 
 /*
- *@param rootElement SCENE tag from LSX
- * Parse tag LIGHTS from LSX
+ *@param rootElement SCENE tag from DSX
+ * Parse tag LIGHTS from DSX
  */
-LSXSceneGraph.prototype.parseLights = function(rootElement) {
+DSXSceneGraph.prototype.parseLights = function(rootElement) { //por testar
 	//Get LIGHTS
-    var tempLights =  rootElement.getElementsByTagName("LIGHTS");
+    var tempLights =  rootElement.getElementsByTagName("lights");
 	if (tempLights == null) {
 		return "LIGHTS element is missing.";
 	}
@@ -419,50 +326,102 @@ LSXSceneGraph.prototype.parseLights = function(rootElement) {
 
 	//Get LIGHTS - LIGHT
 	var lights = tempLights[0];
+  var j =0;
 
 	for (var i = 0; i < lights.children.length; ++i) {
 		var light = lights.children[i];
-		if (light.nodeName != "LIGHT")
-			return "expected LIGHT in LIGHTS: " + light.nodeName;
-		var id = this.reader.getString(light, "id");
-		if (id == null)
-			return "LIGHT without id.";
+		if (light.nodeName != "omni" && i == 0)
+			return "expected omni in LIGHTS: " + light.nodeName;
+    //****OMNI*********************
+    else if (light.nodeName == "omni"){
+      var id = this.reader.getString(omni, "id");
+      if (id == null)
+        return "OMNI without id.";
+      var enable = this.reader.getBoolean(omni, "enabled");
 
-		this.lights.push(new Light(this.scene, i, id));
+      this.omni.push(new Light(this.scene, j, id)); //CRIAR CLASSE OMNI
+      if (enable)
+  			this.omni[j].enable();
+  		else
+  			this.omni[j].disable();
 
-		var enable = this.reader.getBoolean(light.children[0], "value");
-		if (enable)
-			this.lights[i].enable();
-		else
-			this.lights[i].disable();
+      var data = [];
+      //location of light
+      data.push(this.reader.getFloat(light.children[1], "x"));
+      data.push(this.reader.getFloat(light.children[1], "y"));
+      data.push(this.reader.getFloat(light.children[1], "z"));
+      data.push(this.reader.getFloat(light.children[1], "w"));
+      this.omni[j].setPosition(data[0], data[1], data[2], data[3]);
 
-		var data = [];
-		//position of light
-		data.push(this.reader.getFloat(light.children[1], "x"));
-		data.push(this.reader.getFloat(light.children[1], "y"));
-		data.push(this.reader.getFloat(light.children[1], "z"));
-		data.push(this.reader.getFloat(light.children[1], "w"));
-		this.lights[i].setPosition(data[0], data[1], data[2], data[3]);
-
-		//components of light
-		data = this.reader.getRGBA(light.children[2]);
-		this.lights[i].setAmbient(data[0], data[1], data[2], data[3]);
-
-		data = this.reader.getRGBA(light.children[3]);
-		this.lights[i].setDiffuse(data[0], data[1], data[2], data[3]);
-
-		data = this.reader.getRGBA(light.children[4]);
-		this.lights[i].setSpecular(data[0], data[1], data[2], data[3]);
+      //components of light
+      //ambient
+      data = this.reader.getRGBA(light.children[2]);
+      this.omni[j].setAmbient(data[0], data[1], data[2], data[3]);
+      //diffuse
+      data = this.reader.getRGBA(light.children[3]);
+      this.omni[j].setDiffuse(data[0], data[1], data[2], data[3]);
+      //specular
+      data = this.reader.getRGBA(light.children[4]);
+      this.omni[j].setSpecular(data[0], data[1], data[2], data[3]);
+    }
+    //*****************************
 	}
+  j=0;
+	//****SPOT*********************
+  for (var i = 0; i < lights.children.length; ++i) {
+		var light = lights.children[i];
+		if (light.nodeName == "spot"){
+      var id = this.reader.getString(spot, "id");
+      if (id == null)
+        return "SPOT without id.";
+      var enable = this.reader.getBoolean(spot, "enabled");
+      var angle = this.reader.getFloat(spot, "angle");
+      var exponent = this.reader.getFloat(spot, "exponent");
+      console.log(enable + " " + angle + " " + exponent);
+      this.spot.push(new Light(this.scene, j, id)); //CRIAR CLASSE OMNI
+      if (enable)
+  			this.spot[j].enable();
+  		else
+  			this.spot[j].disable();
+
+      var data = [];
+      //target of light
+      data.push(this.reader.getFloat(light.children[1], "x"));
+      data.push(this.reader.getFloat(light.children[1], "y"));
+      data.push(this.reader.getFloat(light.children[1], "z"));
+      data.push(this.reader.getFloat(light.children[1], "w"));
+      /*/this.spot[j].setTarget/*/console.log("targuet x="+data[0]+ " y="+data[1]+" z="+ data[2] +" w="+ data[3]);
+
+      //location of light
+      data.push(this.reader.getFloat(light.children[2], "x"));
+      data.push(this.reader.getFloat(light.children[2], "y"));
+      data.push(this.reader.getFloat(light.children[2], "z"));
+      data.push(this.reader.getFloat(light.children[2], "w"));
+      this.spot[j].setPosition(data[0], data[1], data[2], data[3]);
+
+      //components of light
+      //ambient
+      data = this.reader.getRGBA(light.children[3]);
+      this.spot[j].setAmbient(data[0], data[1], data[2], data[3]);
+      //diffuse
+      data = this.reader.getRGBA(light.children[4]);
+      this.spot[j].setDiffuse(data[0], data[1], data[2], data[3]);
+      //specular
+      data = this.reader.getRGBA(light.children[5]);
+      this.spot[j].setSpecular(data[0], data[1], data[2], data[3]);
+    }
+      //*****************************
+  	}
+
 }
 
 /*
- *@param rootElement SCENE tag from LSX
- * Parse tag TEXTURES from LSX
+ *@param rootElement SCENE tag from DSX
+ * Parse tag TEXTURES from DSX
  */
-LSXSceneGraph.prototype.parseTextures = function(rootElement) {
+DSXSceneGraph.prototype.parseTextures = function(rootElement) {
 	//Get TEXTURES
-    var tempText =  rootElement.getElementsByTagName("TEXTURES");
+    var tempText =  rootElement.getElementsByTagName("textures");
 	if (tempText == null) {
 		return "TEXTURES is missing.";
 	}
@@ -473,7 +432,7 @@ LSXSceneGraph.prototype.parseTextures = function(rootElement) {
 
 	var textures = tempText[0];
 
-	texture = textures.getElementsByTagName("TEXTURE");
+	texture = textures.getElementsByTagName("texture");
 
 	if (texture == null) {
 		console.log("TEXTURE in TEXTURES missing");
@@ -493,9 +452,9 @@ LSXSceneGraph.prototype.parseTextures = function(rootElement) {
 		if (id in this.textures)
 			return "Duplicate texture id: " + id;
 
-		var path = pathRel + '/' + this.reader.getString(NewTexture.children[0], "path");
-		var s = this.reader.getFloat(NewTexture.children[1], "s");
-		var t = this.reader.getFloat(NewTexture.children[1], "t");
+		var path = pathRel + '/' + this.reader.getString(NewTexture, "file");
+		var s = this.reader.getFloat(NewTexture, "length_s");
+		var t = this.reader.getFloat(NewTexture, "length_t");
 		this.textures[id] = new Texture(this.scene, path, id);
 		this.textures[id].setAmplifyFactor(s,t);
 	}
@@ -503,12 +462,12 @@ LSXSceneGraph.prototype.parseTextures = function(rootElement) {
 
 
 /*
- *@param rootElement SCENE tag from LSX
- * Parse tag MATERIALS from LSX
+ *@param rootElement SCENE tag from DSX
+ * Parse tag MATERIALS from DSX
  */
-LSXSceneGraph.prototype.parseMaterials = function(rootElement) {
+DSXSceneGraph.prototype.parseMaterials = function(rootElement) {
 	//Get MATERIALS
-    var tempMat =  rootElement.getElementsByTagName("MATERIALS");
+    var tempMat =  rootElement.getElementsByTagName("materials");
 	if (tempMat == null) {
 		return "MATERIALS is missing.";
 	}
@@ -527,25 +486,25 @@ LSXSceneGraph.prototype.parseMaterials = function(rootElement) {
 			return "Duplicate material id: " + id;
 
 		this.materials[id] = new Material(this.scene,id);
-		var shininess = this.reader.getFloat(material.children[0],"value");
-		this.materials[id].setShininess(shininess);
-		var data = this.reader.getRGBA(material.children[1]);
-		this.materials[id].setSpecular(data[0],data[1],data[2],data[3]);
-		data = this.reader.getRGBA(material.children[2]);
-		this.materials[id].setDiffuse(data[0],data[1],data[2],data[3]);
-		data = this.reader.getRGBA(material.children[3]);
-		this.materials[id].setAmbient(data[0],data[1],data[2],data[3]);
-		data = this.reader.getRGBA(material.children[4]);
-		this.materials[id].setEmission(data[0],data[1],data[2],data[3]);
 
+		data = this.reader.getRGBA(material.children[0]);
+		this.materials[id].setEmission(data[0],data[1],data[2],data[3]);
+    data = this.reader.getRGBA(material.children[1]);
+		this.materials[id].setAmbient(data[0],data[1],data[2],data[3]);
+    data = this.reader.getRGBA(material.children[2]);
+		this.materials[id].setDiffuse(data[0],data[1],data[2],data[3]);
+    var data = this.reader.getRGBA(material.children[3]);
+		this.materials[id].setSpecular(data[0],data[1],data[2],data[3]);
+    var shininess = this.reader.getFloat(material.children[4],"value");
+    this.materials[id].setShininess(shininess);
 	}
 }
 
 /*
- *@param rootElement SCENE tag from LSX
- * Parse tag LEAVES from LSX - sets all primitives for the scene
+ *@param rootElement SCENE tag from DSX
+ * Parse tag LEAVES from DSX - sets all primitives for the scene
  */
-LSXSceneGraph.prototype.parseLeaves = function(rootElement) {
+DSXSceneGraph.prototype.parseLeaves = function(rootElement) {
 	//Get LEAVES - primitives to be drawn
     var tempLeaves =  rootElement.getElementsByTagName("LEAVES");
 	if (tempLeaves == null) {
@@ -614,10 +573,10 @@ LSXSceneGraph.prototype.parseLeaves = function(rootElement) {
 }
 
 /*
- *@param rootElement SCENE tag from LSX
- * Parse tag NODES from LSX
+ *@param rootElement SCENE tag from DSX
+ * Parse tag NODES from DSX
  */
-LSXSceneGraph.prototype.parseNodes = function(rootElement) {
+DSXSceneGraph.prototype.parseNodes = function(rootElement) {
 	//Get NODES
     var tempNodes =  rootElement.getElementsByTagName("NODES");
 	if (tempNodes == null) {
@@ -665,7 +624,7 @@ LSXSceneGraph.prototype.parseNodes = function(rootElement) {
  * Parse each NODE
  * Called by parseNodes
  */
-LSXSceneGraph.prototype.parseNode = function(node) {
+DSXSceneGraph.prototype.parseNode = function(node) {
 	//Id of node
 	var id = this.reader.getString(node, "id");
 	console.log(id);
@@ -678,7 +637,7 @@ LSXSceneGraph.prototype.parseNode = function(node) {
 
 	//Get NODE MATERIAL
 	var childNode = node.children[0];
-	if (childNode.nodeName != "MATERIAL")
+	if (childNode.nodeName != "material")
 		return "Expected MATERIAL in NODE " + id + "in 1st child.";
 	var material = this.reader.getString(childNode, "id");
 
@@ -755,7 +714,7 @@ LSXSceneGraph.prototype.parseNode = function(node) {
  * Callback to be executed on any read error
  */
 
-LSXSceneGraph.prototype.onXMLError=function (message) {
+DSXSceneGraph.prototype.onXMLError=function (message) {
 	console.error("XML Loading Error: "+message);
 	this.loadedOk=false;
 };

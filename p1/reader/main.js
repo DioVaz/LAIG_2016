@@ -18,7 +18,7 @@ serialInclude(['../lib/CGF.js',
 'primitives/MyCircle.js',
 'primitives/MyCylinder.js',
 'primitives/MySphere.js',
-'LSXSceneGraph.js',
+'DSXSceneGraph.js',
 'DSXReader.js',
 'DSXScene.js',
 'MyInterface.js',
@@ -55,8 +55,8 @@ main=function()
 
 	var filename=getUrlVars()['file'] || "t1.dsx";
 
-	//Loads the graph from lsx filename
-	var myGraph = new LSXSceneGraph(filename, myScene);
+	//Loads the graph from dsx filename
+	var myGraph = new DSXSceneGraph(filename, myScene);
 
 	// start
     app.run();

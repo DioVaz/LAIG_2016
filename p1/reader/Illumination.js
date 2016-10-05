@@ -3,6 +3,8 @@
  * @constructor
  */
 function Illumination() {
+    this.doublesided = null;
+    this.local = null;
     this.ambient = [0, 0, 0, 0];
     this.background = [0, 0, 0, 0];
 }
