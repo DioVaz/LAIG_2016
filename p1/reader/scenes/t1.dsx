@@ -145,6 +145,25 @@
 
 </MATERIALS>
 
+ <transformations>
+
+        <!-- Deve existir um ou mais blocos "transformation" -->
+        <!-- Os identificadores "id" nao podem ser repetidos -->
+        <transformation id="1">
+           <!-- instrucoes a usar sem limite nem ordem -->
+           <!-- deve existir pelo menos uma transformacao -->
+           <translate x="11.1" y="11.1" z="11.1" />
+           <rotate axis="x" angle="13.1" />
+           <scale x="2.22" y="3.33" z="4.44" />
+        </transformation>
+	 <transformation id="2">
+		 <rotate axis="y" angle="15.1" />
+		 <scale x="7.77" y="8.88" z="9.99" />
+	 </transformation>
+
+  </transformations>
+
+
 
 <!-- The leaves -->
 <LEAVES>

@@ -84,3 +84,5 @@ DSXReader.prototype.getArrayOfFloats = function(element, name, num) {
     }
     return makeArray;
 }
+
+

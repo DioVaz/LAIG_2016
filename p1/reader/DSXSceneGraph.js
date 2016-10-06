@@ -91,13 +91,13 @@ DSXSceneGraph.prototype.parseSceneGraph = function(rootElement) {
     if (error) {
         return error;
     }
-  */
+
   console.log("*******VIEWS*******");
     var error = this.parseViews(rootElement);
     if (error) {
         return error;
     }
-  /*
+
 	console.log("*******ILLUMINATION*******");
     error = this.parseIllumination(rootElement);
     if (error) {
@@ -121,13 +121,13 @@ DSXSceneGraph.prototype.parseSceneGraph = function(rootElement) {
     if (error) {
         return error;
     }
-
+*/
     console.log("*******TRANSFORMATIONS*******");
-    //  error = this.parseTransformations(rootElement);
+      error = this.parseTransformations(rootElement);
       if (error) {
           return error;
       }
-
+/*
 	console.log("*******PRIMITIVES*******");
     //error = this.parsePrimitives(rootElement);
     if (error) {
@@ -256,7 +256,7 @@ DSXSceneGraph.prototype.parseScene = function(rootElement) {
 }
 
 
- *@param rootElement SCENE tag from DSX
+ /*@param rootElement SCENE tag from DSX
  * Parse tag ILLUMINATION from DSX
  */
 DSXSceneGraph.prototype.parseIllumination = function(rootElement) {
@@ -505,6 +505,7 @@ DSXSceneGraph.prototype.parseMaterials = function(rootElement) {
  *@param rootElement SCENE tag from DSX
  * Parse tag TRANSFORMATIONS from DSX
  */
+/*
 DSXSceneGraph.prototype.parseTransformations = function(rootElement) {
 	//Get TRANSFORMATIONS
     var tempMat =  rootElement.getElementsByTagName("transformations");
@@ -547,6 +548,56 @@ DSXSceneGraph.prototype.parseTransformations = function(rootElement) {
     //this.transformations[id].setscale(scale[0], scale[1], scale[2], scale[3]);
 
 	}
+}
+*/
+
+/*
+ *@param rootElement SCENE tag from DSX
+ * Parse tag TRANSFORMATIONS from DSX
+ */
+
+
+DSXSceneGraph.prototype.parseTransformations = function(rootElement) {
+
+	var transformationElement = rootElement.getElementsByTagName('transformations');
+
+	var transformationsElement = transformationElement[0].getElementsByTagName('transformation');
+	var transformationsLength = transformationsElement.length;
+	console.log("transformationsLength: "+ transformationsLength);
+
+	var id, i;
+	var translate,rotate,scale = [];
+	var translateTag,rotateTag,scaleTag;
+	for( i = 0 ; i < transformationsLength ; i++ )
+	{
+		id = this.reader.getString(transformationsElement[i],'id',1);
+		if(id == null)
+			return "id not founded in parse transformations";
+
+		translateTag = transformationsElement[i].getElementsByTagName('translate');
+		if(translateTag != null && translateTag.length != 0)
+			translate = this.getArray(translateTag,"translate");
+
+
+		scaleTag = transformationsElement[i].getElementsByTagName('scale');
+		if(scaleTag != null && scaleTag != [])
+			scale = this.getArray(scaleTag,"scale");
+		console.log(scale);
+
+		rotateTag = transformationsElement[i].getElementsByTagName('rotate');
+		if(rotateTag != null && rotateTag != [])
+			rotate = this.getArray(rotateTag,"rotate");
+		console.log(rotate);
+
+		translateTag = null;
+		scaleTag = null;
+		rotateTag = null;
+		translate = null;
+		scale = null;
+		rotate = null;
+
+	}
+	return 0;
 }
 /*
  *@param rootElement SCENE tag from DSX
@@ -766,3 +817,96 @@ DSXSceneGraph.prototype.onXMLError=function (message) {
 	console.error("XML Loading Error: "+message);
 	this.loadedOk=false;
 };
+
+/*
+ Vai buscar um array para diversos atributos.
+ */
+DSXSceneGraph.prototype.getArray = function(element,type) {
+
+	var pos = [];
+	var count = 0;
+
+	console.log("type in get array: " + type);
+
+	if(type == "location" || type == "target" || type == "translate" || type =="scale") {
+
+
+		if (element[0].getAttribute('x') != null) {
+			pos[count] = this.reader.getFloat(element[0], 'x', 1);
+			count++;
+		}
+
+		if (element[0].getAttribute('y') != null) {
+			pos[count] = this.reader.getFloat(element[0], 'y', 1);
+			count++;
+		}
+
+		if (element[0].getAttribute('z') != null) {
+			pos[count] = this.reader.getFloat(element[0], 'z', 1);
+			count++;
+		}
+
+		if (element[0].getAttribute('w') != null) {
+			pos[count] = this.reader.getFloat(element[0], 'w', 1);
+			count++;
+		}
+
+		return pos;
+	}
+
+	if(type == "ambient" || type == "diffuse" || type == "specular" || type == "emission")
+	{
+
+		if (element[0].getAttribute('r') != null) {
+			pos[count] = this.reader.getFloat(element[0], 'r', 1);
+			count++;
+		}
+
+		if (element[0].getAttribute('g') != null) {
+			pos[count] = this.reader.getFloat(element[0], 'g', 1);
+			count++;
+		}
+
+		if (element[0].getAttribute('b') != null) {
+			pos[count] = this.reader.getFloat(element[0], 'b', 1);
+			count++;
+		}
+
+		if (element[0].getAttribute('a') != null) {
+			pos[count] = this.reader.getFloat(element[0], 'a', 1);
+			count++;
+		}
+		if(this.notRGBA(pos[0],pos[1],pos[2],pos[3]))
+			return 1;
+
+		return pos;
+	}
+
+	if(type == "rotate")
+	{
+		var axis;
+		if(element[0].getAttribute('axis') != null) {
+
+
+			axis = this.reader.getString(element[0],'axis',1);
+			console.log(axis);
+			if (axis != "x" && axis != "y" && axis != "z")
+				return "eixo inexistente no rotate!";
+			else {
+				pos[count] = axis;
+				count++;
+			}
+		}
+
+		if(element[0].getAttribute('angle') != null)
+		{
+			pos[count] = this.reader.getFloat(element[0],'angle', 1);
+			count++;
+		}
+		return pos;
+	}
+
+	return 0;
+
+};
+
