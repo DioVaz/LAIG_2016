@@ -16,6 +16,7 @@ function DSXSceneGraph(filename, scene) {
 
   //***************UPDATE LATER*************
   this.scene = new Scene();
+    this.views = [];
   this.illumination = new Illumination();
   this.omni = [];
   this.spots = [];
@@ -205,7 +206,7 @@ DSXSceneGraph.prototype.parseViews = function (rootElement) {
 			console.log(to);
 
 		}
-
+        this.views[i] = new CGFcamera(angle,near,far,from,to);
 		fromTag = null;
 		toTag = null;
 		from = null;
@@ -599,6 +600,56 @@ DSXSceneGraph.prototype.parseTransformations = function(rootElement) {
 	}
 	return 0;
 }
+
+XMLreader.prototype.parsePrimitives = function(rootElement)
+{
+    var primitiveElement = rootElement.getElementsByTagName('primitives');
+    var primitivesCollection = (primitiveElement[0].getElementsByTagName('primitive'));
+    var primitivesLength = primitivesCollection.length;
+    //console.log(primitivesLength);
+    var i,id,auxiliarTag;
+    var primitive = [];
+    var founded = false;
+    for( i = 0; i < primitivesLength ; i++)
+    {
+        id = this.reader.getString(primitivesCollection[i],'id',1);
+        //console.log(id);
+
+        auxiliarTag = primitivesCollection[i].getElementsByTagName('rectangle');
+        console.log(auxiliarTag);
+        if(auxiliarTag != null && auxiliarTag.length != 0)
+        {
+            founded=true;
+            primitive = this.getPrimitive(auxiliarTag,"rectangle");
+            console.log(primitive);
+        }
+
+
+        if(!founded) {
+            auxiliarTag = primitivesCollection[i].getElementsByTagName('triangle');
+            if (auxiliarTag != null && auxiliarTag.length != 0) {
+                founded = true;
+                primitive = this.getPrimitive(auxiliarTag, "triangle");
+            }
+            console.log(primitive);
+        }
+
+
+
+
+        auxiliarTag = null;
+        primitive = null;
+
+
+        founded = false;
+
+    }
+    return 0;
+
+}
+
+
+
 /*
  *@param rootElement SCENE tag from DSX
  * Parse tag LEAVES from DSX - sets all primitives for the scene
@@ -910,3 +961,67 @@ DSXSceneGraph.prototype.getArray = function(element,type) {
 
 };
 
+
+XMLreader.prototype.getPrimitive = function(element,type)
+{
+    var pos = [];
+    var count = 0;
+
+    if(type == "rectangle" || type== "triangle")
+    {
+        if (element[0].getAttribute('x1') != null) {
+            pos[count] = this.reader.getFloat(element[0], 'x1', 1);
+            count++;
+        }
+
+        if (element[0].getAttribute('y1') != null) {
+            pos[count] = this.reader.getFloat(element[0], 'y1', 1);
+            count++;
+        }
+
+        if(type == "triangle")
+        {
+            if (element[0].getAttribute('z1') != null) {
+                pos[count] = this.reader.getFloat(element[0], 'z1', 1);
+                count++;
+            }
+        }
+
+
+        if (element[0].getAttribute('x2') != null) {
+            pos[count] = this.reader.getFloat(element[0], 'x2', 1);
+            count++;
+        }
+
+        if (element[0].getAttribute('y2') != null) {
+            pos[count] = this.reader.getFloat(element[0], 'y2', 1);
+            count++;
+        }
+
+        if(type == "triangle")
+        {
+            if (element[0].getAttribute('z2') != null) {
+                pos[count] = this.reader.getFloat(element[0], 'z2', 1);
+                count++;
+            }
+
+            if (element[0].getAttribute('x3') != null) {
+                pos[count] = this.reader.getFloat(element[0], 'x3', 1);
+                count++;
+            }
+
+            if (element[0].getAttribute('y3') != null) {
+                pos[count] = this.reader.getFloat(element[0], 'y3', 1);
+                count++;
+            }
+
+            if (element[0].getAttribute('z3') != null) {
+                pos[count] = this.reader.getFloat(element[0], 'z3', 1);
+                count++;
+            }
+        }
+
+        return pos;
+
+    }
+}

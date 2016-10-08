@@ -1,6 +1,6 @@
 <SCENE>
 
-  <views default="inicial" >
+  <views default="default" >
 
       <perspective id="primeira" near="1" far="2" angle="3">
           <from x="4.0" y="5.0" z="6.0" />
