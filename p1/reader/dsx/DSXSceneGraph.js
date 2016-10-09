@@ -506,7 +506,7 @@ DSXSceneGraph.prototype.parseMaterials = function(rootElement) {
  *@param rootElement SCENE tag from dsx
  * Parse tag TRANSFORMATIONS from dsx
  */
-
+/*
 DSXSceneGraph.prototype.parseTransformations = function(rootElement) {
 	//Get TRANSFORMATIONS
     var tempMat =  rootElement.getElementsByTagName("transformations");
@@ -549,7 +549,7 @@ DSXSceneGraph.prototype.parseTransformations = function(rootElement) {
     //this.transformations[id].setscale(scale[0], scale[1], scale[2], scale[3]);
 
 	}
-}
+}*/
 
 
 /*
@@ -601,7 +601,11 @@ DSXSceneGraph.prototype.parseTransformations = function(rootElement) {
 	return 0;
 }
 
-LSXSceneGraph.prototype.parseLeaves = function(rootElement) {
+/*
+ *@param rootElement SCENE tag from dsx
+ * Parse tag PRIMITIVES from dsx - sets all primitives for the scene
+ */
+DSXSceneGraph.prototype.parsePrimitives = function(rootElement) {
 	//Get primitives to be drawn
     var tempPrimitives =  rootElement.getElementsByTagName("primitives");
 	if (tempPrimitives == null) {
@@ -628,21 +632,21 @@ LSXSceneGraph.prototype.parseLeaves = function(rootElement) {
 		var primitive = allPrimitive[i]
 		var id = this.reader.getString(primitive, "id");
 		if (id in this.primitives)
-			return "Duplicate leaf id: " + id;
+			return "Duplicate primitive id: " + id;
 
-		var type = this.reader.getString(leaf, "type");
+		var type = primitive.nodeName;
 		var data;
 
 		//Different types of primitives
 		switch (type) {
 			case "rectangle":
-				data = this.reader.getArrayOfFloats(leaf, "args", 4);
+				data = this.reader.getArrayOfFloats(primitive, "args", 4);
 				if (data == null)
 					return "rectangle with error " + id;
 				this.leaves[id] = new LeafRectangle(id, data[0], data[1], data[2], data[3]);
 				break;
 			case "cylinder":
-				data = this.reader.getArrayOfFloats(leaf, "args", 5);
+				data = this.reader.getArrayOfFloats(primitive, "args", 5);
 				if (data == null)
 					return "cylinder with error " + id;
 				if(data[3] % 1 != 0  || data[4] % 1 != 0 )
@@ -650,97 +654,36 @@ LSXSceneGraph.prototype.parseLeaves = function(rootElement) {
 				this.leaves[id] = new LeafCylinder(id, data[0], data[1], data[2], data[3], data[4]);
 				break;
 			case "sphere":
-				data = this.reader.getArrayOfFloats(leaf, "args", 3);
+				data = this.reader.getArrayOfFloats(primitive, "args", 3);
 				if (data == null)
 					return "sphere with error " + id;
 				if(data[1] % 1 != 0  || data[2] % 1 != 0 )
 					return "sphere " + id + " 2nd/3rd arg must be integer.";
 				this.leaves[id] = new LeafSphere(id, data[0], data[1], data[2]);
 				break;
+        case "torus":
+  				data = this.reader.getArrayOfFloats(primitive, "args", 4);
+  				if (data == null)
+  					return "torus with error " + id;
+  				if(data[2] % 1 != 0  || data[3] % 1 != 0 )
+  					return "torus " + id + " 3rd/4rd arg must be integer.";
+  				this.leaves[id] = new LeafTorus(id, data[0], data[1], data[2], data[3]);
+  				break;
 			case "triangle":
-				data = this.reader.getArrayOfFloats(leaf, "args", 9);
+				data = this.reader.getArrayOfFloats(primitive, "args", 9);
 				if (data == null)
 					return "triangle with error" + id;
 				this.leaves[id] = new LeafTriangle(id, data[0], data[1], data[2], data[3], data[4], data[5], data[6], data[7], data[8]);
 				break;
 			default:
-				return "Leaf type unknown: " + type;
+				return "Primitive type unknown: " + type;
 		}
 	}
 }
 
 
-/*
- *@param rootElement SCENE tag from dsx
- * Parse tag LEAVES from dsx - sets all primitives for the scene
- */
-DSXSceneGraph.prototype.parseLeaves = function(rootElement) {
-	//Get LEAVES - primitives to be drawn
-    var tempLeaves =  rootElement.getElementsByTagName("LEAVES");
-	if (tempLeaves == null) {
-		return "LEAVES is missing.";
-	}
 
-	if (tempLeaves.length != 1) {
-		return "Only one LEAVES is allowed.";
-	}
 
-	var leaves = tempLeaves[0];
-
-	allLeaf = leaves.getElementsByTagName("LEAF");
-
-	if (allLeaf == null) {
-		return "LEAF in LEAVES missing";
-	}
-	if (allLeaf.length == 0) {
-		return "No LEAF found."
-	}
-
-	//Get each leaf
-	for (var i = 0; i < allLeaf.length; ++i) {
-		var leaf = allLeaf[i]
-		var id = this.reader.getString(leaf, "id");
-		if (id in this.leaves)
-			return "Duplicate leaf id: " + id;
-
-		var type = this.reader.getString(leaf, "type");
-		var data;
-
-		//Different types of primitives
-		switch (type) {
-			case "rectangle":
-				data = this.reader.getArrayOfFloats(leaf, "args", 4);
-				if (data == null)
-					return "rectangle with error " + id;
-				this.leaves[id] = new LeafRectangle(id, data[0], data[1], data[2], data[3]);
-				break;
-			case "cylinder":
-				data = this.reader.getArrayOfFloats(leaf, "args", 5);
-				if (data == null)
-					return "cylinder with error " + id;
-				if(data[3] % 1 != 0  || data[4] % 1 != 0 )
-					return "cylinder " + id + " 4th/5th arg must be integer.";
-				this.leaves[id] = new LeafCylinder(id, data[0], data[1], data[2], data[3], data[4]);
-				break;
-			case "sphere":
-				data = this.reader.getArrayOfFloats(leaf, "args", 3);
-				if (data == null)
-					return "sphere with error " + id;
-				if(data[1] % 1 != 0  || data[2] % 1 != 0 )
-					return "sphere " + id + " 2nd/3rd arg must be integer.";
-				this.leaves[id] = new LeafSphere(id, data[0], data[1], data[2]);
-				break;
-			case "triangle":
-				data = this.reader.getArrayOfFloats(leaf, "args", 9);
-				if (data == null)
-					return "triangle with error" + id;
-				this.leaves[id] = new LeafTriangle(id, data[0], data[1], data[2], data[3], data[4], data[5], data[6], data[7], data[8]);
-				break;
-			default:
-				return "Leaf type unknown: " + type;
-		}
-	}
-}
 
 /*
  *@param rootElement SCENE tag from dsx
