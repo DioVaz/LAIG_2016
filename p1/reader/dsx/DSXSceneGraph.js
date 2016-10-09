@@ -23,7 +23,7 @@ function DSXSceneGraph(filename, scene) {
   this.textures = [];
   this.materials = [];
   this.transformations = [];
-  this.leaves = [];
+  this.primitives = [];
   this.nodes = [];
   this.scene = scene;
   scene.graph=this;
@@ -636,43 +636,135 @@ DSXSceneGraph.prototype.parsePrimitives = function(rootElement) {
 
 		var type = primitive.nodeName;
 		var data;
+    var param;
+    var count = 0;
 
 		//Different types of primitives
 		switch (type) {
 			case "rectangle":
-				data = this.reader.getArrayOfFloats(primitive, "args", 4);
-				if (data == null)
-					return "rectangle with error " + id;
+        if (primitive.getAttribute('x1') != null) {
+              data[count] = this.reader.getFloat(primitive, 'x1', 1);
+              count++;
+        }
+        if (primitive.getAttribute('y1') != null && count == 1) {
+              data[count] = this.reader.getFloat(primitive, 'y1', 1);
+              count++;
+        }
+        if (primitive.getAttribute('x2') != null && count == 2) {
+              data[count] = this.reader.getFloat(primitive, 'x2', 1);
+              count++;
+        }
+        if (primitive.getAttribute('y2') != null && count == 3) {
+              data[count] = this.reader.getFloat(primitive, 'y2', 1);
+              count++;
+        }
+        if (count != 4)
+					return "Rectangle with error " + id;
 				this.leaves[id] = new LeafRectangle(id, data[0], data[1], data[2], data[3]);
 				break;
 			case "cylinder":
-				data = this.reader.getArrayOfFloats(primitive, "args", 5);
-				if (data == null)
-					return "cylinder with error " + id;
-				if(data[3] % 1 != 0  || data[4] % 1 != 0 )
-					return "cylinder " + id + " 4th/5th arg must be integer.";
+        if (primitive.getAttribute('base') != null) {
+              data[count] = this.reader.getFloat(primitive, 'base', 1);
+              count++;
+        }
+        if (primitive.getAttribute('top') != null && count == 1) {
+              data[count] = this.reader.getFloat(primitive, 'top', 1);
+              count++;
+        }
+        if (primitive.getAttribute('height') != null && count == 2) {
+              data[count] = this.reader.getFloat(primitive, 'height', 1);
+              count++;
+        }
+        if (primitive.getAttribute('slices') != null && count == 3) {
+              data[count] = this.reader.getInt(primitive, 'slices', 1);
+              count++;
+        }
+        if (primitive.getAttribute('stacks') != null && count == 4) {
+              data[count] = this.reader.getInt(primitive, 'stacks', 1);
+              count++;
+        }
+        if (count != 5)
+          return "Cylinder with error " + id;
 				this.leaves[id] = new LeafCylinder(id, data[0], data[1], data[2], data[3], data[4]);
 				break;
 			case "sphere":
-				data = this.reader.getArrayOfFloats(primitive, "args", 3);
-				if (data == null)
-					return "sphere with error " + id;
-				if(data[1] % 1 != 0  || data[2] % 1 != 0 )
-					return "sphere " + id + " 2nd/3rd arg must be integer.";
+        if (primitive.getAttribute('radius') != null) {
+              data[count] = this.reader.getFloat(primitive, 'radius', 1);
+              count++;
+        }
+        if (primitive.getAttribute('slices') != null && count == 1) {
+              data[count] = this.reader.getInt(primitive, 'slices', 1);
+              count++;
+        }
+        if (primitive.getAttribute('stacks') != null && count == 2) {
+              data[count] = this.reader.getInt(primitive, 'stacks', 1);
+              count++;
+        }
+        if (count != 3)
+          return "Sphere with error " + id;
 				this.leaves[id] = new LeafSphere(id, data[0], data[1], data[2]);
 				break;
-        case "torus":
-  				data = this.reader.getArrayOfFloats(primitive, "args", 4);
-  				if (data == null)
-  					return "torus with error " + id;
-  				if(data[2] % 1 != 0  || data[3] % 1 != 0 )
-  					return "torus " + id + " 3rd/4rd arg must be integer.";
-  				this.leaves[id] = new LeafTorus(id, data[0], data[1], data[2], data[3]);
-  				break;
+      case "torus":
+        if (primitive.getAttribute('inner') != null) {
+              data[count] = this.reader.getFloat(primitive, 'inner', 1);
+              count++;
+        }
+        if (primitive.getAttribute('outer') != null && count == 1) {
+              data[count] = this.reader.getFloat(primitive, 'outer', 1);
+              count++;
+        }
+        if (primitive.getAttribute('slices') != null && count == 2) {
+              data[count] = this.reader.getInt(primitive, 'slices', 1);
+              count++;
+        }
+        if (primitive.getAttribute('loops') != null && count == 3) {
+              data[count] = this.reader.getInt(primitive, 'loops', 1);
+              count++;
+        }
+        if (count != 4)
+          return "Torus with error " + id;
+				this.leaves[id] = new LeafTorus(id, data[0], data[1], data[2], data[3]);
+				break;
 			case "triangle":
-				data = this.reader.getArrayOfFloats(primitive, "args", 9);
-				if (data == null)
-					return "triangle with error" + id;
+        if (primitive.getAttribute('x1') != null) {
+              data[count] = this.reader.getFloat(primitive, 'x1', 1);
+              count++;
+        }
+        if (primitive.getAttribute('y1') != null && count == 1) {
+              data[count] = this.reader.getFloat(primitive, 'y1', 1);
+              count++;
+        }
+        if (primitive.getAttribute('z1') != null && count == 2) {
+              data[count] = this.reader.getFloat(primitive, 'z1', 1);
+              count++;
+        }
+        if (primitive.getAttribute('x2') != null && count == 3) {
+              data[count] = this.reader.getFloat(primitive, 'x2', 1);
+              count++;
+        }
+        if (primitive.getAttribute('y2') != null && count == 4) {
+              data[count] = this.reader.getFloat(primitive, 'y2', 1);
+              count++;
+        }
+        if (primitive.getAttribute('z2') != null && count == 5) {
+              data[count] = this.reader.getFloat(primitive, 'z2', 1);
+              count++;
+        }
+        if (primitive.getAttribute('x3') != null && count == 6) {
+              data[count] = this.reader.getFloat(primitive, 'x3', 1);
+              count++;
+        }
+        if (primitive.getAttribute('y3') != null && count == 7) {
+              data[count] = this.reader.getFloat(primitive, 'y3', 1);
+              count++;
+        }
+        if (primitive.getAttribute('z3') != null && count == 8) {
+              data[count] = this.reader.getFloat(primitive, 'z3', 1);
+              count++;
+        }
+
+        if (count != 9)
+          return "Rectangle with error " + id;
 				this.leaves[id] = new LeafTriangle(id, data[0], data[1], data[2], data[3], data[4], data[5], data[6], data[7], data[8]);
 				break;
 			default:
