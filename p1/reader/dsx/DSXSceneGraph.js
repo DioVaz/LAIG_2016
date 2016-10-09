@@ -18,7 +18,7 @@ function DSXSceneGraph(filename, scene) {
   //this.scene = new Scene();
     this.views = [];
   this.illumination = new Illumination();
-  this.omni = [];
+  this.omnis = [];
   this.spots = [];
   this.textures = [];
   this.materials = [];
@@ -68,9 +68,10 @@ DSXSceneGraph.prototype.parseSceneGraph = function(rootElement) {
     if (rootElement.nodeName != "SCENE") {
         return "Not a SCENE file";
     }
-	/*
+
 	//The order must be correct
   //
+    /*
 	if (
       rootElement.children[0].nodeName != "scene" ||
   		rootElement.children[1].nodeName != "views" ||
@@ -84,33 +85,33 @@ DSXSceneGraph.prototype.parseSceneGraph = function(rootElement) {
 			error = "The order of the TAGS is wrong";
 			return error;
 	}
-	*/
 
-  /*
+*/
+
   console.log("*******SCENE*******");
     //var error = this.parseScene(rootElement);
     if (error) {
         return error;
-    }*/
+    }
 
   console.log("*******VIEWS*******");
     var error = this.parseViews(rootElement);
     if (error) {
         return error;
     }
-/*
+
 	console.log("*******ILLUMINATION*******");
     error = this.parseIllumination(rootElement);
     if (error) {
         return error;
     }
 
- 	console.log("*******LIGHTS*******");
+    console.log("*******LIGHTS*******");
     error = this.parseLights(rootElement);
     if (error) {
         return error;
     }
-
+    /*
 	console.log("*******TEXTURES*******");
     error = this.parseTextures(rootElement);
     if (error) {
@@ -153,6 +154,8 @@ DSXSceneGraph.prototype.parseViews = function (rootElement) {
   var perspectivesCollection = viewsElement[0].getElementsByTagName('perspective');
   var perspectivesLength = perspectivesCollection.length;
 
+
+
   console.log(perspectivesLength);
     var i, id, near, far, angle;
     var to = [];
@@ -175,42 +178,40 @@ DSXSceneGraph.prototype.parseViews = function (rootElement) {
         angle = this.reader.getFloat(perspectivesCollection[i], 'angle', 1);
         console.log("angle: "+ angle);
 
-        fromTag = perspectivesCollection[0].getElementsByTagName('from');
+        fromTag = perspectivesCollection[i].getElementsByTagName('from');
         console.log(fromTag[0]);
         if(fromTag != null && fromTag.length != 0){
             if(this.reader.hasAttribute(fromTag[0],'x')) {
-				console.log("entrou111");
 			}
 
             from[0] = this.reader.getFloat(fromTag[0], 'x', 1);
-            console.log("passou");
-
             from[1] = this.reader.getFloat(fromTag[0],'y',1);
             from[2] = this.reader.getFloat(fromTag[0],'z',1);
-            console.log(from);
+            //console.log(from);
 
         }
 
-		toTag = perspectivesCollection[0].getElementsByTagName('to');
+		toTag = perspectivesCollection[i].getElementsByTagName('to');
 		console.log(toTag[0]);
 		if(toTag != null && toTag.length != 0){
 			if(this.reader.hasAttribute(toTag[0],'x')) {
-				console.log("entrou111");
+
 			}
 
 			to[0] = this.reader.getFloat(toTag[0], 'x', 1);
-			console.log("passou");
+
 
 			to[1] = this.reader.getFloat(toTag[0],'y',1);
 			to[2] = this.reader.getFloat(toTag[0],'z',1);
-			console.log(to);
+			//console.log(to);
 
 		}
-        this.views[i] = new CGFcamera(angle,near,far,from,to);
+        this.views.push(new CGFcamera(angle,near,far,from,to));
+        this.views.id = id;
 		fromTag = null;
 		toTag = null;
-		from = null;
-		to = null;
+		from = [];
+		to = [];
 		id = null;
 		near = null;
 		far = null;
@@ -218,7 +219,7 @@ DSXSceneGraph.prototype.parseViews = function (rootElement) {
 
 	}
 
-
+    return 0;
 };
 
 /*
@@ -266,12 +267,13 @@ DSXSceneGraph.prototype.parseIllumination = function(rootElement) {
 	if (tempIllum == null) {
 		return "ILLUMINATION is missing.";
 	}
-
+    console.log("illumination length"+tempIllum.length);
 	if (tempIllum.length != 1) {
 		return "only one ILLUMINATION is allowed.";
 	}
 
 	var illumination = tempIllum[0];
+
 
   //Get ILLUMINATION - doublesided
   this.illumination.doublesided = this.reader.getString(illumination, "doublesided");
@@ -282,6 +284,7 @@ DSXSceneGraph.prototype.parseIllumination = function(rootElement) {
   this.illumination.local = this.reader.getString(illumination, "local");
   if (this.illumination.local == null)
     return "ILLUMINATION without local.";
+
 
 	//Get global ambient light
     tempAmb = illumination.getElementsByTagName("ambient");
@@ -309,12 +312,14 @@ DSXSceneGraph.prototype.parseIllumination = function(rootElement) {
 	var background = tempBack[0];
 	this.illumination.background = this.reader.getRGBA(background);
 
-}
 
+
+}
 /*
+/!*
  *@param rootElement SCENE tag from dsx
  * Parse tag LIGHTS from dsx
- */
+ *!/
 DSXSceneGraph.prototype.parseLights = function(rootElement) { //por testar
 	//Get LIGHTS
     var tempLights =  rootElement.getElementsByTagName("lights");
@@ -334,7 +339,7 @@ DSXSceneGraph.prototype.parseLights = function(rootElement) { //por testar
 		var light = lights.children[i];
 		if (light.nodeName != "omni" && i == 0)
 			return "expected omni in LIGHTS: " + light.nodeName;
-    //****OMNI*********************
+    //!****OMNI*********************
     else if (light.nodeName == "omni"){
       var id = this.reader.getString(omni, "id");
       if (id == null)
@@ -366,10 +371,10 @@ DSXSceneGraph.prototype.parseLights = function(rootElement) { //por testar
       data = this.reader.getRGBA(light.children[4]);
       this.omni[j].setSpecular(data[0], data[1], data[2], data[3]);
     }
-    //*****************************
+    //!*****************************
 	}
   j=0;
-	//****SPOT*********************
+	//!****SPOT*********************
   for (var i = 0; i < lights.children.length; ++i) {
 		var light = lights.children[i];
 		if (light.nodeName == "spot"){
@@ -392,7 +397,7 @@ DSXSceneGraph.prototype.parseLights = function(rootElement) { //por testar
       data.push(this.reader.getFloat(light.children[1], "y"));
       data.push(this.reader.getFloat(light.children[1], "z"));
       data.push(this.reader.getFloat(light.children[1], "w"));
-      /*/this.spot[j].setTarget/*/console.log("targuet x="+data[0]+ " y="+data[1]+" z="+ data[2] +" w="+ data[3]);
+      /!*!/this.spot[j].setTarget/!*!/console.log("targuet x="+data[0]+ " y="+data[1]+" z="+ data[2] +" w="+ data[3]);
 
       //location of light
       data.push(this.reader.getFloat(light.children[2], "x"));
@@ -412,10 +417,167 @@ DSXSceneGraph.prototype.parseLights = function(rootElement) { //por testar
       data = this.reader.getRGBA(light.children[5]);
       this.spot[j].setSpecular(data[0], data[1], data[2], data[3]);
     }
-      //*****************************
+      //!*****************************
   	}
 
-}
+  	console.log(this.omnis);
+    console.log(this.spots);
+    debugger;
+
+}*/
+
+
+
+DSXSceneGraph.prototype.parseLights = function (rootElement) {
+
+    console.log("parsing ligths!!");
+
+    var lightsTag = rootElement.getElementsByTagName('lights');
+
+    if(lightsTag == null)
+        return "Lights tag not founded!";
+
+    var omnis = lightsTag[0].getElementsByTagName('omni');
+    if(omnis[0] == null)
+        return "any omnis founded";
+
+    var spots = lightsTag[0].getElementsByTagName('spot');
+    if(spots[0] == null)
+        return "any spots founded";
+
+    /*
+     console.log("omnis: "+omnis.length);
+     console.log("spots: "+spots.length);
+     */
+
+    var parseOmnisReturn = this.parseOmnis(omnis);
+    /*if(parseOmnisReturn != 0)
+     return parseOmnisReturn;*/
+    this.parseSpots(spots);
+
+    return 0;
+
+};
+
+DSXSceneGraph.prototype.parseOmnis = function(omnisElement) {
+
+    console.log("parsing Omnis");
+    var omnisLength = omnisElement.length;
+
+    var location,ambient, diffuse, specular = [];
+
+    var i, id, enable;
+    for( i =0; i < omnisLength; i++){
+
+        id = this.reader.getString(omnisElement[i],'id',1);
+        console.log(id);
+
+        enable = this.reader.getBoolean(omnisElement[i],'enabled',1);
+        if(this.notBoolean(enable))
+            return "enable em omni nao é um boolean";
+
+
+        location = this.getArray(omnisElement[i].getElementsByTagName('location'),"location");
+        if(location == 1 || location == 0)
+            return "parseOmnis -> tag não encontrada";
+
+        ambient = this.getArray(omnisElement[i].getElementsByTagName('ambient'),"ambient");
+        if(ambient == 1 || ambient == 0)
+            return "parseOmnis -> tag não encontrada ou rgb invalido";
+
+        diffuse = this.getArray(omnisElement[i].getElementsByTagName('diffuse'),"diffuse");
+        if(diffuse == 1 || diffuse == 0)
+            return "parseOmnis -> tag não encontrada ou rgb invalido ";
+
+
+        specular = this.getArray(omnisElement[i].getElementsByTagName('specular'),"specular");
+        if(specular == 1 || specular == 0)
+            return "parseOmnis -> tag não encontrada ou rgb invalido";
+
+
+        var light = new CGFlight(this.scene,id);
+        light.setPosition(location);
+        light.setAmbient(ambient);
+        light.setDiffuse(diffuse);
+        light.setSpecular(specular);
+        enable ? light.enable() : light.disable();
+        this.omnis.push(light);
+
+
+
+    }
+    console.log(this.omnis);
+    return 0;
+
+
+
+};
+
+DSXSceneGraph.prototype.parseSpots = function(spotsElement) {
+
+    console.log("parseSpots");
+    var spotsLength = spotsElement.length;
+
+    var target,location,ambient, diffuse, specular = [];
+    var id, enable, angle, expoente, i;
+    for( i =0; i < spotsLength; i++){
+
+        id = this.reader.getString(spotsElement[i],'id',1);
+
+        enable = this.reader.getBoolean(spotsElement[i],'enabled',1);
+        if(this.notBoolean(enable))
+            return "enable em omni nao é um boolean";
+
+        angle = this.reader.getFloat(spotsElement[i],'angle',1);
+
+
+
+
+        expoente = this.reader.getFloat(spotsElement[i],'expoente',1);
+
+        target = this.getArray(spotsElement[i].getElementsByTagName('target'),"target");
+        if(target == 1 || target == 0)
+            return "parseSpots-> target não encontrada";
+
+        location = this.getArray(spotsElement[i].getElementsByTagName('location'),"location");
+        if(location == 1 || location == 0)
+            return "parseSpots- -> location não encontrada";
+
+
+        ambient = this.getArray(spotsElement[i].getElementsByTagName('ambient'),"ambient");
+        if(ambient == 1 || ambient == 0)
+            return "parseSpots- -> ambient não encontrada ou rgb invalido";
+
+
+        diffuse = this.getArray(spotsElement[i].getElementsByTagName('diffuse'),"diffuse");
+        if(diffuse == 1 || diffuse == 0)
+            return "parseSpots- -> diffuse não encontrada ou rgb invalido ";
+
+
+        specular = this.getArray(spotsElement[i].getElementsByTagName('specular'),"specular");
+        if(specular == 1 || specular == 0)
+            return "parseSpots- -> specular não encontrada ou rgb invalido";
+
+
+
+        var light = new CGFlight(this.scene,id);
+        light.setSpotExponent(expoente);
+        light.setSpotCutOff(angle);
+        light.setPosition(location);
+        light.setAmbient(ambient);
+        light.setDiffuse(diffuse);
+        light.setSpecular(specular);
+        enable ? light.enable() : light.disable();
+        this.spots.push(light);
+
+
+
+    }
+    console.log(this.spots);
+    return 0;
+
+
+};
 
 /*
  *@param rootElement SCENE tag from dsx
@@ -988,3 +1150,28 @@ DSXSceneGraph.prototype.getPrimitive = function(element,type)
 
     }
 }
+
+DSXSceneGraph.prototype.notBoolean = function(bool)
+{
+    if(bool == 0 || bool == 1)
+        return false;
+    return true;
+};
+
+
+/**
+ * Verifica se os valores de RGB são válidos.
+ */
+DSXSceneGraph.prototype.notRGBA = function (r, g, b, a) {
+    if(r < 0 || r > 1 || isNaN(r))
+        return true;
+    if(g < 0 || g > 1 || isNaN(g))
+        return true;
+    if(b < 0 || b > 1 || isNaN(b))
+        return true;
+    if(a < 0 || a> 1 || isNaN(a))
+        return true;
+    return false;
+};
+
+

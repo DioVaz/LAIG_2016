@@ -1,57 +1,70 @@
 <SCENE>
 
-<views default="inicial" >
+<views default="v1" >
 
-    <perspective id="primeira" near="1" far="2" angle="3">
-        <from x="4.0" y="5.0" z="6.0" />
-        <to x="7" y="8" z="9" />
+    <perspective id="v1" near="1" far="300" angle="0.5">
+        <from x="15" y="15" z="15" />
+        <to x="0" y="0" z="0" />
+    </perspective>
+    <perspective id="v2" near="1" far="300" angle="0.5">
+        <from x="15" y="15" z="-15" />
+        <to x="0" y="0" z="0" />
+    </perspective>
+    <perspective id="v3" near="1" far="300" angle="0.5">
+        <from x="-15" y="15" z="15" />
+        <to x="0" y="0" z="0" />
+    </perspective>
+    <perspective id="v4" near="1" far="300" angle="0.5">
+        <from x="-15" y="15" z="-15" />
+        <to x="0" y="0" z="0" />
     </perspective>
 
 </views>
 
 
 <!-- Illumination and clear colour -->
-<ILLUMINATION>
+<illumination doublesided="1" local="0">
     <ambient r="0.2" g="0.2" b="0.2" a="1" />
     <background r="0" g="0" b="0" a="1" />
-</ILLUMINATION>
+</illumination>
 
 
 <!-- Lights -->
-<LIGHTS>
-	<LIGHT id="light0">
-        <enable value ="1" />
-        <position  x="0" y="10" z="0" w="1" />
-        <ambient r="0.2" g="0.2" b="0.2" a="1.0" />
-        <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
-        <specular r="1.0" g="1.0" b="1.0" a="1.0" />
-    </LIGHT>
+<lights>
+	<omni id="1" enabled="0">
+		<location x="10" y="12" z="11" w="13"/>
+		<ambient r="0.2" g="0.2" b="0.2" a="1"/>
+		<diffuse r="0.2" g="0.2" b="0.2" a="1"/>
+		<specular r="0.2" g="0.2" b="0.2" a="1"/>
+	</omni>
+	<spot id="2" enabled="0" angle="1.2" expoente="1.4">
+		<target x="1" y="2" z="3" />
+		<location x="10" y="12" z="11" w="13"/>
+		<ambient r="0.2" g="0.2" b="0.2" a="1"/>
+		<diffuse r="0.2" g="0.2" b="0.2" a="1"/>
+		<specular r="0.2" g="0.2" b="0.2" a="1"/>
+	</spot>
+	<omni id="3" enabled="1">
+		<location x="11" y="12" z="14" w="13"/>
+		<ambient r="0.3" g="0.2" b="0.6" a="1"/>
+		<diffuse r="0.2" g="0.2" b="0.2" a="1"/>
+		<specular r="0.2" g="0.2" b="0.2" a="1"/>
+	</omni>
+	<omni id="4" enabled="1">
+		<location x="10" y="13" z="11" w="17"/>
+		<ambient r="0.1" g="0.2" b="0.2" a="1"/>
+		<diffuse r="0.2" g="0.2" b="0.2" a="1"/>
+		<specular r="0.2" g="0.2" b="0.2" a="1"/>
+	</omni>
+	<spot id="5" enabled="0" angle="1.5" expoente="3.4">
+		<target x="4" y="5" z="6" />
+		<location x="10" y="12" z="11" w="13"/>
+		<ambient r="0.2" g="0.2" b="0.2" a="1"/>
+		<diffuse r="0.2" g="0.2" b="0.2" a="1"/>
+		<specular r="0.2" g="0.2" b="0.2" a="1"/>
+	</spot>
+</lights>
 
-	<LIGHT id="light1">
-        <enable value ="1" />
-        <position x="30" y="10" z="0" w="1" />
-        <ambient r="0.2" g="0.2" b="0.2" a="1.0" />
-        <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
-        <specular r="1.0" g="1.0" b="1.0" a="1.0" />
-    </LIGHT>
-
-	<LIGHT id="light2">
-        <enable value ="1" />
-        <position x="0" y="10" z="20" w="1" />
-        <ambient r="0.2" g="0.2" b="0.2" a="1.0" />
-        <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
-        <specular r="1.0" g="1.0" b="1.0" a="1.0" />
-    </LIGHT>
-
-    <LIGHT id="light3">
-        <enable value ="1" />
-        <position x="30" y="10" z="20" w="1" />
-        <ambient r="0.2" g="0.2" b="0.2" a="1.0" />
-        <diffuse r="0.6" g="0.6" b="0.6" a="1.0" />
-        <specular r="0.6" g="0.6" b="0.6" a="1.0" />
-    </LIGHT>
-
-</LIGHTS>
 
 <!-- Textures -->
 <TEXTURES>

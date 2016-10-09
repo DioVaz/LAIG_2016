@@ -18,7 +18,7 @@ DSXScene.prototype.init = function (application) {
     CGFscene.prototype.init.call(this, application);
 
     this.myinterface = null;
-    DSXScenegraph = null;
+
 
     this.initCameras(); //Set default configuration of camera view
 
@@ -37,6 +37,7 @@ DSXScene.prototype.init = function (application) {
 
 	this.gl.enable(this.gl.BLEND);
 	this.gl.blendFunc(this.gl.SRC_ALPHA, this.gl.ONE_MINUS_SRC_ALPHA);
+	this.setGlobalAmbientLight(0.5,0.5,0.5,0.5);
 
     this.enableTextures(true);
 };
@@ -138,11 +139,15 @@ DSXScene.prototype.display = function () {
 	torus.display();
 
 
+
+	//this.setDefaultAppearance();
 	//Process scene if dsx read ok
+
 	if (this.graph != null && this.graph.loadedOk)
 	{
+		console.log("entrou");
+		console.log("numero de views: "+ this.graph.views.length );
 
-		/*
 		for (var i = 0; i < this.lights.length; ++i)
 			this.lights[i].update();
 
@@ -156,8 +161,9 @@ DSXScene.prototype.display = function () {
 
 		//Draws the scene from the graph by processing all nodes starting from the root
 		this.processScene();
-		*/
+
 	}
+
 
     this.shader.unbind();
 };

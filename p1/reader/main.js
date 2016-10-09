@@ -60,7 +60,7 @@ main=function()
 	var filename=getUrlVars()['file'] || "t1.dsx";
 
 	//Loads the graph from dsx filename
-	//var myGraph = new DSXSceneGraph(filename, myScene);
+	var myGraph = new DSXSceneGraph(filename, myScene);
 
 	// start
     app.run();
