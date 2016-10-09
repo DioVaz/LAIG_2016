@@ -8,13 +8,12 @@
  * @param sections number of sections
  * @param parts number of parts
  */
-function LeafCylinder(id, bottomR, topR, h, sections, parts) {
-    Leaf.call(this, id, "cylinder");
-    this.height = h;
-    this.bottomRadius = bottomR;
-    this.topRadius = topR;
-    this.sections = sections;
-    this.parts = parts;
+function LeafTorus(id, inner, outer, slices, loops) {
+    Leaf.call(this, id, "torus");
+    this.inner = inner;
+    this.outer = outer;
+    this.slices = slices;
+    this.loops = loops;
 }
 
 LeafCylinder.prototype = Object.create(Leaf.prototype);

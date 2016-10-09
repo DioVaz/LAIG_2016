@@ -506,7 +506,7 @@ DSXSceneGraph.prototype.parseMaterials = function(rootElement) {
  *@param rootElement SCENE tag from dsx
  * Parse tag TRANSFORMATIONS from dsx
  */
-/*
+
 DSXSceneGraph.prototype.parseTransformations = function(rootElement) {
 	//Get TRANSFORMATIONS
     var tempMat =  rootElement.getElementsByTagName("transformations");
@@ -550,7 +550,7 @@ DSXSceneGraph.prototype.parseTransformations = function(rootElement) {
 
 	}
 }
-*/
+
 
 /*
  *@param rootElement SCENE tag from dsx
@@ -601,53 +601,73 @@ DSXSceneGraph.prototype.parseTransformations = function(rootElement) {
 	return 0;
 }
 
-DSXSceneGraph.prototype.parsePrimitives = function(rootElement)
-{
-    var primitiveElement = rootElement.getElementsByTagName('primitives');
-    var primitivesCollection = (primitiveElement[0].getElementsByTagName('primitive'));
-    var primitivesLength = primitivesCollection.length;
-    //console.log(primitivesLength);
-    var i,id,auxiliarTag;
-    var primitive = [];
-    var founded = false;
-    for( i = 0; i < primitivesLength ; i++)
-    {
-        id = this.reader.getString(primitivesCollection[i],'id',1);
-        //console.log(id);
+LSXSceneGraph.prototype.parseLeaves = function(rootElement) {
+	//Get primitives to be drawn
+    var tempPrimitives =  rootElement.getElementsByTagName("primitives");
+	if (tempPrimitives == null) {
+		return "PRIMITIVES is missing.";
+	}
 
-        auxiliarTag = primitivesCollection[i].getElementsByTagName('rectangle');
-        console.log(auxiliarTag);
-        if(auxiliarTag != null && auxiliarTag.length != 0)
-        {
-            founded=true;
-            primitive = this.getPrimitive(auxiliarTag,"rectangle");
-            console.log(primitive);
-        }
+	if (tempPrimitives.length != 1) {
+		return "Only one PRIMITIVES is allowed.";
+	}
 
+	var primitives = tempPrimitives[0];
 
-        if(!founded) {
-            auxiliarTag = primitivesCollection[i].getElementsByTagName('triangle');
-            if (auxiliarTag != null && auxiliarTag.length != 0) {
-                founded = true;
-                primitive = this.getPrimitive(auxiliarTag, "triangle");
-            }
-            console.log(primitive);
-        }
+	allPrimitive = primitives.getElementsByTagName("primitive");
 
+	if (allPrimitive == null) {
+		return "PRIMITIVE in LEAVES missing";
+	}
+	if (allPrimitive.length == 0) {
+		return "No PRIMITIVES found."
+	}
 
+	//Get each Primitive
+	for (var i = 0; i < allPrimitive.length; ++i) {
+		var primitive = allPrimitive[i]
+		var id = this.reader.getString(primitive, "id");
+		if (id in this.primitives)
+			return "Duplicate leaf id: " + id;
 
+		var type = this.reader.getString(leaf, "type");
+		var data;
 
-        auxiliarTag = null;
-        primitive = null;
-
-
-        founded = false;
-
-    }
-    return 0;
-
+		//Different types of primitives
+		switch (type) {
+			case "rectangle":
+				data = this.reader.getArrayOfFloats(leaf, "args", 4);
+				if (data == null)
+					return "rectangle with error " + id;
+				this.leaves[id] = new LeafRectangle(id, data[0], data[1], data[2], data[3]);
+				break;
+			case "cylinder":
+				data = this.reader.getArrayOfFloats(leaf, "args", 5);
+				if (data == null)
+					return "cylinder with error " + id;
+				if(data[3] % 1 != 0  || data[4] % 1 != 0 )
+					return "cylinder " + id + " 4th/5th arg must be integer.";
+				this.leaves[id] = new LeafCylinder(id, data[0], data[1], data[2], data[3], data[4]);
+				break;
+			case "sphere":
+				data = this.reader.getArrayOfFloats(leaf, "args", 3);
+				if (data == null)
+					return "sphere with error " + id;
+				if(data[1] % 1 != 0  || data[2] % 1 != 0 )
+					return "sphere " + id + " 2nd/3rd arg must be integer.";
+				this.leaves[id] = new LeafSphere(id, data[0], data[1], data[2]);
+				break;
+			case "triangle":
+				data = this.reader.getArrayOfFloats(leaf, "args", 9);
+				if (data == null)
+					return "triangle with error" + id;
+				this.leaves[id] = new LeafTriangle(id, data[0], data[1], data[2], data[3], data[4], data[5], data[6], data[7], data[8]);
+				break;
+			default:
+				return "Leaf type unknown: " + type;
+		}
+	}
 }
-
 
 
 /*
