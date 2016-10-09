@@ -18,27 +18,31 @@ serialInclude(['../lib/CGF.js',
 'primitives/MyCircle.js',
 'primitives/MyCylinder.js',
 'primitives/MySphere.js',
-'DSXSceneGraph.js',
-'DSXReader.js',
-'DSXScene.js',
-'MyInterface.js',
-'Initials.js',
-'Illumination.js',
-'Light.js',
-'Texture.js',
+    'primitives/MyTorus.js',
+'dsx/DSXSceneGraph.js',
+'dsx/DSXReader.js',
+'dsx/DSXScene.js',
+'interface/MyInterface.js',
+'elements/Illumination.js',
+'elements/Light.js',
+'elements/Texture.js',
 'leafs/Leaf.js',
 'leafs/LeafCylinder.js',
 'leafs/LeafRectangle.js',
 'leafs/LeafSphere.js',
 'leafs/LeafTriangle.js',
-'Material.js',
-'Node.js',
+'elements/Material.js',
+'elements/Node.js',
+
 
 main=function()
 {
+
+    console.log("START");
 	// Standard application, scene and interface setup
     var app = new CGFapplication(document.body);
     var myScene = new DSXScene();
+
     var myInterface = new MyInterface();
 
     app.init();
@@ -56,7 +60,7 @@ main=function()
 	var filename=getUrlVars()['file'] || "t1.dsx";
 
 	//Loads the graph from dsx filename
-	var myGraph = new DSXSceneGraph(filename, myScene);
+	//var myGraph = new DSXSceneGraph(filename, myScene);
 
 	// start
     app.run();

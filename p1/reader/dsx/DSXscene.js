@@ -79,7 +79,7 @@ DSXScene.prototype.onGraphLoaded = function ()
 	this.lights = [];
 
 	//load lights from the Grahps
-	//All lights are invisible, enabled or not depends from the DSX
+	//All lights are invisible, enabled or not depends from the dsx
     for (var i = 0; i < this.graph.lights.length; ++i) {
     	this.lights.push(this.graph.lights[i]);
     	this.lights[i].setVisible(false);
@@ -134,13 +134,15 @@ DSXScene.prototype.display = function () {
 
 	// Apply transformations from the camera setup
 	this.applyViewMatrix();
+	var torus = new MyTorus(this,1,4,10,10);
+	torus.display();
 
 
-	//Process scene if DSX read ok
+	//Process scene if dsx read ok
 	if (this.graph != null && this.graph.loadedOk)
 	{
 
-
+		/*
 		for (var i = 0; i < this.lights.length; ++i)
 			this.lights[i].update();
 
@@ -154,6 +156,7 @@ DSXScene.prototype.display = function () {
 
 		//Draws the scene from the graph by processing all nodes starting from the root
 		this.processScene();
+		*/
 	}
 
     this.shader.unbind();

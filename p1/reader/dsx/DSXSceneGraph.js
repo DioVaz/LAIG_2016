@@ -15,7 +15,7 @@ function DSXSceneGraph(filename, scene) {
 	this.filename = 'scenes/'+filename;
 
   //***************UPDATE LATER*************
-  this.scene = new Scene();
+  //this.scene = new Scene();
     this.views = [];
   this.illumination = new Illumination();
   this.omni = [];
@@ -59,8 +59,8 @@ DSXSceneGraph.prototype.onXMLReady=function()
 };
 
 /*
- *@param rootElement SCENE tag from DSX
- * Parser of the DSX file
+ *@param rootElement SCENE tag from dsx
+ * Parser of the dsx file
  */
 DSXSceneGraph.prototype.parseSceneGraph = function(rootElement) {
 
@@ -91,14 +91,14 @@ DSXSceneGraph.prototype.parseSceneGraph = function(rootElement) {
     //var error = this.parseScene(rootElement);
     if (error) {
         return error;
-    }
+    }*/
 
   console.log("*******VIEWS*******");
     var error = this.parseViews(rootElement);
     if (error) {
         return error;
     }
-
+/*
 	console.log("*******ILLUMINATION*******");
     error = this.parseIllumination(rootElement);
     if (error) {
@@ -122,13 +122,13 @@ DSXSceneGraph.prototype.parseSceneGraph = function(rootElement) {
     if (error) {
         return error;
     }
-*/
+
     console.log("*******TRANSFORMATIONS*******");
       error = this.parseTransformations(rootElement);
       if (error) {
           return error;
       }
-/*
+
 	console.log("*******PRIMITIVES*******");
     //error = this.parsePrimitives(rootElement);
     if (error) {
@@ -222,8 +222,8 @@ DSXSceneGraph.prototype.parseViews = function (rootElement) {
 };
 
 /*
- *@param rootElement SCENE tag from DSX
- * Parse tag SCENE from DSX
+ *@param rootElement SCENE tag from dsx
+ * Parse tag SCENE from dsx
  */
 
 
@@ -257,8 +257,8 @@ DSXSceneGraph.prototype.parseScene = function(rootElement) {
 }
 
 
- /*@param rootElement SCENE tag from DSX
- * Parse tag ILLUMINATION from DSX
+ /*@param rootElement SCENE tag from dsx
+ * Parse tag ILLUMINATION from dsx
  */
 DSXSceneGraph.prototype.parseIllumination = function(rootElement) {
 	//Get ILLUMINATION
@@ -312,8 +312,8 @@ DSXSceneGraph.prototype.parseIllumination = function(rootElement) {
 }
 
 /*
- *@param rootElement SCENE tag from DSX
- * Parse tag LIGHTS from DSX
+ *@param rootElement SCENE tag from dsx
+ * Parse tag LIGHTS from dsx
  */
 DSXSceneGraph.prototype.parseLights = function(rootElement) { //por testar
 	//Get LIGHTS
@@ -418,8 +418,8 @@ DSXSceneGraph.prototype.parseLights = function(rootElement) { //por testar
 }
 
 /*
- *@param rootElement SCENE tag from DSX
- * Parse tag TEXTURES from DSX
+ *@param rootElement SCENE tag from dsx
+ * Parse tag TEXTURES from dsx
  */
 DSXSceneGraph.prototype.parseTextures = function(rootElement) {
 	//Get TEXTURES
@@ -464,8 +464,8 @@ DSXSceneGraph.prototype.parseTextures = function(rootElement) {
 
 
 /*
- *@param rootElement SCENE tag from DSX
- * Parse tag MATERIALS from DSX
+ *@param rootElement SCENE tag from dsx
+ * Parse tag MATERIALS from dsx
  */
 DSXSceneGraph.prototype.parseMaterials = function(rootElement) {
 	//Get MATERIALS
@@ -503,8 +503,8 @@ DSXSceneGraph.prototype.parseMaterials = function(rootElement) {
 }
 
 /*
- *@param rootElement SCENE tag from DSX
- * Parse tag TRANSFORMATIONS from DSX
+ *@param rootElement SCENE tag from dsx
+ * Parse tag TRANSFORMATIONS from dsx
  */
 /*
 DSXSceneGraph.prototype.parseTransformations = function(rootElement) {
@@ -553,8 +553,8 @@ DSXSceneGraph.prototype.parseTransformations = function(rootElement) {
 */
 
 /*
- *@param rootElement SCENE tag from DSX
- * Parse tag TRANSFORMATIONS from DSX
+ *@param rootElement SCENE tag from dsx
+ * Parse tag TRANSFORMATIONS from dsx
  */
 
 
@@ -601,7 +601,7 @@ DSXSceneGraph.prototype.parseTransformations = function(rootElement) {
 	return 0;
 }
 
-XMLreader.prototype.parsePrimitives = function(rootElement)
+DSXSceneGraph.prototype.parsePrimitives = function(rootElement)
 {
     var primitiveElement = rootElement.getElementsByTagName('primitives');
     var primitivesCollection = (primitiveElement[0].getElementsByTagName('primitive'));
@@ -651,8 +651,8 @@ XMLreader.prototype.parsePrimitives = function(rootElement)
 
 
 /*
- *@param rootElement SCENE tag from DSX
- * Parse tag LEAVES from DSX - sets all primitives for the scene
+ *@param rootElement SCENE tag from dsx
+ * Parse tag LEAVES from dsx - sets all primitives for the scene
  */
 DSXSceneGraph.prototype.parseLeaves = function(rootElement) {
 	//Get LEAVES - primitives to be drawn
@@ -723,8 +723,8 @@ DSXSceneGraph.prototype.parseLeaves = function(rootElement) {
 }
 
 /*
- *@param rootElement SCENE tag from DSX
- * Parse tag NODES from DSX
+ *@param rootElement SCENE tag from dsx
+ * Parse tag NODES from dsx
  */
 DSXSceneGraph.prototype.parseNodes = function(rootElement) {
 	//Get NODES
@@ -962,7 +962,7 @@ DSXSceneGraph.prototype.getArray = function(element,type) {
 };
 
 
-XMLreader.prototype.getPrimitive = function(element,type)
+DSXSceneGraph.prototype.getPrimitive = function(element,type)
 {
     var pos = [];
     var count = 0;
