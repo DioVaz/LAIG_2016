@@ -84,7 +84,7 @@
         <specular r="1.0" g="1.0" b="1.0" a="1.0" />
         <shininess value="1.0" />
     </material>
-    <material id="carvao" >
+    <material id="arvore" >
         <emission r="1.0" g="1.0" b="1.0" a="1.0" />
         <ambient r="1.0" g="1.0" b="1.0" a="1.0" />
         <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
@@ -120,8 +120,11 @@
       <primitive id="triangle1">
           <triangle x1="1" y1="1" z1="1" x2="1" y2="1" z2="1" x3="1" y3="1" z3="1" />
       </primitive>
-      <primitive id="cylinder1">
-          <cylinder base="1" top="1" height="1" slices="1" stacks="1" />
+      <primitive id="cilindro">
+          <cylinder base="1" top="1" height="2" slices="5" stacks="1" />
+      </primitive>
+      <primitive id="copa">
+          <cylinder base="2" top="0" height="2" slices="5" stacks="1" />
       </primitive>
       <primitive id="sphere1">
           <sphere radius="1" slices="1" stacks="1" />
@@ -135,26 +138,57 @@
   <!-- The components -->
   <components>
 
-      <component id="root">
+      <component id="arvore">
           <transformation>
               <transformationref id="1" />
           </transformation>
           <materials>
-              <material id="carvao" />
-              <material id="espeho" />
+              <material id="arvore" />
           </materials>
 
-          <texture id="peleB" />
 
           <!-- bloco "children" obrigatorio num "component" -->
           <children>
-              <componentref id="filho1" />
-              <componentref id="filho_inexistente" />
-              <primitiveref id="rectangle1" />
-              <primitiveref id="primitiva_inexistente" />
+              <componentref id="copa" />
+              <componentref id="tronco" />
           </children>
 
       </component>
+
+      <!-- COPA -->
+      <component id="copa">
+          <transformation>
+              <transformationref id="1" />
+          </transformation>
+          <materials>
+              <material id="inherit" />
+          </materials>
+
+
+          <!-- bloco "children" obrigatorio num "component" -->
+          <children>
+              <primitiveref id="copa" />
+          </children>
+
+      </component>
+
+      <!-- TRONCO -->
+      <component id="tronco">
+          <transformation>
+              <transformationref id="1" />
+          </transformation>
+          <materials>
+              <material id="inherit" />
+          </materials>
+
+
+          <!-- bloco "children" obrigatorio num "component" -->
+          <children>
+              <primitiveref id="cilindro" />
+          </children>
+
+      </component>
+
 
   </components>
 
