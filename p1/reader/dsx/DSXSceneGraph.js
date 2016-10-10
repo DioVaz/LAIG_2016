@@ -17,6 +17,7 @@ function DSXSceneGraph(filename, scene) {
   //***************UPDATE LATER*************
   //this.scene = new Scene();
   this.views = [];
+  this.defaultView;
   this.illumination = new Illumination();
   this.omnis = [];
   this.spots = [];
@@ -137,7 +138,7 @@ DSXSceneGraph.prototype.parseSceneGraph = function(rootElement) {
     }
 
 	console.log("*******COMPONENTS*******");
-    error = this.parseNodes(rootElement);
+    //error = this.parseNodes(rootElement);
     if (error) {
         return error;
     }
@@ -151,6 +152,7 @@ DSXSceneGraph.prototype.parseSceneGraph = function(rootElement) {
 
 DSXSceneGraph.prototype.parseViews = function (rootElement) {
   var viewsElement = rootElement.getElementsByTagName('views');
+  this.defaultView=this.reader.getString(viewsElement[0],'default',1);
   var perspectivesCollection = viewsElement[0].getElementsByTagName('perspective');
   var perspectivesLength = perspectivesCollection.length;
 

@@ -142,7 +142,7 @@ DSXScene.prototype.display = function () {
 
 	//this.setDefaultAppearance();
 	//Process scene if dsx read ok
-
+/*
 	if (this.graph != null && this.graph.loadedOk)
 	{
 		console.log("entrou");
@@ -164,7 +164,7 @@ DSXScene.prototype.display = function () {
 
 	}
 
-
+*/
     this.shader.unbind();
 };
 
