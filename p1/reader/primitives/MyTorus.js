@@ -25,6 +25,7 @@ MyTorus.prototype.initBuffers = function () {
     this.indices = [];
     this.vertices = [];
     this.normals = [];
+    this.texCoords = [];
 
     this.ang_interno = (2 * Math.PI)/this.slices;
     this.ang_central = (2* Math.PI)/this.loops;
@@ -50,20 +51,21 @@ MyTorus.prototype.initBuffers = function () {
             this.vertices.push(z);
 
             //as normais não estão correctas, é só mesmo para as ter
-            this.normals.push(x*this.ang);
-            this.normals.push(y*this.ang);
-            this.normals.push(z*this.ang);
+            this.normals.push(x);
+            this.normals.push(y);
+            this.normals.push(z);
 
+            this.texCoords.push(c/this.loops,i/this.slices);
 
 
 
         }
     }
 
-    for(c = 0; c < this.loops ; c += 1)
+    for(c = 0; c < this.loops  ; c += 1)
     {
 
-        for(i=0; i< this.slices  ; i += 1) {
+        for(i=0; i < this.slices  ; i += 1) {
 
             x1 = (this.loops+1) * c + i ;
             y1 = (1+ this.loops)*(c+1) + i ;
@@ -78,9 +80,9 @@ MyTorus.prototype.initBuffers = function () {
     }
 
 
-
     this.primitiveType = this.scene.gl.TRIANGLES;
     this.initGLBuffers();
+
 
 
 
