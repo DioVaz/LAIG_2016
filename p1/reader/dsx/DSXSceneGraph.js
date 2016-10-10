@@ -15,7 +15,7 @@ function DSXSceneGraph(filename, scene) {
 	this.filename = 'scenes/'+filename;
 
   //***************UPDATE LATER*************
-  //this.scene = new Scene();
+  this.scene = new Scene();
   this.views = [];
   this.defaultView;
   this.illumination = new Illumination();
@@ -66,28 +66,28 @@ DSXSceneGraph.prototype.onXMLReady=function()
 DSXSceneGraph.prototype.parseSceneGraph = function(rootElement) {
 
 
-    if (rootElement.nodeName != "SCENE") {
-        return "Not a SCENE file";
+    if (rootElement.nodeName != "dsx") {
+        return "Not a DSX file";
     }
 
 	//The order must be correct
   //
-    /*
+
 	if (
-      rootElement.children[0].nodeName != "scene" ||
+      	rootElement.children[0].nodeName != "scene" ||
   		rootElement.children[1].nodeName != "views" ||
   		rootElement.children[2].nodeName != "illumination" ||
   		rootElement.children[3].nodeName != "lights" ||
   		rootElement.children[4].nodeName != "textures" ||
   		rootElement.children[5].nodeName != "materials" ||
-      rootElement.children[6].nodeName != "transformations" ||
-      rootElement.children[7].nodeName != "primitives" ||
+      	rootElement.children[6].nodeName != "transformations" ||
+      	rootElement.children[7].nodeName != "primitives" ||
   		rootElement.children[8].nodeName != "components"){
 			error = "The order of the TAGS is wrong";
 			return error;
 	}
 
-*/
+
 
   console.log("*******SCENE*******");
     var error = this.parseScene(rootElement);
@@ -138,7 +138,7 @@ DSXSceneGraph.prototype.parseSceneGraph = function(rootElement) {
     }
 
 	console.log("*******COMPONENTS*******");
-    //error = this.parseNodes(rootElement);
+    error = this.parseComponents(rootElement);
     if (error) {
         return error;
     }
@@ -242,13 +242,11 @@ DSXSceneGraph.prototype.parseScene = function(rootElement) {
   }
 
   var scene = sceneTemp[0];
-	/*
+	
   //Get SCENE - root
   this.scene.root = this.reader.getString(scene, "root");
   if (this.scene.root == null)
     return "Root is missing.";
-  if (isNaN(this.scene.root))
-    return "Root is NaN.";
 
 
   //Get SCENE - axis_length
@@ -256,7 +254,7 @@ DSXSceneGraph.prototype.parseScene = function(rootElement) {
   if (this.scene.axis_length == null)
     return "axis_length is missing.";
   if (isNaN(this.scene.axis_length))
-    return "axis_length is NaN.";*/
+    return "axis_length is NaN.";
 }
 
 
@@ -317,118 +315,11 @@ DSXSceneGraph.prototype.parseIllumination = function(rootElement) {
 
 
 }
+
 /*
-/!*
  *@param rootElement SCENE tag from dsx
  * Parse tag LIGHTS from dsx
- *!/
-DSXSceneGraph.prototype.parseLights = function(rootElement) { //por testar
-	//Get LIGHTS
-    var tempLights =  rootElement.getElementsByTagName("lights");
-	if (tempLights == null) {
-		return "LIGHTS element is missing.";
-	}
-
-	if (tempLights.length != 1) {
-		return "only one LIGHTS is allowed.";
-	}
-
-	//Get LIGHTS - LIGHT
-	var lights = tempLights[0];
-  var j =0;
-
-	for (var i = 0; i < lights.children.length; ++i) {
-		var light = lights.children[i];
-		if (light.nodeName != "omni" && i == 0)
-			return "expected omni in LIGHTS: " + light.nodeName;
-    //!****OMNI*********************
-    else if (light.nodeName == "omni"){
-      var id = this.reader.getString(omni, "id");
-      if (id == null)
-        return "OMNI without id.";
-      var enable = this.reader.getBoolean(omni, "enabled");
-
-      this.omni.push(new Light(this.scene, j, id)); //CRIAR CLASSE OMNI
-      if (enable)
-  			this.omni[j].enable();
-  		else
-  			this.omni[j].disable();
-
-      var data = [];
-      //location of light
-      data.push(this.reader.getFloat(light.children[1], "x"));
-      data.push(this.reader.getFloat(light.children[1], "y"));
-      data.push(this.reader.getFloat(light.children[1], "z"));
-      data.push(this.reader.getFloat(light.children[1], "w"));
-      this.omni[j].setPosition(data[0], data[1], data[2], data[3]);
-
-      //components of light
-      //ambient
-      data = this.reader.getRGBA(light.children[2]);
-      this.omni[j].setAmbient(data[0], data[1], data[2], data[3]);
-      //diffuse
-      data = this.reader.getRGBA(light.children[3]);
-      this.omni[j].setDiffuse(data[0], data[1], data[2], data[3]);
-      //specular
-      data = this.reader.getRGBA(light.children[4]);
-      this.omni[j].setSpecular(data[0], data[1], data[2], data[3]);
-    }
-    //!*****************************
-	}
-  j=0;
-	//!****SPOT*********************
-  for (var i = 0; i < lights.children.length; ++i) {
-		var light = lights.children[i];
-		if (light.nodeName == "spot"){
-      var id = this.reader.getString(spot, "id");
-      if (id == null)
-        return "SPOT without id.";
-      var enable = this.reader.getBoolean(spot, "enabled");
-      var angle = this.reader.getFloat(spot, "angle");
-      var exponent = this.reader.getFloat(spot, "exponent");
-      console.log(enable + " " + angle + " " + exponent);
-      this.spot.push(new Light(this.scene, j, id)); //CRIAR CLASSE OMNI
-      if (enable)
-  			this.spot[j].enable();
-  		else
-  			this.spot[j].disable();
-
-      var data = [];
-      //target of light
-      data.push(this.reader.getFloat(light.children[1], "x"));
-      data.push(this.reader.getFloat(light.children[1], "y"));
-      data.push(this.reader.getFloat(light.children[1], "z"));
-      data.push(this.reader.getFloat(light.children[1], "w"));
-      /!*!/this.spot[j].setTarget/!*!/console.log("targuet x="+data[0]+ " y="+data[1]+" z="+ data[2] +" w="+ data[3]);
-
-      //location of light
-      data.push(this.reader.getFloat(light.children[2], "x"));
-      data.push(this.reader.getFloat(light.children[2], "y"));
-      data.push(this.reader.getFloat(light.children[2], "z"));
-      data.push(this.reader.getFloat(light.children[2], "w"));
-      this.spot[j].setPosition(data[0], data[1], data[2], data[3]);
-
-      //components of light
-      //ambient
-      data = this.reader.getRGBA(light.children[3]);
-      this.spot[j].setAmbient(data[0], data[1], data[2], data[3]);
-      //diffuse
-      data = this.reader.getRGBA(light.children[4]);
-      this.spot[j].setDiffuse(data[0], data[1], data[2], data[3]);
-      //specular
-      data = this.reader.getRGBA(light.children[5]);
-      this.spot[j].setSpecular(data[0], data[1], data[2], data[3]);
-    }
-      //!*****************************
-  	}
-
-  	console.log(this.omnis);
-    console.log(this.spots);
-    debugger;
-
-}*/
-
-
+ */
 
 DSXSceneGraph.prototype.parseLights = function (rootElement) {
 
@@ -632,10 +523,6 @@ DSXSceneGraph.prototype.parseMaterials = function(rootElement) {
     var tempMat =  rootElement.getElementsByTagName("materials");
 	if (tempMat == null) {
 		return "MATERIALS is missing.";
-	}
-
-	if (tempMat.length != 1) {
-		return "Only one MATERIALS is allowed.";
 	}
 
 	var materials = tempMat[0];
@@ -903,19 +790,17 @@ DSXSceneGraph.prototype.parseComponents = function(rootElement) {
 		return "Only one components is allowed";
 	}
 
-	var components = tempComponents[0];
+	var components = tempComponents[0].getElementsByTagName("component");
 
-	tempComponent = components.getElementsByTagName("components");
-
-	if (tempComponent == null) {
+	if (components == null) {
 		return "Component in Components missing";
 	}
-	if (tempComponents.length == 0) {
+	if (components.length == 0) {
 		return "No Components found."
 	}
 
-	for (var i = 0; i < tempComponent.length; ++i) {
-		var component = tempComponent[i];
+	for (var i = 0; i < components.length; ++i) {
+		var component = components[i];
 
 		error = this.parseComponent(component);
 		if (error)
