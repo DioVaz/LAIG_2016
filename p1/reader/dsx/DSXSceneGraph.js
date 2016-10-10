@@ -943,79 +943,126 @@ DSXSceneGraph.prototype.parsePrimitives = function(rootElement) {
  *@param rootElement SCENE tag from dsx
  * Parse tag NODES from dsx
  */
-DSXSceneGraph.prototype.parseNodes = function(rootElement) {
-	//Get NODES
-    var tempNodes =  rootElement.getElementsByTagName("NODES");
-	if (tempNodes == null) {
-		return "NODES is missing.";
+DSXSceneGraph.prototype.parseComponents = function(rootElement) {
+	//Get components
+    var tempComponents =  rootElement.getElementsByTagName("components");
+	if (tempComponents == null) {
+		return "Components is missing.";
 	}
 
-	if (tempNodes.length != 1) {
-		return "Only one NODES is allowed";
+	if (tempComponents.length != 1) {
+		return "Only one components is allowed";
 	}
 
-	var nodes = tempNodes[0];
-	this.root = this.reader.getString(nodes.children[0], "id");
+	var components = tempComponents[0];
 
-	tempNode = nodes.getElementsByTagName("NODE");
+	tempComponent = components.getElementsByTagName("components");
 
-	if (tempNode == null) {
-		return "NODE in NODES missing";
+	if (tempComponent == null) {
+		return "Component in Components missing";
 	}
-	if (tempNode.length == 0) {
-		return "No NODE found."
+	if (tempComponents.length == 0) {
+		return "No Components found."
 	}
 
-	for (var i = 0; i < tempNode.length; ++i) {
-		var node = tempNode[i];
+	for (var i = 0; i < tempComponent.length; ++i) {
+		var component = tempComponent[i];
 
-		error = this.parseNode(node);
+		error = this.parseComponent(component);
 		if (error)
 			return error;
 	}
 
-	if (!(this.root in this.nodes))
-		return "Node with root id missing";
+	if (!(this.scene.root in this.nodes)) //verificar mais tarde
+		return "Component with root id missing";
 
 	for (key in this.nodes) {
 		for (var i = 0; i < this.nodes[key].children.length; ++i) {
 			var child = this.nodes[key].children[i];
-			if (!((child in this.nodes) || (child in this.leaves)))
+			if (!((child in this.nodes) || (child in this.primitives)))
 				return "Child " + child + " is missing";
 		}
 	}
 }
 
 /*
- *@param node
- * Parse each NODE
- * Called by parseNodes
+ *@param component
+ * Parse each component
+ * Called by parseComponents
  */
-DSXSceneGraph.prototype.parseNode = function(node) {
+DSXSceneGraph.prototype.parseComponent = function(component) {
 	//Id of node
 	var id = this.reader.getString(node, "id");
 	console.log(id);
-	if (id in this.leaves)
-		return "Copy id leaf " + id;
+	if (id in this.primitives)
+		return "Copy id primitive " + id;
 	if (id in this.nodes)
 		return "Copy id node " + id;
 
 	this.nodes[id] = new Node(id);
 
-	//Get NODE MATERIAL
-	var childNode = node.children[0];
-	if (childNode.nodeName != "material")
-		return "Expected MATERIAL in NODE " + id + "in 1st child.";
-	var material = this.reader.getString(childNode, "id");
+  //Get Local Transformations of Node
+  var childNode = node.children[0];
+	for (var i = 0; i < childNode.length; ++i) {
+		var transformation = childNode.children[i];
+		var type = transformation.nodeName;
+    if(childNode.length ==1 && type=="transformationref"){
+      var idRef = this.reader.getString(transformation, "id");
+    }
+    else{
+  		switch (type) {
+  			case "rotate":
+  				var axis = this.reader.getString(transformation, "axis");
+  				var angle = this.reader.getFloat(transformation, "angle");
+  					switch (axis) {
 
-	if(!(material in this.materials) && material != "null")
-		return "No MATERIAL " + material +  " for NODE " + id;
-	this.nodes[id].setMaterial(material);
+  						case "x":
+  							this.nodes[id].rotateX(angle * deg2rad);
+  							break;
+  						case "y":
+  							this.nodes[id].rotateY(angle * deg2rad);
+  							break;
+  						case "z":
+  							this.nodes[id].rotateZ(angle *deg2rad);
+  							break;
+  						default:
+  							return "Unknown rotation axis: " + axis;
+  					}
+  				break;
+  			case "scale":
+  				var x = this.reader.getFloat(transformation, "x");
+  				var y = this.reader.getFloat(transformation, "y");
+  				var z = this.reader.getFloat(transformation, "z");
+  				this.nodes[id].scale(x, y, z);
+  				break;
+  			case "translate":
+  				var x = this.reader.getFloat(transformation, "x");
+  				var y = this.reader.getFloat(transformation, "y");
+  				var z = this.reader.getFloat(transformation, "z");
+  				this.nodes[id].translate(x, y, z);
+  				break;
+  			default:
+  				return "Unknown transformation: " + type;
+  		}
+    }
+	}
+  //Get NODE MATERIALS
+	var childNode = node.children[1];
+	if (childNode.nodeName != "materials")
+		return "Expected MATERIAL in COMPONENT " + id + "in 2st child.";
+  for (var i = 0; i < childNode.length; ++i) {
+	   var material = childNode.children[i];
+     var materialID = this.reader.getString(material, "id");
 
+    	if(!(materialID in this.materials) && materialID != "null")
+    		return "No MATERIAL " + materialID +  " for COMPONENT " + id;
+      if(i==0)
+    	this.nodes[id].setMaterial(material);
+  }
 	//Get NODE TEXTURE
-	childNode = node.children[1];
-	if (childNode.nodeName != "TEXTURE")
-		return "Expected TEXTURE in NODE " + id + "in 2nd child.";
+	childNode = node.children[2];
+	if (childNode.nodeName != "texture")
+		return "Expected TEXTURE in NODE " + id + "in 3rd child.";
 	var texture = this.reader.getString(childNode, "id");
 
 	if(!(texture in this.textures) && texture != "null" && texture != "clear")
@@ -1023,54 +1070,13 @@ DSXSceneGraph.prototype.parseNode = function(node) {
 
 	this.nodes[id].setTexture(texture);
 
-	//Get Local Transformations of Node - OPTIONAL
-	for (var i = 2; i < node.children.length - 1; ++i) {
-		var transformation = node.children[i];
-		var type = transformation.nodeName;
-		switch (type) {
-			case "ROTATION":
-				var axis = this.reader.getString(transformation, "axis");
-				var angle = this.reader.getFloat(transformation, "angle");
-					switch (axis) {
-
-						case "x":
-							this.nodes[id].rotateX(angle * deg2rad);
-							break;
-						case "y":
-							this.nodes[id].rotateY(angle * deg2rad);
-							break;
-						case "z":
-							this.nodes[id].rotateZ(angle *deg2rad);
-							break;
-						default:
-							return "Unknown rotation axis: " + axis;
-					}
-				break;
-			case "SCALE":
-				var sx = this.reader.getFloat(transformation, "sx");
-				var sy = this.reader.getFloat(transformation, "sy");
-				var sz = this.reader.getFloat(transformation, "sz");
-				this.nodes[id].scale(sx, sy, sz);
-				break;
-			case "TRANSLATION":
-				var x = this.reader.getFloat(transformation, "x");
-				var y = this.reader.getFloat(transformation, "y");
-				var z = this.reader.getFloat(transformation, "z");
-				this.nodes[id].translate(x, y, z);
-				break;
-			default:
-				return "Unknown transformation: " + type;
-		}
-	}
-
 	//Get children of NODE
-	var new_children = node.children[node.children.length - 1];
-	if (new_children.nodeName != "DESCENDANTS")
-		return "Expected DESCENDANTS tag in NODE " + id;
+	var new_children = node.children[3];
+	if (new_children.nodeName != "children")
+		return "Expected CHILDREN tag in NODE " + id;
 
 	if (new_children.children.length == 0)
-		return "NODE " + id + " as no descendants";
-
+		return "COMPONENT " + id + " as no children";
 	for (var i = 0; i < new_children.children.length; ++i) {
 		var new_child = this.reader.getString(new_children.children[i], "id");
 		this.nodes[id].addChild(new_child);
@@ -1265,5 +1271,3 @@ DSXSceneGraph.prototype.notRGBA = function (r, g, b, a) {
         return true;
     return false;
 };
-
-
