@@ -81,11 +81,19 @@ DSXScene.prototype.onGraphLoaded = function ()
 
 	//load lights from the Grahps
 	//All lights are invisible, enabled or not depends from the dsx
-    for (var i = 0; i < this.graph.lights.length; ++i) {
-    	this.lights.push(this.graph.lights[i]);
-    	this.lights[i].setVisible(false);
-    	this.lightsEnabled[this.lights[i].id] = this.lights[i].enabled;
-    }
+
+	for (var i = 0; i < this.graph.omnis.length; ++i) {
+		this.lights.push(this.graph.omnis[i]);
+		this.lights[i].setVisible(false);
+		this.lightsEnabled[this.lights[i].id] = this.lights[i].enabled;
+	}
+
+	for (var i = 0; i < this.graph.spots.length; ++i) {
+		this.lights.push(this.graph.spots[i]);
+		this.lights[i].setVisible(false);
+		this.lightsEnabled[this.lights[i].id] = this.lights[i].enabled;
+	}
+
 
 	//controls all lights
     this.lightsEnabled[this.allLights] = false;
@@ -142,7 +150,7 @@ DSXScene.prototype.display = function () {
 
 	//this.setDefaultAppearance();
 	//Process scene if dsx read ok
-/*
+
 	if (this.graph != null && this.graph.loadedOk)
 	{
 		console.log("entrou");
@@ -161,10 +169,10 @@ DSXScene.prototype.display = function () {
 
 		//Draws the scene from the graph by processing all nodes starting from the root
 		this.processScene();
-
+		console.log(this.lights.length);
 	}
 
-*/
+
     this.shader.unbind();
 };
 
@@ -210,10 +218,10 @@ DSXScene.prototype.processNode = function(node, parentTexture, parentMaterial) {
 	//Applies transformations
 	this.pushMatrix();
 
-	this.multMatrix(this.graph.nodes[node].localTransformations);
+	//this.multMatrix(this.graph.nodes[node].localTransformations);
 
 	//Receives material and texture from parent?
-	var material = this.graph.nodes[node].material;
+	/*var material = this.graph.nodes[node].material;
 	if (material == "null")
 		material = parentMaterial;
 
@@ -225,16 +233,19 @@ DSXScene.prototype.processNode = function(node, parentTexture, parentMaterial) {
 	var children = this.graph.nodes[node].children;
 	for (var i = 0; i < children.length; ++i) {
 		this.processNode(children[i], texture, material);
-	}
+	}*/
 
 	this.popMatrix();
 }
+
 
 /*
  * Updates lights from the interface
  * @param lightId
  * @param enable boolean
  */
+
+/*
 DSXScene.prototype.updateLight = function(lightId, enable) {
 
 	//Switch only one light
@@ -258,3 +269,62 @@ DSXScene.prototype.updateLight = function(lightId, enable) {
 
 	}
 }
+*/
+
+DSXScene.prototype.updateLights = function(lightId,enable) {
+		this.updateOmnis(lightId,enable);
+		this.updateSpots(lightId,enable);
+
+
+}
+
+DSXScene.prototype.updateOmnis = function(lightId,enable) {
+	if(lightId != this.allLights) {
+	for (var i = 0; i < this.graph.omnis.length; ++i) {
+		if (this.lights[i].id == lightId) {
+			var light = this.lights[i];
+			enable ? light.enable() : light.disable();
+			return ;
+		}
+	}
+	}else
+	{
+		for (var i = 0; i < this.graph.omnis.length; ++i) {
+				var light = this.lights[i];
+				enable ? light.enable() : light.disable();
+		}
+	}
+}
+
+DSXScene.prototype.updateSpots = function(lightId,enable) {
+	if(lightId != this.allLights) {
+		for (var i = this.getSpotsBegin() ; i < this.graph.spots.length; ++i) {
+			if (this.lights[i].id == lightId) {
+				var light = this.lights[i];
+				enable ? light.enable() : light.disable();
+				return ;
+			}
+		}
+	}else
+	{
+		for (var i = this.getSpotsBegin() ; i < this.getSpotsEnd(); ++i) {
+			var light = this.lights[i];
+			enable ? light.enable() : light.disable();
+		}
+	}
+}
+
+DSXScene.prototype.getSpotsBegin = function() {
+	return this.graph.omnis.length;
+}
+
+DSXScene.prototype.getSpotsEnd = function() {
+	return this.graph.omnis.length + this.graph.spots.length;
+}
+
+
+
+
+
+
+

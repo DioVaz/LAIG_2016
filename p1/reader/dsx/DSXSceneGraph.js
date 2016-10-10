@@ -15,7 +15,7 @@ function DSXSceneGraph(filename, scene) {
 	this.filename = 'scenes/'+filename;
 
   //***************UPDATE LATER*************
-  this.scene = new Scene();
+  //this.scene = new Scene();
   this.views = [];
   this.defaultView;
   this.illumination = new Illumination();
@@ -136,12 +136,12 @@ DSXSceneGraph.prototype.parseSceneGraph = function(rootElement) {
     if (error) {
         return error;
     }
-
+    /*
 	console.log("*******COMPONENTS*******");
     error = this.parseComponents(rootElement);
     if (error) {
         return error;
-    }
+    }*/
 
 	console.log("**************");
 
@@ -399,7 +399,7 @@ DSXSceneGraph.prototype.parseOmnis = function(omnisElement) {
 
 
     }
-    console.log(this.omnis);
+
     return 0;
 
 
@@ -456,6 +456,7 @@ DSXSceneGraph.prototype.parseSpots = function(spotsElement) {
         var light = new CGFlight(this.scene,id);
         light.setSpotExponent(expoente);
         light.setSpotCutOff(angle);
+        light.setSpotDirection(target);
         light.setPosition(location);
         light.setAmbient(ambient);
         light.setDiffuse(diffuse);
@@ -466,7 +467,7 @@ DSXSceneGraph.prototype.parseSpots = function(spotsElement) {
 
 
     }
-    console.log(this.spots);
+
     return 0;
 
 
