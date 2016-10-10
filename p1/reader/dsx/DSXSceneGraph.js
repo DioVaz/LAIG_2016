@@ -16,7 +16,7 @@ function DSXSceneGraph(filename, scene) {
 
   //***************UPDATE LATER*************
   //this.scene = new Scene();
-    this.views = [];
+  this.views = [];
   this.illumination = new Illumination();
   this.omnis = [];
   this.spots = [];
@@ -89,7 +89,7 @@ DSXSceneGraph.prototype.parseSceneGraph = function(rootElement) {
 */
 
   console.log("*******SCENE*******");
-    //var error = this.parseScene(rootElement);
+    var error = this.parseScene(rootElement);
     if (error) {
         return error;
     }
@@ -111,7 +111,7 @@ DSXSceneGraph.prototype.parseSceneGraph = function(rootElement) {
     if (error) {
         return error;
     }
-    /*
+
 	console.log("*******TEXTURES*******");
     error = this.parseTextures(rootElement);
     if (error) {
@@ -131,17 +131,17 @@ DSXSceneGraph.prototype.parseSceneGraph = function(rootElement) {
       }
 
 	console.log("*******PRIMITIVES*******");
-    //error = this.parsePrimitives(rootElement);
+    error = this.parsePrimitives(rootElement);
     if (error) {
         return error;
     }
 
 	console.log("*******COMPONENTS*******");
-    //error = this.parseNodes(rootElement);
+    error = this.parseNodes(rootElement);
     if (error) {
         return error;
     }
-    */
+
 	console.log("**************");
 
     this.loadedOk = true;
@@ -230,7 +230,7 @@ DSXSceneGraph.prototype.parseViews = function (rootElement) {
 
 DSXSceneGraph.prototype.parseScene = function(rootElement) {
   //Get SCENE
-  var sceneTemp =  rootElement.getElementsByTagName("SCENE");
+  var sceneTemp =  rootElement.getElementsByTagName("scene");
   if (sceneTemp == null) {
     return "SCENE is missing";
   }
@@ -240,7 +240,7 @@ DSXSceneGraph.prototype.parseScene = function(rootElement) {
   }
 
   var scene = sceneTemp[0];
-
+	/*
   //Get SCENE - root
   this.scene.root = this.reader.getString(scene, "root");
   if (this.scene.root == null)
@@ -254,7 +254,7 @@ DSXSceneGraph.prototype.parseScene = function(rootElement) {
   if (this.scene.axis_length == null)
     return "axis_length is missing.";
   if (isNaN(this.scene.axis_length))
-    return "axis_length is NaN.";
+    return "axis_length is NaN.";*/
 }
 
 
@@ -590,10 +590,6 @@ DSXSceneGraph.prototype.parseTextures = function(rootElement) {
 		return "TEXTURES is missing.";
 	}
 
-	if (tempText.length != 1) {
-		return "Only one TEXTURES is allowed.";
-	}
-
 	var textures = tempText[0];
 
 	texture = textures.getElementsByTagName("texture");
@@ -609,7 +605,7 @@ DSXSceneGraph.prototype.parseTextures = function(rootElement) {
 
 	//Relative path to file with textures (images)
 	var pathRel = this.filename.substring(0, this.filename.lastIndexOf("/"));
-
+	console.log(pathRel);
 	for (var i = 0; i < texture.length; ++i) {
 		var NewTexture = texture[i];
 		var id = this.reader.getString(NewTexture, "id");
@@ -668,56 +664,6 @@ DSXSceneGraph.prototype.parseMaterials = function(rootElement) {
  *@param rootElement SCENE tag from dsx
  * Parse tag TRANSFORMATIONS from dsx
  */
-/*
-DSXSceneGraph.prototype.parseTransformations = function(rootElement) {
-	//Get TRANSFORMATIONS
-    var tempMat =  rootElement.getElementsByTagName("transformations");
-	if (tempMat == null) {
-		return "TRANSFORMATIONS is missing.";
-	}
-
-	if (tempMat.length != 1) {
-		return "Only one TRANSFORMATIONS is allowed.";
-	}
-
-	var transformations = tempMat[0];
-
-	//Get each transformation
-	for(var i = 0; i < transformations.children.length; ++i){
-		var transformation = transformations.children[i];
-		var id = this.reader.getString(transformation,"id");
-		if (id in this.transformations)
-			return "Duplicate transformation id: " + id;
-
-		//this.transformations[id] = new Transformation(this.scene,id); CRIAR CLASSE
-
-    var translate = [];
-    //translate of transformation
-    translate.push(this.reader.getFloat(transformation.children[0], "x"));
-    translate.push(this.reader.getFloat(transformation.children[0], "y"));
-    translate.push(this.reader.getFloat(transformation.children[0], "z"));
-    translate.push(this.reader.getFloat(transformation.children[0], "w"));
-    //this.transformations[id].settranslate(translate[0], translate[1], translate[2], translate[3]);
-
-    var axis = this.reader.getString(transformation.children[1],"axis");
-    var angle = this.reader.getFloat(transformation.children[1],"angle");
-
-    var scale = [];
-    //scale of transformation
-    scale.push(this.reader.getFloat(transformation.children[2], "x"));
-    scale.push(this.reader.getFloat(transformation.children[2], "y"));
-    scale.push(this.reader.getFloat(transformation.children[2], "z"));
-    scale.push(this.reader.getFloat(transformation.children[2], "w"));
-    //this.transformations[id].setscale(scale[0], scale[1], scale[2], scale[3]);
-
-	}
-}*/
-
-
-/*
- *@param rootElement SCENE tag from dsx
- * Parse tag TRANSFORMATIONS from dsx
- */
 
 
 DSXSceneGraph.prototype.parseTransformations = function(rootElement) {
@@ -752,12 +698,12 @@ DSXSceneGraph.prototype.parseTransformations = function(rootElement) {
 			rotate = this.getArray(rotateTag,"rotate");
 		console.log(rotate);
 
-		translateTag = null;
-		scaleTag = null;
-		rotateTag = null;
-		translate = null;
-		scale = null;
-		rotate = null;
+		translateTag = [];
+		scaleTag = [];
+		rotateTag = [];
+		translate = [];
+		scale = [];
+		rotate = [];
 
 	}
 	return 0;
@@ -796,138 +742,139 @@ DSXSceneGraph.prototype.parsePrimitives = function(rootElement) {
 		if (id in this.primitives)
 			return "Duplicate primitive id: " + id;
 
-		var type = primitive.nodeName;
-		var data;
-    var param;
-    var count = 0;
+		var type = primitive.children[0].nodeName;
+		var primitiveT = primitive.children[0];
+		var data=[];
+        var param;
+        var count = 0;
 
 		//Different types of primitives
 		switch (type) {
 			case "rectangle":
-        if (primitive.getAttribute('x1') != null) {
-              data[count] = this.reader.getFloat(primitive, 'x1', 1);
+        if (primitiveT.getAttribute('x1') != null) {
+              data[count] = this.reader.getFloat(primitiveT, 'x1', 1);
               count++;
         }
-        if (primitive.getAttribute('y1') != null && count == 1) {
-              data[count] = this.reader.getFloat(primitive, 'y1', 1);
+        if (primitiveT.getAttribute('y1') != null && count == 1) {
+              data[count] = this.reader.getFloat(primitiveT, 'y1', 1);
               count++;
         }
-        if (primitive.getAttribute('x2') != null && count == 2) {
-              data[count] = this.reader.getFloat(primitive, 'x2', 1);
+        if (primitiveT.getAttribute('x2') != null && count == 2) {
+              data[count] = this.reader.getFloat(primitiveT, 'x2', 1);
               count++;
         }
-        if (primitive.getAttribute('y2') != null && count == 3) {
-              data[count] = this.reader.getFloat(primitive, 'y2', 1);
+        if (primitiveT.getAttribute('y2') != null && count == 3) {
+              data[count] = this.reader.getFloat(primitiveT, 'y2', 1);
               count++;
         }
         if (count != 4)
 					return "Rectangle with error " + id;
-				this.leaves[id] = new LeafRectangle(id, data[0], data[1], data[2], data[3]);
+				this.primitives[id] = new LeafRectangle(id, data[0], data[1], data[2], data[3]);
 				break;
-			case "cylinder":
-        if (primitive.getAttribute('base') != null) {
-              data[count] = this.reader.getFloat(primitive, 'base', 1);
+		case "cylinder":
+        if (primitiveT.getAttribute('base') != null) {
+              data[count] = this.reader.getFloat(primitiveT, 'base', 1);
               count++;
         }
-        if (primitive.getAttribute('top') != null && count == 1) {
-              data[count] = this.reader.getFloat(primitive, 'top', 1);
+        if (primitiveT.getAttribute('top') != null && count == 1) {
+              data[count] = this.reader.getFloat(primitiveT, 'top', 1);
               count++;
         }
-        if (primitive.getAttribute('height') != null && count == 2) {
-              data[count] = this.reader.getFloat(primitive, 'height', 1);
+        if (primitiveT.getAttribute('height') != null && count == 2) {
+              data[count] = this.reader.getFloat(primitiveT, 'height', 1);
               count++;
         }
-        if (primitive.getAttribute('slices') != null && count == 3) {
-              data[count] = this.reader.getInt(primitive, 'slices', 1);
+        if (primitiveT.getAttribute('slices') != null && count == 3) {
+              data[count] = this.reader.getInteger(primitiveT, 'slices', 1);
               count++;
         }
-        if (primitive.getAttribute('stacks') != null && count == 4) {
-              data[count] = this.reader.getInt(primitive, 'stacks', 1);
+        if (primitiveT.getAttribute('stacks') != null && count == 4) {
+              data[count] = this.reader.getInteger(primitiveT, 'stacks', 1);
               count++;
         }
         if (count != 5)
           return "Cylinder with error " + id;
-				this.leaves[id] = new LeafCylinder(id, data[0], data[1], data[2], data[3], data[4]);
+				this.primitives[id] = new LeafCylinder(id, data[0], data[1], data[2], data[3], data[4]);
 				break;
 			case "sphere":
-        if (primitive.getAttribute('radius') != null) {
-              data[count] = this.reader.getFloat(primitive, 'radius', 1);
+        if (primitiveT.getAttribute('radius') != null) {
+              data[count] = this.reader.getFloat(primitiveT, 'radius', 1);
               count++;
         }
-        if (primitive.getAttribute('slices') != null && count == 1) {
-              data[count] = this.reader.getInt(primitive, 'slices', 1);
+        if (primitiveT.getAttribute('slices') != null && count == 1) {
+              data[count] = this.reader.getInteger(primitiveT, 'slices', 1);
               count++;
         }
-        if (primitive.getAttribute('stacks') != null && count == 2) {
-              data[count] = this.reader.getInt(primitive, 'stacks', 1);
+        if (primitiveT.getAttribute('stacks') != null && count == 2) {
+              data[count] = this.reader.getInteger(primitiveT, 'stacks', 1);
               count++;
         }
         if (count != 3)
           return "Sphere with error " + id;
-				this.leaves[id] = new LeafSphere(id, data[0], data[1], data[2]);
+				this.primitives[id] = new LeafSphere(id, data[0], data[1], data[2]);
 				break;
       case "torus":
-        if (primitive.getAttribute('inner') != null) {
-              data[count] = this.reader.getFloat(primitive, 'inner', 1);
+        if (primitiveT.getAttribute('inner') != null) {
+              data[count] = this.reader.getFloat(primitiveT, 'inner', 1);
               count++;
         }
-        if (primitive.getAttribute('outer') != null && count == 1) {
-              data[count] = this.reader.getFloat(primitive, 'outer', 1);
+        if (primitiveT.getAttribute('outer') != null && count == 1) {
+              data[count] = this.reader.getFloat(primitiveT, 'outer', 1);
               count++;
         }
-        if (primitive.getAttribute('slices') != null && count == 2) {
-              data[count] = this.reader.getInt(primitive, 'slices', 1);
+        if (primitiveT.getAttribute('slices') != null && count == 2) {
+              data[count] = this.reader.getInteger(primitiveT, 'slices', 1);
               count++;
         }
-        if (primitive.getAttribute('loops') != null && count == 3) {
-              data[count] = this.reader.getInt(primitive, 'loops', 1);
+        if (primitiveT.getAttribute('loops') != null && count == 3) {
+              data[count] = this.reader.getInteger(primitiveT, 'loops', 1);
               count++;
         }
         if (count != 4)
           return "Torus with error " + id;
-				this.leaves[id] = new LeafTorus(id, data[0], data[1], data[2], data[3]);
+				//this.primitives[id] = new LeafTorus(id, data[0], data[1], data[2], data[3]);
 				break;
 			case "triangle":
-        if (primitive.getAttribute('x1') != null) {
-              data[count] = this.reader.getFloat(primitive, 'x1', 1);
+        if (primitiveT.getAttribute('x1') != null) {
+              data[count] = this.reader.getFloat(primitiveT, 'x1', 1);
               count++;
         }
-        if (primitive.getAttribute('y1') != null && count == 1) {
-              data[count] = this.reader.getFloat(primitive, 'y1', 1);
+        if (primitiveT.getAttribute('y1') != null && count == 1) {
+              data[count] = this.reader.getFloat(primitiveT, 'y1', 1);
               count++;
         }
-        if (primitive.getAttribute('z1') != null && count == 2) {
-              data[count] = this.reader.getFloat(primitive, 'z1', 1);
+        if (primitiveT.getAttribute('z1') != null && count == 2) {
+              data[count] = this.reader.getFloat(primitiveT, 'z1', 1);
               count++;
         }
-        if (primitive.getAttribute('x2') != null && count == 3) {
-              data[count] = this.reader.getFloat(primitive, 'x2', 1);
+        if (primitiveT.getAttribute('x2') != null && count == 3) {
+              data[count] = this.reader.getFloat(primitiveT, 'x2', 1);
               count++;
         }
-        if (primitive.getAttribute('y2') != null && count == 4) {
-              data[count] = this.reader.getFloat(primitive, 'y2', 1);
+        if (primitiveT.getAttribute('y2') != null && count == 4) {
+              data[count] = this.reader.getFloat(primitiveT, 'y2', 1);
               count++;
         }
-        if (primitive.getAttribute('z2') != null && count == 5) {
-              data[count] = this.reader.getFloat(primitive, 'z2', 1);
+        if (primitiveT.getAttribute('z2') != null && count == 5) {
+              data[count] = this.reader.getFloat(primitiveT, 'z2', 1);
               count++;
         }
-        if (primitive.getAttribute('x3') != null && count == 6) {
-              data[count] = this.reader.getFloat(primitive, 'x3', 1);
+        if (primitiveT.getAttribute('x3') != null && count == 6) {
+              data[count] = this.reader.getFloat(primitiveT, 'x3', 1);
               count++;
         }
-        if (primitive.getAttribute('y3') != null && count == 7) {
-              data[count] = this.reader.getFloat(primitive, 'y3', 1);
+        if (primitiveT.getAttribute('y3') != null && count == 7) {
+              data[count] = this.reader.getFloat(primitiveT, 'y3', 1);
               count++;
         }
-        if (primitive.getAttribute('z3') != null && count == 8) {
-              data[count] = this.reader.getFloat(primitive, 'z3', 1);
+        if (primitiveT.getAttribute('z3') != null && count == 8) {
+              data[count] = this.reader.getFloat(primitiveT, 'z3', 1);
               count++;
         }
 
         if (count != 9)
           return "Rectangle with error " + id;
-				this.leaves[id] = new LeafTriangle(id, data[0], data[1], data[2], data[3], data[4], data[5], data[6], data[7], data[8]);
+				this.primitives[id] = new LeafTriangle(id, data[0], data[1], data[2], data[3], data[4], data[5], data[6], data[7], data[8]);
 				break;
 			default:
 				return "Primitive type unknown: " + type;
