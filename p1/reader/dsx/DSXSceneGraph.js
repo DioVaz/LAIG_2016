@@ -136,12 +136,12 @@ DSXSceneGraph.prototype.parseSceneGraph = function(rootElement) {
     if (error) {
         return error;
     }
-    /*
+    
 	console.log("*******COMPONENTS*******");
     error = this.parseComponents(rootElement);
     if (error) {
         return error;
-    }*/
+    }
 
 	console.log("**************");
 
@@ -819,7 +819,7 @@ DSXSceneGraph.prototype.parseComponents = function(rootElement) {
  */
 DSXSceneGraph.prototype.parseComponent = function(component) {
 	//Id of node
-	var id = this.reader.getString(node, "id");
+	var id = this.reader.getString(component, "id");
 	console.log(id);
 	if (id in this.primitives)
 		return "Copy id primitive " + id;
@@ -829,7 +829,7 @@ DSXSceneGraph.prototype.parseComponent = function(component) {
 	this.nodes[id] = new Node(id);
 
   //Get Local Transformations of Node
-  var childNode = node.children[0];
+  var childNode = component.children[0];
 	for (var i = 0; i < childNode.children.length; ++i) {
 		var transformation = childNode.children[i];
 		var type = transformation.nodeName;
@@ -874,7 +874,7 @@ DSXSceneGraph.prototype.parseComponent = function(component) {
     }
 	}
   //Get NODE MATERIALS
-	var childNode = node.children[1];
+	var childNode = component.children[1];
 	if (childNode.nodeName != "materials")
 		return "Expected MATERIAL in COMPONENT " + id + "in 2st child.";
   for (var i = 0; i < childNode.children.length; ++i) {
@@ -887,7 +887,7 @@ DSXSceneGraph.prototype.parseComponent = function(component) {
     	this.nodes[id].setMaterial(material);
   }
 	//Get NODE TEXTURE
-	childNode = node.children[2];
+	childNode = component.children[2];
 	if (childNode.nodeName != "texture")
 		return "Expected TEXTURE in NODE " + id + "in 3rd child.";
 	var texture = this.reader.getString(childNode, "id");
@@ -898,7 +898,7 @@ DSXSceneGraph.prototype.parseComponent = function(component) {
 	this.nodes[id].setTexture(texture);
 
 	//Get children of NODE
-	var new_children = node.children[3];
+	var new_children = component.children[3];
 	if (new_children.nodeName != "children")
 		return "Expected CHILDREN tag in NODE " + id;
 

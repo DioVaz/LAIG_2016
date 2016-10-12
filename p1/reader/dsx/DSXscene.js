@@ -218,10 +218,10 @@ DSXScene.prototype.processNode = function(node, parentTexture, parentMaterial) {
 	//Applies transformations
 	this.pushMatrix();
 
-	//this.multMatrix(this.graph.nodes[node].localTransformations);
+	this.multMatrix(this.graph.nodes[node].localTransformations);
 
 	//Receives material and texture from parent?
-	/*var material = this.graph.nodes[node].material;
+	var material = this.graph.nodes[node].material;
 	if (material == "null")
 		material = parentMaterial;
 
@@ -233,7 +233,7 @@ DSXScene.prototype.processNode = function(node, parentTexture, parentMaterial) {
 	var children = this.graph.nodes[node].children;
 	for (var i = 0; i < children.length; ++i) {
 		this.processNode(children[i], texture, material);
-	}*/
+	}
 
 	this.popMatrix();
 }
@@ -321,10 +321,3 @@ DSXScene.prototype.getSpotsBegin = function() {
 DSXScene.prototype.getSpotsEnd = function() {
 	return this.graph.omnis.length + this.graph.spots.length;
 }
-
-
-
-
-
-
-
