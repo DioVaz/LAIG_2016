@@ -15,7 +15,7 @@ function DSXSceneGraph(filename, scene) {
 	this.filename = 'scenes/'+filename;
 
   //***************UPDATE LATER*************
-  //this.scene = new Scene();
+  this.scene = new Scene();
   this.views = [];
   this.defaultView;
   this.illumination = new Illumination();
@@ -189,7 +189,6 @@ DSXSceneGraph.prototype.parseViews = function (rootElement) {
             from[0] = this.reader.getFloat(fromTag[0], 'x', 1);
             from[1] = this.reader.getFloat(fromTag[0],'y',1);
             from[2] = this.reader.getFloat(fromTag[0],'z',1);
-            //console.log(from);
 
         }
 
@@ -201,11 +200,8 @@ DSXSceneGraph.prototype.parseViews = function (rootElement) {
 			}
 
 			to[0] = this.reader.getFloat(toTag[0], 'x', 1);
-
-
 			to[1] = this.reader.getFloat(toTag[0],'y',1);
 			to[2] = this.reader.getFloat(toTag[0],'z',1);
-			//console.log(to);
 
 		}
         this.views.push(new CGFcamera(angle,near,far,from,to));
@@ -242,7 +238,7 @@ DSXSceneGraph.prototype.parseScene = function(rootElement) {
   }
 
   var scene = sceneTemp[0];
-	
+
   //Get SCENE - root
   this.scene.root = this.reader.getString(scene, "root");
   if (this.scene.root == null)
@@ -772,10 +768,6 @@ DSXSceneGraph.prototype.parsePrimitives = function(rootElement) {
 	}
 }
 
-
-
-
-
 /*
  *@param rootElement SCENE tag from dsx
  * Parse tag NODES from dsx
@@ -838,10 +830,10 @@ DSXSceneGraph.prototype.parseComponent = function(component) {
 
   //Get Local Transformations of Node
   var childNode = node.children[0];
-	for (var i = 0; i < childNode.length; ++i) {
+	for (var i = 0; i < childNode.children.length; ++i) {
 		var transformation = childNode.children[i];
 		var type = transformation.nodeName;
-    if(childNode.length ==1 && type=="transformationref"){
+    if(childNode.children.length ==1 && type=="transformationref"){
       var idRef = this.reader.getString(transformation, "id");
     }
     else{
@@ -885,7 +877,7 @@ DSXSceneGraph.prototype.parseComponent = function(component) {
 	var childNode = node.children[1];
 	if (childNode.nodeName != "materials")
 		return "Expected MATERIAL in COMPONENT " + id + "in 2st child.";
-  for (var i = 0; i < childNode.length; ++i) {
+  for (var i = 0; i < childNode.children.length; ++i) {
 	   var material = childNode.children[i];
      var materialID = this.reader.getString(material, "id");
 

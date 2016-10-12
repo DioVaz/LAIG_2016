@@ -1,6 +1,6 @@
 <dsx>
 
-  <scene root="root" axis_length="2.0" />
+  <scene root="arvore" axis_length="2.0" />
 
   <views default="v1" >
 
@@ -123,7 +123,7 @@
       <primitive id="cilindro">
           <cylinder base="1" top="1" height="2" slices="5" stacks="1" />
       </primitive>
-      <primitive id="copa">
+      <primitive id="cone">
           <cylinder base="2" top="0" height="2" slices="5" stacks="1" />
       </primitive>
       <primitive id="sphere1">
@@ -146,7 +146,7 @@
               <material id="arvore" />
           </materials>
 
-
+          <texture id="null" />
           <!-- bloco "children" obrigatorio num "component" -->
           <children>
               <componentref id="copa" />
@@ -161,13 +161,13 @@
               <transformationref id="1" />
           </transformation>
           <materials>
-              <material id="inherit" />
+              <material id="arvore" />
           </materials>
 
-
+          <texture id="null" />
           <!-- bloco "children" obrigatorio num "component" -->
           <children>
-              <primitiveref id="copa" />
+              <primitiveref id="cone" />
           </children>
 
       </component>
@@ -175,12 +175,16 @@
       <!-- TRONCO -->
       <component id="tronco">
           <transformation>
-              <transformationref id="1" />
+            <translate x="2" y="3" z="4" />
+            <rotate axis="x" angle="3" />
+            <rotate axis="y" angle="3" />
+            <rotate axis="z" angle="3" />
+            <scale x="5" y="6" z="7" />
           </transformation>
           <materials>
-              <material id="inherit" />
+              <material id="arvore" />
           </materials>
-
+          <texture id="null" />
 
           <!-- bloco "children" obrigatorio num "component" -->
           <children>

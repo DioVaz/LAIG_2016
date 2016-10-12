@@ -5,6 +5,7 @@
  */
 function Node(id) {
     this.id = id;
+    this.transformationsRef = "null";
     this.material = "null";
     this.texture = "clear";
     this.localTransformations = mat4.create();
@@ -17,7 +18,7 @@ Node.prototype.constructor = Node;
 
 /*
  * Sets the material of the node
- * @param material 
+ * @param material
  */
 
 Node.prototype.setMaterial = function(material) {
