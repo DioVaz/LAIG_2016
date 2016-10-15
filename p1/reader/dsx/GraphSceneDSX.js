@@ -6,7 +6,7 @@ function GraphSceneDSX(filename, scene) {
     this.loadedOk = null;
 
     this.scene = scene;
-
+    this.illumination =new Illumination();
     this.graph = new GraphDSX();
     scene.graph = this.graph;
     this.reader = new CGFXMLreader();
@@ -257,10 +257,9 @@ GraphSceneDSX.prototype.parseIllumination = function(rootElement) {
     if(this.notRGBA(background[0],background[1],background[2],background[3]))
         return "background values are wrong!";
 
-    //adicionar ao graph, é preciso criar presumo, pois não está existe na scene
-    /*this.scene.graph.illumination.background = background;
-    this.scene.graph.illumination.ambient = ambient;*/
-
+    this.illumination.background = background;
+    this.illumination.ambient = ambient;
+    this.graph.illumination = this.illumination;
     return 0;
 
 };
