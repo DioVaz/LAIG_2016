@@ -154,10 +154,10 @@ GraphSceneDSX.prototype.parseScene = function(rootElement) {
 
 
     //Get SCENE - axis_length
-    this.scene.axis_length = this.reader.getString(scene, "axis_length");
-    if (this.scene.axis_length == null)
+    this.graph.referenceLength = this.reader.getString(scene, "axis_length");
+    if (this.graph.referenceLength == null)
         return "axis_length is missing.";
-    if (isNaN(this.scene.axis_length))
+    if (isNaN(this.graph.referenceLength))
         return "axis_length is NaN.";
 }
 
@@ -1110,5 +1110,3 @@ GraphSceneDSX.prototype.onXMLError = function (message) {
     console.error("XML Loading Error: "+message);
     this.loadedOk=false;
 };
-
-

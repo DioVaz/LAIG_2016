@@ -25,11 +25,12 @@ serialInclude(['../lib/CGF.js',
 'dsx/GraphSceneDSX.js',
 'dsx/GraphDSX.js',
 'dsx/Component.js',
+'dsx/DSXscene.js',
     'parser/Illumination.js',
     'parser/Texture.js',
     'parser/Material.js',
     'parser/Transformation.js',
-    'XMLscene.js',
+
 
 
 
@@ -41,7 +42,7 @@ main=function()
     console.log("START");
 	// Standard application, scene and interface setup
     var app = new CGFapplication(document.body);
-    var myScene = new XMLscene();
+    var myScene = new DSXScene();
 
     var myInterface = new MyInterface();
 
