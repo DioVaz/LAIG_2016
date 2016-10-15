@@ -1,6 +1,6 @@
 <dsx>
 
-  <scene root="arvore" axis_length="2.0" />
+  <scene root="root" axis_length="2.0" />
 
   <views default="v1" >
 
@@ -34,7 +34,7 @@
   <!-- Lights -->
   <lights>
   	<omni id="1" enabled="0">
-  		<location x="0" y="0" z="0" w="13"/>
+  		<location x="10" y="12" z="11" w="13"/>
   		<ambient r="0.2" g="0.2" b="0.2" a="1"/>
   		<diffuse r="0.2" g="0.2" b="0.2" a="1"/>
   		<specular r="0.2" g="0.2" b="0.2" a="1"/>
@@ -94,16 +94,14 @@
   </materials>
 
    <transformations>
-      <transformation id="1">
+      <transformation id="translatecopa">
          <!-- instrucoes a usar sem limite nem ordem -->
          <!-- deve existir pelo menos uma transformacao -->
-         <translate x="11.1" y="11.1" z="11.1" />
-         <rotate axis="x" angle="13.1" />
-         <scale x="2.22" y="3.33" z="4.44" />
+         <translate x="0" y="0" z="3" />
+         <scale x="0.5" y="0.5" z="0.5" />
       </transformation>
-      <transformation id="2">
-         <scale x="7.77" y="8.88" z="9.99" />
-    		 <rotate axis="y" angle="15.1" />
+      <transformation id="ttronco">
+         <scale x="0.4" y="0.4" z="1" />
   	 </transformation>
   </transformations>
 
@@ -114,23 +112,26 @@
 
       <!-- Deve existir um ou mais blocos "primitive" -->
       <!-- Os identificadores "id" nao podem ser repetidos -->
-      <primitive id="rectangle1">
-          <rectangle x1="1" y1="1" x2="1" y2="1" />
+      <primitive id="terra">
+          <rectangle x1="-10" y1="-10" x2="10" y2="10" />
+      </primitive>
+      <primitive id="terra-base">
+                <rectangle x1="10" y1="10" x2="-10" y2="-10" />
       </primitive>
       <primitive id="triangle1">
-          <triangle x1="1" y1="1" z1="1" x2="1" y2="1" z2="1" x3="1" y3="1" z3="1" />
+          <triangle x1="0" y1="0" z1="0" x2="3" y2="0" z2="0" x3="0" y3="3" z3="0" />
       </primitive>
       <primitive id="cilindro">
-          <cylinder base="1" top="1" height="2" slices="5" stacks="1" />
+          <cylinder base="1" top="1" height="4" slices="10" stacks="10" />
       </primitive>
-      <primitive id="cone">
-          <cylinder base="2" top="0" height="2" slices="5" stacks="1" />
+      <primitive id="copa">
+          <cylinder base="4" top="0" height="4" slices="5" stacks="5" />
       </primitive>
-      <primitive id="sphere1">
-          <sphere radius="1" slices="1" stacks="1" />
+      <primitive id="copa_redonda">
+          <sphere radius="2\" slices="5" stacks="5" />
       </primitive>
       <primitive id="torus1">
-          <torus inner="1" outer="1" slices="1" loops="1" />
+          <torus inner="1" outer="4" slices="10" loops="10" />
       </primitive>
   </primitives>
 
@@ -138,15 +139,53 @@
   <!-- The components -->
   <components>
 
+   <component id="terra">
+      <transformation>
+      </transformation>
+      <materials>
+          <material id="inherit" />
+      </materials>
+      <texture id="null">
+      </texture>
+
+
+      <!-- bloco "children" obrigatorio num "component" -->
+      <children>
+          <primitiveref id="terra"/>
+      </children>
+
+  </component>
+
+  <component id="terra-base">
+              <transformation>
+              <rotate axis="y" angle="180" />
+              </transformation>
+              <materials>
+                  <material id="inherit" />
+              </materials>
+              <texture id="null">
+              </texture>
+
+
+              <!-- bloco "children" obrigatorio num "component" -->
+              <children>
+                  <primitiveref id="terra-base"/>
+              </children>
+
+          </component>
+
+
+
       <component id="arvore">
           <transformation>
-              <transformationref id="1" />
           </transformation>
           <materials>
               <material id="arvore" />
           </materials>
+          <texture id="null">
+          </texture>
 
-          <texture id="null" />
+
           <!-- bloco "children" obrigatorio num "component" -->
           <children>
               <componentref id="copa" />
@@ -158,16 +197,19 @@
       <!-- COPA -->
       <component id="copa">
           <transformation>
-              <transformationref id="1" />
+              <transformationref id="translatecopa" />
           </transformation>
           <materials>
-              <material id="arvore" />
+              <material id="inherit" />
           </materials>
 
-          <texture id="null" />
+          <texture id="null">
+          </texture>
+
+
           <!-- bloco "children" obrigatorio num "component" -->
           <children>
-              <primitiveref id="cone" />
+              <primitiveref id="copa" />
           </children>
 
       </component>
@@ -175,16 +217,15 @@
       <!-- TRONCO -->
       <component id="tronco">
           <transformation>
-            <translate x="2" y="3" z="4" />
-            <rotate axis="x" angle="3" />
-            <rotate axis="y" angle="3" />
-            <rotate axis="z" angle="3" />
-            <scale x="5" y="6" z="7" />
+         	 <transformationref id="ttronco" />
           </transformation>
           <materials>
-              <material id="arvore" />
+              <material id="inherit" />
           </materials>
-          <texture id="null" />
+
+          <texture id="tronco">
+          </texture>
+
 
           <!-- bloco "children" obrigatorio num "component" -->
           <children>

@@ -1,51 +1,22 @@
 /**
- * Node
- * @constructor
- * @id node id
+ * Tranformation
  */
-function Node(id) {
-    this.id = id;
-    this.transformationsRef = "null";
-    this.material = "null";
-    this.texture = "clear";
+
+function Transformation() {
+    this.id;
     this.localTransformations = mat4.create();
     mat4.identity(this.localTransformations);
-    this.children = [];
 }
 
-Node.prototype = Object.create(Object.prototype);
-Node.prototype.constructor = Node;
-
-/*
- * Sets the material of the node
- * @param material
- */
-
-Node.prototype.setMaterial = function(material) {
-    this.material = material;
-}
-
-/*
- * Sets the texture of the node
- * @param texture
- */
-Node.prototype.setTexture = function(texture) {
-     this.texture = texture;
-}
-
-/*
- * Add a new child to the node
- * @param child
- */
-Node.prototype.addChild = function(child) {
-    this.children.push(child);
+Transformation.prototype.reset= function () {
+    mat4.identity(this.localTransformations);
 }
 
 /*
  * Applies a rotation to the axis x
  * @param rad degrees in radians
  */
-Node.prototype.rotateX = function(rad) {
+Transformation.prototype.rotateX = function(rad) {
     mat4.rotateX(this.localTransformations, this.localTransformations, rad);
 }
 
@@ -53,7 +24,7 @@ Node.prototype.rotateX = function(rad) {
  * Applies a rotation to the axis y
  * @param rad degrees in radians
  */
-Node.prototype.rotateY = function(rad) {
+Transformation.prototype.rotateY = function(rad) {
     mat4.rotateY(this.localTransformations, this.localTransformations, rad);
 }
 
@@ -61,7 +32,7 @@ Node.prototype.rotateY = function(rad) {
  * Applies a rotation to the axis z
  * @param rad degrees in radians
  */
-Node.prototype.rotateZ = function(rad) {
+Transformation.prototype.rotateZ = function(rad) {
     mat4.rotateZ(this.localTransformations, this.localTransformations, rad);
 }
 
@@ -71,7 +42,7 @@ Node.prototype.rotateZ = function(rad) {
  * @param sy
  * @param sz
  */
-Node.prototype.scale = function(sx, sy, sz) {
+Transformation.prototype.scale = function(sx, sy, sz) {
     mat4.scale(this.localTransformations, this.localTransformations, vec3.fromValues(sx,sy,sz));
 }
 
@@ -81,6 +52,6 @@ Node.prototype.scale = function(sx, sy, sz) {
  * @param y
  * @param z
  */
-Node.prototype.translate = function(x, y, z) {
+Transformation.prototype.translate = function(x, y, z) {
     mat4.translate(this.localTransformations, this.localTransformations, vec3.fromValues(x, y, z));
 }

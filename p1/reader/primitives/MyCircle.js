@@ -4,7 +4,6 @@
  */
 function MyCircle(scene, rad, slices) {
     CGFobject.call(this, scene);
-
     this.rad = rad || 1;
     this.slices = slices || 8;
 

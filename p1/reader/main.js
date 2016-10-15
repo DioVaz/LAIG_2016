@@ -11,29 +11,28 @@ function getUrlVars() {
     return vars;
 }
 
+deg2rad = Math.PI / 180;
+
 serialInclude(['../lib/CGF.js',
 'primitives/MyTriangle.js',
 'primitives/MyRectangle.js',
-'primitives/MyFullCylinder.js',
-'primitives/MyCircle.js',
 'primitives/MyCylinder.js',
+'primitives/MyCircle.js',
+'primitives/MyCylinderAux.js',
 'primitives/MySphere.js',
 'primitives/MyTorus.js',
-'dsx/DSXSceneGraph.js',
-'dsx/DSXReader.js',
-'dsx/DSXScene.js',
-'interface/MyInterface.js',
-'elements/Illumination.js',
-'elements/Scene.js',
-'elements/Light.js',
-'elements/Texture.js',
-'leafs/Leaf.js',
-'leafs/LeafCylinder.js',
-'leafs/LeafRectangle.js',
-'leafs/LeafSphere.js',
-'leafs/LeafTriangle.js',
-'elements/Material.js',
-'elements/Node.js',
+    'interface/MyInterface.js',
+'dsx/GraphSceneDSX.js',
+'dsx/GraphDSX.js',
+'dsx/Component.js',
+    'parser/Illumination.js',
+    'parser/Texture.js',
+    'parser/Material.js',
+    'parser/Transformation.js',
+    'XMLscene.js',
+
+
+
 
 
 main=function()
@@ -42,7 +41,7 @@ main=function()
     console.log("START");
 	// Standard application, scene and interface setup
     var app = new CGFapplication(document.body);
-    var myScene = new DSXScene();
+    var myScene = new XMLscene();
 
     var myInterface = new MyInterface();
 
@@ -50,7 +49,7 @@ main=function()
 
     app.setInterface(myInterface);
     app.setScene(myScene);
-	  myScene.setInterface(myInterface);
+	//  myScene.setInterface(myInterface);
 	  myInterface.setScene(myScene);
 
     myInterface.setActiveCamera(myScene.camera);
@@ -61,7 +60,7 @@ main=function()
 	var filename=getUrlVars()['file'] || "t1.dsx";
 
 	//Loads the graph from dsx filename
-	var myGraph = new DSXSceneGraph(filename, myScene);
+	var myGraph = new GraphSceneDSX(filename, myScene);
 
 	// start
     app.run();
