@@ -27,7 +27,7 @@
   <!-- Illumination and clear colour -->
   <illumination doublesided="1" local="0">
       <ambient r="0.2" g="0.2" b="0.2" a="1" />
-      <background r="0" g="0" b="0" a="1" />
+      <background r="0.5" g="0.5" b="0.5" a="1" />
   </illumination>
 
 
@@ -115,8 +115,8 @@
       <primitive id="terra">
           <rectangle x1="-10" y1="-10" x2="10" y2="10" />
       </primitive>
-      <primitive id="terra-base">
-                <rectangle x1="10" y1="10" x2="-10" y2="-10" />
+      <primitive id="face-cubo">
+                <rectangle x1="1" y1="1" x2="-1" y2="-1" />
       </primitive>
       <primitive id="triangle1">
           <triangle x1="0" y1="0" z1="0" x2="3" y2="0" z2="0" x3="0" y3="3" z3="0" />
@@ -128,7 +128,7 @@
           <cylinder base="4" top="0" height="4" slices="5" stacks="5" />
       </primitive>
       <primitive id="copa_redonda">
-          <sphere radius="2\" slices="5" stacks="5" />
+          <sphere radius="2" slices="5" stacks="5" />
       </primitive>
       <primitive id="torus1">
           <torus inner="1" outer="4" slices="10" loops="10" />
@@ -138,103 +138,138 @@
 
   <!-- The components -->
   <components>
+    <component id="root">
+        <transformation>
+        </transformation>
+        <materials>
+        </materials>
+        <texture id="null">
+        </texture>
+        <children>
+            <componentRef id="parede"/>
+        </children>
 
-   <component id="terra">
-      <transformation>
-      </transformation>
-      <materials>
-          <material id="inherit" />
-      </materials>
-      <texture id="null">
-      </texture>
+    </component>
+    <component id="parede">
+        <transformation>
+          <scale x="1" y="10" z="10" />
+        </transformation>
+        <materials>
+        </materials>
+        <texture id="null">
+        </texture>
+        <children>
+            <componentRef id="cubo"/>
+        </children>
 
+    </component>
+    <component id="cubo">
+        <transformation>
+        </transformation>
+        <materials>
+            <material id="arvore" />
+        </materials>
+        <texture id="null">
+        </texture>
+        <children>
+            <componentRef id="face1"/>
+            <componentRef id="face2"/>
+            <componentRef id="face3"/>
+            <componentRef id="face4"/>
+            <componentRef id="face5"/>
+            <componentRef id="face6"/>
+        </children>
 
-      <!-- bloco "children" obrigatorio num "component" -->
-      <children>
-          <primitiveref id="terra"/>
-      </children>
+    </component>
+    <component id="face1">
+        <transformation>
+          <translate x="0" y="0" z="1" />
+        </transformation>
+        <materials>
+            <material id="inherit" />
+        </materials>
+        <texture id="null">
+        </texture>
+        <children>
+            <primitiveRef id="face-cubo"/>
+        </children>
 
-  </component>
+    </component>
+    <component id="face2">
+        <transformation>
+          <translate x="1" y="0" z="0" />
+          <rotate axis="y" angle="90" />
+        </transformation>
+        <materials>
+            <material id="inherit" />
+        </materials>
+        <texture id="null">
+        </texture>
+        <children>
+            <primitiveRef id="face-cubo"/>
+        </children>
 
-  <component id="terra-base">
-              <transformation>
-              <rotate axis="y" angle="180" />
-              </transformation>
-              <materials>
-                  <material id="inherit" />
-              </materials>
-              <texture id="null">
-              </texture>
+    </component>
+    <component id="face3">
+        <transformation>
+          <translate x="0" y="0" z="-1" />
+          <rotate axis="y" angle="180" />
+        </transformation>
+        <materials>
+            <material id="inherit" />
+        </materials>
+        <texture id="null">
+        </texture>
+        <children>
+            <primitiveRef id="face-cubo"/>
+        </children>
 
+    </component>
+    <component id="face4">
+        <transformation>
+          <translate x="-1" y="0" z="0" />
+          <rotate axis="y" angle="-90" />
+        </transformation>
+        <materials>
+            <material id="inherit" />
+        </materials>
+        <texture id="null">
+        </texture>
+        <children>
+            <primitiveRef id="face-cubo"/>
+        </children>
 
-              <!-- bloco "children" obrigatorio num "component" -->
-              <children>
-                  <primitiveref id="terra-base"/>
-              </children>
+    </component>
+    <component id="face5">
+        <transformation>
+          <translate x="0" y="-1" z="0" />
+          <rotate axis="x" angle="90" />
+        </transformation>
+        <materials>
+            <material id="inherit" />
+        </materials>
+        <texture id="null">
+        </texture>
+        <children>
+            <primitiveRef id="face-cubo"/>
+        </children>
 
-          </component>
+    </component>
+    <component id="face6">
+        <transformation>
+          <translate x="0" y="1" z="0" />
+          <rotate axis="x" angle="-90" />
+        </transformation>
+        <materials>
+            <material id="inherit" />
+        </materials>
+        <texture id="null">
+        </texture>
+        <children>
+            <primitiveRef id="face-cubo"/>
+        </children>
 
-
-
-      <component id="arvore">
-          <transformation>
-          </transformation>
-          <materials>
-              <material id="arvore" />
-          </materials>
-          <texture id="null">
-          </texture>
-
-
-          <!-- bloco "children" obrigatorio num "component" -->
-          <children>
-              <componentref id="copa" />
-              <componentref id="tronco" />
-          </children>
-
-      </component>
-
-      <!-- COPA -->
-      <component id="copa">
-          <transformation>
-              <transformationref id="translatecopa" />
-          </transformation>
-          <materials>
-              <material id="inherit" />
-          </materials>
-
-          <texture id="null">
-          </texture>
-
-
-          <!-- bloco "children" obrigatorio num "component" -->
-          <children>
-              <primitiveref id="copa" />
-          </children>
-
-      </component>
-
-      <!-- TRONCO -->
-      <component id="tronco">
-          <transformation>
-         	 <transformationref id="ttronco" />
-          </transformation>
-          <materials>
-              <material id="inherit" />
-          </materials>
-
-          <texture id="tronco">
-          </texture>
-
-
-          <!-- bloco "children" obrigatorio num "component" -->
-          <children>
-              <primitiveref id="cilindro" />
-          </children>
-
-      </component>
-
-
+    </component>
   </components>
 
 
