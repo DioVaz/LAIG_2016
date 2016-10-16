@@ -162,7 +162,7 @@ DSXScene.prototype.display = function () {
  */
 DSXScene.prototype.processScene = function() {
 	this.processNode(this.root, "clear", "null");
-	//this.setDefaultAppearance();
+	this.setDefaultAppearance();
 }
 
 /*

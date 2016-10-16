@@ -12,7 +12,7 @@ function MyTorus(scene, inner, outer, slices, loops){
     this.slices = slices;
     this.loops = loops;
 
-   
+
     this.initBuffers();
 
 };
@@ -78,7 +78,9 @@ MyTorus.prototype.initBuffers = function () {
 
         }
     }
-
+    MyTorus.prototype.scaleTexCoords = function(ampS, ampT) {
+        this.updateTexCoordsGLBuffers();
+    }
 
     this.primitiveType = this.scene.gl.TRIANGLES;
     this.initGLBuffers();
@@ -87,5 +89,3 @@ MyTorus.prototype.initBuffers = function () {
 
 
 };
-
-

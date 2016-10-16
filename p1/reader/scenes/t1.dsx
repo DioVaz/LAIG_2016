@@ -25,64 +25,48 @@
 
 
   <!-- Illumination and clear colour -->
-  <illumination doublesided="1" local="0">
-      <ambient r="0.2" g="0.2" b="0.2" a="1" />
-      <background r="0.5" g="0.5" b="0.5" a="1" />
+  <illumination doublesided="1" local="1">
+      <ambient r="0.5" g="0.5" b="0.5" a="1" />
+      <background r="0" g="0.2" b="0.5" a="1" />
   </illumination>
 
 
   <!-- Lights -->
   <lights>
-  	<omni id="1" enabled="0">
-  		<location x="10" y="12" z="11" w="13"/>
-  		<ambient r="0.2" g="0.2" b="0.2" a="1"/>
-  		<diffuse r="0.2" g="0.2" b="0.2" a="1"/>
-  		<specular r="0.2" g="0.2" b="0.2" a="1"/>
-  	</omni>
-  	<spot id="2" enabled="0" angle="1.2" expoente="1.4">
+  	<spot id="2" enabled="1" angle="1.2" expoente="1.4">
   		<target x="1" y="2" z="3" />
   		<location x="10" y="12" z="11" w="13"/>
   		<ambient r="0.2" g="0.2" b="0.2" a="1"/>
   		<diffuse r="0.2" g="0.2" b="0.2" a="1"/>
   		<specular r="0.2" g="0.2" b="0.2" a="1"/>
   	</spot>
-  	<omni id="3" enabled="1">
-  		<location x="11" y="12" z="14" w="13"/>
+  	<omni id="3" enabled="0">
+  		<location x="0" y="0" z="0" w="13"/>
   		<ambient r="0.3" g="0.2" b="0.6" a="1"/>
   		<diffuse r="0.2" g="0.2" b="0.2" a="1"/>
   		<specular r="0.2" g="0.2" b="0.2" a="1"/>
   	</omni>
-  	<omni id="4" enabled="1">
-  		<location x="10" y="13" z="11" w="17"/>
-  		<ambient r="0.1" g="0.2" b="0.2" a="1"/>
-  		<diffuse r="0.2" g="0.2" b="0.2" a="1"/>
-  		<specular r="0.2" g="0.2" b="0.2" a="1"/>
-  	</omni>
-  	<spot id="5" enabled="0" angle="1.5" expoente="3.4">
-  		<target x="4" y="5" z="6" />
-  		<location x="10" y="12" z="11" w="13"/>
-  		<ambient r="0.2" g="0.2" b="0.2" a="1"/>
-  		<diffuse r="0.2" g="0.2" b="0.2" a="1"/>
-  		<specular r="0.2" g="0.2" b="0.2" a="1"/>
-  	</spot>
   </lights>
 
 
   <!-- textures -->
   <textures>
   	<!-- Tree trunk -->
-      <texture id="pele" file="negro" length_s="1.0" length_t="2.0" />
+      <texture id="parede" file="textures/brick.jpg" length_s="1.0" length_t="1.0" />
       <texture id="peleB" file="branco" length_s="1.0" length_t="2.0" />
+      <texture file="textures/plastico-lateral.jpg" id="plastico-lateral" length_s="1" length_t="1"/>
+      <texture file="textures/plastico-base.jpg" id="plastico-base" length_s="1" length_t="1"/>
+      <texture file="textures/water.png" id="agua" length_s="1" length_t="1"/>
   </textures>
 
 
   <materials>
     <material id="espelho" >
-        <emission r="1.0" g="1.0" b="1.0" a="1.0" />
-        <ambient r="1.0" g="1.0" b="1.0" a="1.0" />
-        <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
-        <specular r="1.0" g="1.0" b="1.0" a="1.0" />
-        <shininess value="1.0" />
+        <emission r="0" g="1.0" b="0" a="0.5" />
+        <ambient r="0.5" g="0.5" b="0.5" a="1.0" />
+        <diffuse r="0.5" g="0.5" b="0.5" a="1.0" />
+        <specular r="0.5" g="0.5" b="0.5" a="1.0" />
+        <shininess value="0.7" />
     </material>
     <material id="arvore" >
         <emission r="1.0" g="1.0" b="1.0" a="1.0" />
@@ -91,12 +75,31 @@
         <specular r="1.0" g="1.0" b="1.0" a="1.0" />
         <shininess value="1.0" />
     </material>
+    <material id="piscina">
+          <emission a="0.5" b="0" g="1.0" r="1"/>
+          <ambient a="1.0" b="0.5" g="0.5" r="0.5"/>
+          <diffuse a="1.0" b="0.5" g="0.5" r="0.5"/>
+          <specular a="1.0" b="0.5" g="0.5" r="0.5"/>
+          <shininess value="0.7"/>
+    </material>
+    <material id="guarda1">
+         <emission a="1.0" b="0" g="0" r="1.0"/>
+         <ambient a="1.0" b="1.0" g="1.0" r="1.0"/>
+         <diffuse a="1.0" b="1.0" g="1.0" r="1.0"/>
+         <specular a="1.0" b="1.0" g="1.0" r="1.0"/>
+         <shininess value="0.3"/>
+    </material>
+    <material id="aste">
+        <emission a="1" b="0.5" g="0.5" r="0.5"/>
+        <ambient a="1.0" b="1.0" g="1.0" r="1.0"/>
+        <diffuse a="1.0" b="1.0" g="1.0" r="1.0"/>
+        <specular a="1.0" b="1.0" g="1.0" r="1.0"/>
+        <shininess value="0.3"/>
+    </material>
   </materials>
 
    <transformations>
       <transformation id="translatecopa">
-         <!-- instrucoes a usar sem limite nem ordem -->
-         <!-- deve existir pelo menos uma transformacao -->
          <translate x="0" y="0" z="3" />
          <scale x="0.5" y="0.5" z="0.5" />
       </transformation>
@@ -107,13 +110,10 @@
 
 
 
-  <!-- The leaves -->
+  <!-- The primitives -->
   <primitives>
-
-      <!-- Deve existir um ou mais blocos "primitive" -->
-      <!-- Os identificadores "id" nao podem ser repetidos -->
       <primitive id="terra">
-          <rectangle x1="-10" y1="-10" x2="10" y2="10" />
+          <rectangle x1="-11" y1="-11" x2="11" y2="11" />
       </primitive>
       <primitive id="face-cubo">
                 <rectangle x1="1" y1="1" x2="-1" y2="-1" />
@@ -133,11 +133,24 @@
       <primitive id="torus1">
           <torus inner="1" outer="4" slices="10" loops="10" />
       </primitive>
+      <primitive id="piscina-torus">
+        <torus inner="1" loops="10" outer="4" slices="10"/>
+      </primitive>
+      <primitive id="topo-piscina">
+         <cylinder base="4.5" height="0.5" slices="10" stacks="10" top="1"/>
+      </primitive>
+      <primitive id="guarda-topo">
+        <triangle x1="0" x2="3" x3="0" y1="0" y2="0" y3="3" z1="1.5" z2="0" z3="0"/>
+      </primitive>
+      <primitive id="guarda-base">
+           <triangle x1="0" x2="3" x3="0" y1="3" y2="0" y3="0" z1="0" z2="0" z3="1.5"/>
+      </primitive>
   </primitives>
 
 
   <!-- The components -->
   <components>
+    <!-- ROOT -->
     <component id="root">
         <transformation>
         </transformation>
@@ -146,23 +159,316 @@
         <texture id="null">
         </texture>
         <children>
-            <componentRef id="parede"/>
+            <componentRef id="castelo"/>
         </children>
 
     </component>
-    <component id="parede">
+
+    <!-- CHAO -->
+    <component id="chao">
         <transformation>
-          <scale x="1" y="10" z="10" />
+          <translate x="0" y="-15" z="0"/>
+          <rotate axis="x" angle="-90" />
+        </transformation>
+        <materials>
+            <material id="espelho" />
+        </materials>
+        <texture id="null">
+        </texture>
+        <children>
+            <primitiveRef id="terra"/>
+        </children>
+
+    </component>
+
+
+    <!-- CASTELO -->
+    <component id="castelo">
+        <transformation>
         </transformation>
         <materials>
         </materials>
         <texture id="null">
         </texture>
         <children>
+            <componentRef id="chao"/>
+            <componentRef id="torre1"/>
+            <componentRef id="torre2"/>
+            <componentRef id="torre3"/>
+            <componentRef id="torre4"/>
+            <componentRef id="parede1"/>
+            <componentRef id="parede2"/>
+            <componentRef id="parede3"/>
+            <componentRef id="parede4"/>
+        </children>
+
+    </component>
+    <component id="parede1">
+        <transformation>
+          <translate x="14" y="-5" z="0"/>
+        </transformation>
+        <materials>
+        </materials>
+        <texture id="null">
+        </texture>
+        <children>
+            <componentRef id="parede-completa"/>
+        </children>
+
+    </component>
+    <component id="parede2">
+        <transformation>
+          <translate x="-14" y="-5" z="0"/>
+        </transformation>
+        <materials>
+        </materials>
+        <texture id="null">
+        </texture>
+        <children>
+            <componentRef id="parede-completa"/>
+        </children>
+
+    </component>
+    <component id="parede3">
+        <transformation>
+          <translate x="0" y="-5" z="14"/>
+          <rotate axis="y" angle="-90" />
+        </transformation>
+        <materials>
+        </materials>
+        <texture id="null">
+        </texture>
+        <children>
+            <componentRef id="parede-completa"/>
+        </children>
+
+    </component>
+    <component id="parede4">
+        <transformation>
+          <translate x="0" y="-5" z="-14"/>
+          <rotate axis="y" angle="-90" />
+        </transformation>
+        <materials>
+        </materials>
+        <texture id="null">
+        </texture>
+        <children>
+            <componentRef id="parede-completa"/>
+        </children>
+
+    </component>
+
+    <component id="parede-completa">
+        <transformation>
+          <scale x="3" y="10" z="11" />
+        </transformation>
+        <materials>
+        </materials>
+        <texture id="null"/>
+        <children>
             <componentRef id="cubo"/>
         </children>
 
     </component>
+
+    <!-- TORRES -->
+    <component id="torre1">
+        <transformation>
+          <translate x="14" y="0" z="14"/>
+        </transformation>
+        <materials>
+        </materials>
+        <texture id="null">
+        </texture>
+        <children>
+            <componentRef id="torre-completa"/>
+        </children>
+
+    </component>
+    <component id="torre2">
+        <transformation>
+          <translate x="-14" y="0" z="-14"/>
+        </transformation>
+        <materials>
+        </materials>
+        <texture id="null">
+        </texture>
+        <children>
+            <componentRef id="torre-completa"/>
+        </children>
+
+    </component>
+    <component id="torre3">
+        <transformation>
+          <translate x="-14" y="0" z="14"/>
+        </transformation>
+        <materials>
+        </materials>
+        <texture id="null">
+        </texture>
+        <children>
+            <componentRef id="torre-completa"/>
+        </children>
+
+    </component>
+    <component id="torre4">
+        <transformation>
+          <translate x="14" y="0" z="-14"/>
+        </transformation>
+        <materials>
+        </materials>
+        <texture id="null">
+        </texture>
+        <children>
+            <componentRef id="torre-completa"/>
+        </children>
+
+    </component>
+
+    <component id="torre-completa">
+        <transformation>
+        </transformation>
+        <materials>
+        </materials>
+        <texture id="null">
+        </texture>
+        <children>
+            <componentRef id="torre-base"/>
+            <componentRef id="torre-pinos"/>
+        </children>
+
+    </component>
+    <component id="torre-pinos">
+        <transformation>
+          <translate x="0" y="16" z="0" />
+        </transformation>
+        <materials>
+        </materials>
+        <texture id="null">
+        </texture>
+        <children>
+            <componentRef id="pino1"/>
+            <componentRef id="pino2"/>
+            <componentRef id="pino3"/>
+            <componentRef id="pino4"/>
+            <componentRef id="pino5"/>
+            <componentRef id="pino6"/>
+            <componentRef id="pino7"/>
+            <componentRef id="pino8"/>
+        </children>
+
+    </component>
+    <component id="pino1">
+        <transformation>
+          <translate x="4" y="0" z="4" />
+        </transformation>
+        <materials>
+        </materials>
+        <texture id="null"/>
+        <children>
+            <componentRef id="cubo"/>
+        </children>
+
+    </component>
+    <component id="pino2">
+        <transformation>
+          <translate x="0" y="0" z="4" />
+        </transformation>
+        <materials>
+        </materials>
+        <texture id="null"/>
+        <children>
+            <componentRef id="cubo"/>
+        </children>
+
+    </component>
+    <component id="pino3">
+        <transformation>
+          <translate x="-4" y="0" z="4" />
+        </transformation>
+        <materials>
+        </materials>
+        <texture id="null"/>
+        <children>
+            <componentRef id="cubo"/>
+        </children>
+
+    </component>
+    <component id="pino4">
+        <transformation>
+          <translate x="4" y="0" z="0" />
+        </transformation>
+        <materials>
+        </materials>
+        <texture id="null"/>
+        <children>
+            <componentRef id="cubo"/>
+        </children>
+
+    </component>
+    <component id="pino5">
+        <transformation>
+          <translate x="-4" y="0" z="0" />
+        </transformation>
+        <materials>
+        </materials>
+        <texture id="null"/>
+        <children>
+            <componentRef id="cubo"/>
+        </children>
+
+    </component>
+    <component id="pino6">
+        <transformation>
+          <translate x="4" y="0" z="-4" />
+        </transformation>
+        <materials>
+        </materials>
+        <texture id="null"/>
+        <children>
+            <componentRef id="cubo"/>
+        </children>
+
+    </component>
+    <component id="pino7">
+        <transformation>
+          <translate x="0" y="0" z="-4" />
+        </transformation>
+        <materials>
+        </materials>
+        <texture id="null"/>
+        <children>
+            <componentRef id="cubo"/>
+        </children>
+
+    </component>
+    <component id="pino8">
+        <transformation>
+          <translate x="-4" y="0" z="-4" />
+        </transformation>
+        <materials>
+        </materials>
+        <texture id="null"/>
+        <children>
+            <componentRef id="cubo"/>
+        </children>
+
+    </component>
+    <component id="torre-base">
+        <transformation>
+          <scale x="5" y="15" z="5" />
+        </transformation>
+        <materials>
+        </materials>
+        <texture id="parede">
+        </texture>
+        <children>
+            <componentRef id="cubo"/>
+        </children>
+
+    </component>
+
+    <!-- CUBO UNITARIO -->
     <component id="cubo">
         <transformation>
         </transformation>
