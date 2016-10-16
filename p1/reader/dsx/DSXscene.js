@@ -87,11 +87,12 @@ DSXScene.prototype.onGraphLoaded = function ()
 		this.lights[i].setVisible(false);
 		this.lightsEnabled[this.lights[i].id] = this.lights[i].enabled;
 	}
-
+  var j = this.graph.omnis.length;
 	for (var i = 0; i < this.graph.spots.length; ++i) {
 		this.lights.push(this.graph.spots[i]);
-		this.lights[i].setVisible(false);
-		this.lightsEnabled[this.lights[i].id] = this.lights[i].enabled;
+		this.lights[j].setVisible(false);
+		this.lightsEnabled[this.lights[j].id] = this.lights[j].enabled;
+    j++;
 	}
 
 
@@ -108,24 +109,6 @@ DSXScene.prototype.onGraphLoaded = function ()
 	if (this.myinterface != null)
 	    this.myinterface.onGraphLoaded();
 
-	//sets primitives
-    for (key in this.graph.leaves) {
-    	var leaf = this.graph.leaves[key];
-    	switch (leaf.type) {
-    		case "rectangle":
-    			this.primitives[key] = new MyRectangle(this, leaf.x0, leaf.y0, leaf.x1, leaf.y1);
-    			break;
-    		case "triangle":
-    			this.primitives[key] = new MyTriangle(this, leaf.v1[0], leaf.v1[1], leaf.v1[2], leaf.v2[0], leaf.v2[1], leaf.v2[2], leaf.v3[0], leaf.v3[1], leaf.v3[2]);
-    			break;
-    		case "cylinder":
-				this.primitives[key] = new MyFullCylinder(this, leaf.height, leaf.bottomRadius, leaf.topRadius, leaf.sections, leaf.parts);
-				break;
-			case "sphere":
-				this.primitives[key] = new MySphere(this, leaf.radius, leaf.stacks, leaf.sections);
-				break;
-    	}
-    }
 };
 
 /*
@@ -143,15 +126,13 @@ DSXScene.prototype.display = function () {
 
 	// Apply transformations from the camera setup
 	this.applyViewMatrix();
-	var torus = new MyTorus(this,1,4,10,10);
-	torus.display();
 
 
 
 	//this.setDefaultAppearance();
 	//Process scene if dsx read ok
 
-	if (this.graph != null && this.graph.loadedOk)
+	if (this.loadedOk > 0)
 	{
 		console.log("entrou");
 		console.log("numero de views: "+ this.graph.views.length );
@@ -218,19 +199,19 @@ DSXScene.prototype.processNode = function(node, parentTexture, parentMaterial) {
 	//Applies transformations
 	this.pushMatrix();
 
-	this.multMatrix(this.graph.nodes[node].localTransformations);
+	this.multMatrix(this.graph.components[node].localTransformations);
 
 	//Receives material and texture from parent?
-	var material = this.graph.nodes[node].material.id;
-	if (material == "null")
+	var material = this.graph.components[node].material.id;
+	if (material == "inherit")
 		material = parentMaterial;
 
-	var texture = this.graph.nodes[node].texture;
+	var texture = this.graph.components[node].texture;
 	if (texture == "null")
 		texture = parentTexture;
 
 	//Process the node's children
-	var children = this.graph.nodes[node].children;
+	var children = this.graph.components[node].children;
 	for (var i = 0; i < children.length; ++i) {
 		this.processNode(children[i], texture, material);
 	}

@@ -33,6 +33,7 @@ GraphDSX.prototype.getView = function(indice) {
 
 GraphDSX.prototype.addOmni = function(scene, id, location, ambient, diffuse, specular, enable) {
     var omni = new CGFlight(scene,id);
+    omni.id=id;
     omni.setPosition(location);
     omni.setAmbient(ambient);
     omni.setDiffuse(diffuse);
@@ -51,6 +52,7 @@ GraphDSX.prototype.getOmni = function(indice) {
 
 GraphDSX.prototype.addSpot= function(scene, id, location, ambient, diffuse, specular, enable, expoente, angle, target) {
     var spot = new CGFlight(scene,id);
+    spot.id=id;
     spot.setSpotExponent(expoente);
     spot.setSpotCutOff(angle);
     spot.setSpotDirection(target);
@@ -74,14 +76,3 @@ GraphDSX.prototype.addTransformations = function(transformation)
 {
     this.transformations.push(transformation);
 }
-
-
-
-
-
-
-
-
-
-
-

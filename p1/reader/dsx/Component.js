@@ -5,7 +5,6 @@
 /**
  * Node
  * @constructor
- * @id node id
  */
 function Component() {
     this.id;
@@ -14,9 +13,7 @@ function Component() {
     this.transformationsRef = [];
     this.localTransformations = mat4.create();
     mat4.identity(this.localTransformations);
-    this.componentsRef = [];
-    this.primitivesRef = [];
-    this.painted = false;
+    this.children = [];
 };
 
 Component.prototype = Object.create(Object.prototype);
@@ -137,6 +134,3 @@ Component.prototype.paint = function () {
 Component.prototype.isPainte = function () {
     return this.painted;
 };
-
-
-

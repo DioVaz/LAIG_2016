@@ -584,185 +584,140 @@ GraphSceneDSX.prototype.parsePrimitives = function(rootElement)
  * Parse tag NODES from dsx
  */
 GraphSceneDSX.prototype.parseComponents = function(rootElement) {
-    //Get components
+  //Get components
     var tempComponents =  rootElement.getElementsByTagName("components");
-    if (tempComponents == null) {
-        return "Components is missing.";
+  if (tempComponents == null) {
+    return "Components is missing.";
+  }
+
+  if (tempComponents.length != 1) {
+    return "Only one components is allowed";
+  }
+
+  var components = tempComponents[0].getElementsByTagName("component");
+
+  if (components == null) {
+    return "Component in Components missing";
+  }
+  if (components.length == 0) {
+    return "No Components found."
+  }
+
+  for (var i = 0; i < components.length; ++i) {
+    var component = components[i];
+
+    error = this.parseComponent(component);
+    if (error)
+      return error;
+  }
+
+  if (!(this.scene.root in this.graph.components))
+    return "Component with root id missing";
+
+  for (key in this.graph.components) {
+    for (var i = 0; i < this.graph.components[key].children.length; ++i) {
+      var child = this.graph.components[key].children[i];
+      if (!((child in this.graph.components) || (child in this.graph.primitives)))
+        return "Child " + child + " is missing";
     }
-
-    if (tempComponents.length != 1) {
-        return "Only one components is allowed";
-    }
-
-    var components = tempComponents[0].getElementsByTagName("component");
-
-    if (components == null) {
-        return "Component in Components missing";
-    }
-    if (components.length == 0) {
-        return "No Components found."
-    }
-
-    for (var i = 0; i < components.length; ++i) {
-
-        var component = components[i];
-       // console.log(component);
-        error = this.parseComponent(component);
-        if (error)
-            return error;
-    }
-
-    /*if (!(this.scene.root in this.nodes)) //verificar mais tarde
-     return "Component with root id missing";*/
-    /*
-    for (key in this.nodes) {
-        for (var i = 0; i < this.nodes[key].children.length; ++i) {
-            var child = this.nodes[key].children[i];
-            if (!((child in this.nodes) || (child in this.primitives)))
-                return "Child " + child + " is missing";
-        }
-    }*/
+  }
 };
 
-GraphSceneDSX.prototype.parseComponent = function (componentTag) {
+GraphSceneDSX.prototype.parseComponent = function (component) {
+  //Id of node
+  var id = this.reader.getString(component, "id");
+  console.log(id);
+  var test1 = this.graph.primitives[id];
+  var teste = this.graph.components[id];
+  if (test1 != null)
+    return "Copy id primitive " + id;
+  if (teste != null)
+    return "Copy id node " + id;
 
-    var i, idComponent,idTransformation;
+  var newComponent = new Component();
+  newComponent.setId(id);
 
-    idComponent = this.reader.getString(componentTag,'id',1);
-    if (idComponent in this.graph.components)
-        return "Componente repetido " + id;
-    var component = new Component();
-    component.setId(idComponent);
+  //Get Local Transformations of Node
+  var childNode = component.children[0];
+  for (var i = 0; i < childNode.children.length; ++i) {
+    var transformation = childNode.children[i];
+    var type = transformation.nodeName;
+    if(childNode.children.length ==1 && type=="transformationref"){
+      var idRef = this.reader.getString(transformation, "id");
+    }
+    else{
+      switch (type) {
+        case "rotate":
+          var axis = this.reader.getString(transformation, "axis");
+          var angle = this.reader.getFloat(transformation, "angle");
+            switch (axis) {
 
-
-
-    //Get Local Transformations of Node
-    var transformationsTag = componentTag.children[0];
-
-    for (var i = 0; i < transformationsTag.children.length; ++i) {
-        var transformation = transformationsTag.children[i];
-        var type = transformation.nodeName;
-
-        if (type == "transformationref") {
-            idTransformation = this.reader.getString(transformation,'id',1);
-            component.addTransformationsRef(idTransformation);
-        }
-        else {
-            switch (type) {
-                case "rotate":
-                    var axis = this.reader.getString(transformation, "axis");
-                    var angle = this.reader.getFloat(transformation, "angle");
-                    switch (axis) {
-
-                        case "x":
-                            component.rotateX(angle * deg2rad);
-                            break;
-                        case "y":
-                            component.rotateY(angle * deg2rad);
-                            break;
-                        case "z":
-                            component.rotateZ(angle * deg2rad);
-                            break;
-                        default:
-                            return "Unknown rotation axis: " + axis;
-                    }
-                    break;
-                case "scale":
-                    var x = this.reader.getFloat(transformation, "x");
-                    var y = this.reader.getFloat(transformation, "y");
-                    var z = this.reader.getFloat(transformation, "z");
-                    component.scale(x, y, z);
-                    break;
-                case "translate":
-                    var x = this.reader.getFloat(transformation, "x");
-                    var y = this.reader.getFloat(transformation, "y");
-                    var z = this.reader.getFloat(transformation, "z");
-                    component.translate(x, y, z);
-                    break;
-                default:
-                    return "Unknown transformation: " + type;
+              case "x":
+                newComponent.rotateX(angle * deg2rad);
+                break;
+              case "y":
+                newComponent.rotateY(angle * deg2rad);
+                break;
+              case "z":
+                newComponent.rotateZ(angle *deg2rad);
+                break;
+              default:
+                return "Unknown rotation axis: " + axis;
             }
-        }
+          break;
+        case "scale":
+          var x = this.reader.getFloat(transformation, "x");
+          var y = this.reader.getFloat(transformation, "y");
+          var z = this.reader.getFloat(transformation, "z");
+          newComponent.scale(x, y, z);
+          break;
+        case "translate":
+          var x = this.reader.getFloat(transformation, "x");
+          var y = this.reader.getFloat(transformation, "y");
+          var z = this.reader.getFloat(transformation, "z");
+          newComponent.translate(x, y, z);
+          break;
+        default:
+          return "Unknown transformation: " + type;
+      }
     }
+  }
+  //Get NODE MATERIALS
+  var childNode = component.children[1];
+  if (childNode.nodeName != "materials")
+    return "Expected MATERIAL in COMPONENT " + id + "in 2st child.";
+  for (var i = 0; i < childNode.children.length; ++i) {
+     var material = childNode.children[i];
+     var materialID = this.reader.getString(material, "id");
 
+      if(!(materialID in this.graph.materials) && materialID != "inherit")
+        return "No MATERIAL " + materialID +  " for COMPONENT " + id;
+      if(i==0)
+      newComponent.setMaterial(material);
+  }
+  //Get NODE TEXTURE
+  childNode = component.children[2];
+  if (childNode.nodeName != "texture")
+    return "Expected TEXTURE in NODE " + id + "in 3rd child.";
+  var texture = this.reader.getString(childNode, "id");
 
+  if(!(texture in this.graph.textures) && texture != "null" && texture != "clear")
+    return "No TEXTURE " + texture +  " for NODE " + id;
 
-    // get textura do component
-    var texturaTag = componentTag.getElementsByTagName('texture');
-    var texturaId = this.reader.getString(texturaTag[0],'id',1);
-    component.setTexture(texturaId);
+  newComponent.setTexture(texture);
 
+  //Get children of NODE
+  var new_children = component.children[3];
+  if (new_children.nodeName != "children")
+    return "Expected CHILDREN tag in NODE " + id;
 
-    //parse materials do component
-    var  materialsTag = componentTag.getElementsByTagName('materials');
-    var materialsReturn = this.componentMaterials(materialsTag);
-    if(materialsReturn == 1 || materialsReturn == 2)
-        return "erro a obter os materiais do componento"
-    else
-        component.setMaterial(materialsReturn);
-
-    //parse ao children do component
-    var  childrenTag = componentTag.getElementsByTagName('children');
-    component.setPrimitivesRefs(this.parsePrimitiveRef(childrenTag));
-    component.setComponentsRefs(this.parseComponentsRef(childrenTag));
-
-    this.graph.components[idComponent] = component;
-};
-
-
-/*
-Recebe uma tag materials de um Component e devolde um array de ids de materiais
- */
-GraphSceneDSX.prototype.componentMaterials = function (materialsTag) {
-
-    materials = materialsTag[0].getElementsByTagName('material');
-    if(materials.length == 0)
-        return 1;
-
-    var i, id;
-    var ids = [];
-    for(i = 0; i < materials.length ; i++) {
-
-        id = this.reader.getString(materials[i],'id',1);
-        if(id != null)
-            ids.push(id);
-        else
-            return 2;
-
-    }
-    return ids;
-
-}
-
-GraphSceneDSX.prototype.parsePrimitiveRef = function (children) {
-
-    var primitivesRef = children[0].getElementsByTagName('primitiveref');
-    var ids = [];
-    var id;
-    for( i = 0 ; i < primitivesRef.length;i++)
-    {
-        id = this.reader.getString(primitivesRef[i],'id',1);
-        ids.push(id);
-    }
-
-    return ids;
-
-};
-
-GraphSceneDSX.prototype.parseComponentsRef = function (children) {
-
-    var componentesRef = children[0].getElementsByTagName('componentref');
-    var ids = [];
-    var id;
-    var i;
-    for( i = 0 ; i < componentesRef.length;i++)
-    {
-        id = this.reader.getString(componentesRef[i],'id',1);
-        ids.push(id);
-    }
-
-    return ids;
-
+  if (new_children.children.length == 0)
+    return "COMPONENT " + id + " as no children";
+  for (var i = 0; i < new_children.children.length; ++i) {
+    var new_child = this.reader.getString(new_children.children[i], "id");
+    newComponent.addChild(new_child);
+  }
+  this.graph.components[id] = newComponent;
 };
 
 
