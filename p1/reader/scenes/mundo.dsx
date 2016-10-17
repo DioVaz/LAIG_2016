@@ -1,0 +1,810 @@
+<dsx>
+
+  <scene root="root" axis_length="2.0" />
+
+  <views default="v1" >
+
+      <perspective id="v1" near="0.5" far="300" angle="0.5">
+          <from x="200" y="200" z="200" />
+          <to x="1" y="1" z="1" />
+      </perspective>
+      <perspective id="v2" near="0.5" far="300" angle="1">
+          <from x="20" y="180" z="1" />
+          <to x="1" y="1" z="1" />
+      </perspective>
+      <perspective id="v3" near="1" far="300" angle="0.5">
+          <from x="20" y="-180" z="1" />
+          <to x="1" y="1" z="1" />
+      </perspective>
+
+  </views>
+
+
+  <!-- Illumination and clear colour -->
+  <illumination doublesided="1" local="1">
+      <ambient r="0.5" g="0.5" b="0.5" a="1" />
+      <background r="0" g="0.2" b="0.5" a="1" />
+  </illumination>
+
+
+  <!-- Lights -->
+  <lights>
+  	<spot id="2" enabled="1" angle="1.2" expoente="1.4">
+  		<target x="1" y="2" z="3" />
+  		<location x="10" y="12" z="11" w="13"/>
+  		<ambient r="0.2" g="0.2" b="0.2" a="1"/>
+  		<diffuse r="0.2" g="0.2" b="0.2" a="1"/>
+  		<specular r="0.2" g="0.2" b="0.2" a="1"/>
+  	</spot>
+  	<omni id="3" enabled="0">
+  		<location x="0" y="0" z="0" w="13"/>
+  		<ambient r="0.3" g="0.2" b="0.6" a="1"/>
+  		<diffuse r="0.2" g="0.2" b="0.2" a="1"/>
+  		<specular r="0.2" g="0.2" b="0.2" a="1"/>
+  	</omni>
+  </lights>
+
+
+  <!-- textures -->
+  <textures>
+  	<!-- Tree trunk -->
+      <texture file="textures/plastico-lateral.png" id="plastico-lateral" length_s="1" length_t="1"/>
+      <texture file="textures/plastico-base.png" id="plastico-base" length_s="1" length_t="1"/>
+      <texture file="textures/water.png" id="agua" length_s="1" length_t="1"/>
+      <texture file="textures/stoneWall.png" id="parede" length_s="1" length_t="1"/>
+  </textures>
+
+
+  <materials>
+    <material id="espelho" >
+        <emission r="0" g="1.0" b="0" a="0.5" />
+        <ambient r="0.5" g="0.5" b="0.5" a="1.0" />
+        <diffuse r="0.5" g="0.5" b="0.5" a="1.0" />
+        <specular r="0.5" g="0.5" b="0.5" a="1.0" />
+        <shininess value="0.7" />
+    </material>
+    <material id="arvore" >
+        <emission r="1.0" g="1.0" b="1.0" a="1.0" />
+        <ambient r="1.0" g="1.0" b="1.0" a="1.0" />
+        <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
+        <specular r="1.0" g="1.0" b="1.0" a="1.0" />
+        <shininess value="1.0" />
+    </material>
+    <material id="piscina">
+          <emission a="0.5" b="0" g="1.0" r="1"/>
+          <ambient a="1.0" b="0.5" g="0.5" r="0.5"/>
+          <diffuse a="1.0" b="0.5" g="0.5" r="0.5"/>
+          <specular a="1.0" b="0.5" g="0.5" r="0.5"/>
+          <shininess value="0.7"/>
+    </material>
+    <material id="guarda1">
+         <emission a="1.0" b="0" g="0" r="1.0"/>
+         <ambient a="1.0" b="1.0" g="1.0" r="1.0"/>
+         <diffuse a="1.0" b="1.0" g="1.0" r="1.0"/>
+         <specular a="1.0" b="1.0" g="1.0" r="1.0"/>
+         <shininess value="0.3"/>
+    </material>
+    <material id="aste">
+        <emission a="1" b="0.5" g="0.5" r="0.5"/>
+        <ambient a="1.0" b="1.0" g="1.0" r="1.0"/>
+        <diffuse a="1.0" b="1.0" g="1.0" r="1.0"/>
+        <specular a="1.0" b="1.0" g="1.0" r="1.0"/>
+        <shininess value="0.3"/>
+    </material>
+  </materials>
+
+   <transformations>
+      <transformation id="translatecopa">
+         <translate x="0" y="0" z="3" />
+         <scale x="0.5" y="0.5" z="0.5" />
+      </transformation>
+      <transformation id="ttronco">
+         <scale x="0.4" y="0.4" z="1" />
+  	 </transformation>
+  </transformations>
+
+
+
+  <!-- The primitives -->
+  <primitives>
+      <primitive id="terra">
+          <rectangle x1="-11" y1="-11" x2="11" y2="11" />
+      </primitive>
+      <primitive id="face-cubo">
+                <rectangle x1="1" y1="1" x2="-1" y2="-1" />
+      </primitive>
+      <primitive id="triangle1">
+          <triangle x1="0" y1="0" z1="0" x2="3" y2="0" z2="0" x3="0" y3="3" z3="0" />
+      </primitive>
+      <primitive id="cilindro">
+          <cylinder base="1" top="1" height="4" slices="10" stacks="10" />
+      </primitive>
+      <primitive id="copa">
+          <cylinder base="4" top="0" height="4" slices="5" stacks="5" />
+      </primitive>
+      <primitive id="copa_redonda">
+          <sphere radius="2" slices="5" stacks="5" />
+      </primitive>
+      <primitive id="torus1">
+          <torus inner="1" outer="4" slices="10" loops="10" />
+      </primitive>
+      <primitive id="piscina-torus">
+        <torus inner="1" loops="10" outer="4" slices="10"/>
+      </primitive>
+      <primitive id="topo-piscina">
+         <cylinder base="4.5" height="0.5" slices="10" stacks="10" top="1"/>
+      </primitive>
+      <primitive id="guarda-topo">
+        <triangle x1="0" x2="3" x3="0" y1="0" y2="0" y3="3" z1="1.5" z2="0" z3="0"/>
+      </primitive>
+      <primitive id="guarda-base">
+           <triangle x1="0" x2="3" x3="0" y1="3" y2="0" y3="0" z1="0" z2="0" z3="1.5"/>
+      </primitive>
+  </primitives>
+
+
+  <!-- The components -->
+  <components>
+    <!-- ROOT -->
+    <component id="root">
+        <transformation>
+        </transformation>
+        <materials>
+        </materials>
+        <texture id="none">
+        </texture>
+        <children>
+            <componentRef id="castelo"/>
+            <componentRef id="piscina"/>
+            <componentRef id="guarda-sol"/>
+        </children>
+
+    </component>
+
+    <!-- CHAO -->
+    <component id="chao">
+        <transformation>
+          <translate x="0" y="-15" z="0"/>
+          <rotate axis="x" angle="-90" />
+        </transformation>
+        <materials>
+            <material id="espelho" />
+        </materials>
+        <texture id="none">
+        </texture>
+        <children>
+            <primitiveRef id="terra"/>
+        </children>
+
+    </component>
+
+
+    <!-- CASTELO -->
+    <component id="castelo">
+        <transformation>
+        <scale x="3" y="3" z="3"/>
+        </transformation>
+        <materials>
+        </materials>
+        <texture id="none">
+        </texture>
+        <children>
+            <componentRef id="chao"/>
+            <componentRef id="torre1"/>
+            <componentRef id="torre2"/>
+            <componentRef id="torre3"/>
+            <componentRef id="torre4"/>
+            <componentRef id="parede1"/>
+            <componentRef id="parede2"/>
+            <componentRef id="parede3"/>
+            <componentRef id="parede4"/>
+        </children>
+
+    </component>
+    <component id="parede1">
+        <transformation>
+          <translate x="14" y="-5" z="0"/>
+        </transformation>
+        <materials>
+        </materials>
+        <texture id="plastico-base">
+        </texture>
+        <children>
+            <componentRef id="parede-completa"/>
+        </children>
+
+    </component>
+    <component id="parede2">
+        <transformation>
+          <translate x="-14" y="-5" z="0"/>
+        </transformation>
+        <materials>
+        </materials>
+        <texture id="none">
+        </texture>
+        <children>
+            <componentRef id="parede-completa"/>
+        </children>
+
+    </component>
+    <component id="parede3">
+        <transformation>
+          <translate x="0" y="-5" z="14"/>
+          <rotate axis="y" angle="-90" />
+        </transformation>
+        <materials>
+        </materials>
+        <texture id="none">
+        </texture>
+        <children>
+            <componentRef id="parede-completa"/>
+        </children>
+
+    </component>
+    <component id="parede4">
+        <transformation>
+          <translate x="0" y="-5" z="-14"/>
+          <rotate axis="y" angle="-90" />
+        </transformation>
+        <materials>
+        </materials>
+        <texture id="none">
+        </texture>
+        <children>
+            <componentRef id="parede-completa"/>
+        </children>
+
+    </component>
+
+    <component id="parede-completa">
+        <transformation>
+          <scale x="3" y="10" z="11" />
+        </transformation>
+        <materials>
+        </materials>
+        <texture id="none"/>
+        <children>
+            <componentRef id="cubo"/>
+        </children>
+
+    </component>
+
+    <!-- TORRES -->
+    <component id="torre1">
+        <transformation>
+          <translate x="14" y="0" z="14"/>
+        </transformation>
+        <materials>
+        </materials>
+        <texture id="none">
+        </texture>
+        <children>
+            <componentRef id="torre-completa"/>
+        </children>
+
+    </component>
+    <component id="torre2">
+        <transformation>
+          <translate x="-14" y="0" z="-14"/>
+        </transformation>
+        <materials>
+        </materials>
+        <texture id="none">
+        </texture>
+        <children>
+            <componentRef id="torre-completa"/>
+        </children>
+
+    </component>
+    <component id="torre3">
+        <transformation>
+          <translate x="-14" y="0" z="14"/>
+        </transformation>
+        <materials>
+        </materials>
+        <texture id="none">
+        </texture>
+        <children>
+            <componentRef id="torre-completa"/>
+        </children>
+
+    </component>
+    <component id="torre4">
+        <transformation>
+          <translate x="14" y="0" z="-14"/>
+        </transformation>
+        <materials>
+        </materials>
+        <texture id="none">
+        </texture>
+        <children>
+            <componentRef id="torre-completa"/>
+        </children>
+
+    </component>
+
+    <component id="torre-completa">
+        <transformation>
+        </transformation>
+        <materials>
+        </materials>
+        <texture id="none">
+        </texture>
+        <children>
+            <componentRef id="torre-base"/>
+            <componentRef id="torre-pinos"/>
+        </children>
+
+    </component>
+    <component id="torre-pinos">
+        <transformation>
+          <translate x="0" y="16" z="0" />
+        </transformation>
+        <materials>
+        </materials>
+        <texture id="none">
+        </texture>
+        <children>
+            <componentRef id="pino1"/>
+            <componentRef id="pino2"/>
+            <componentRef id="pino3"/>
+            <componentRef id="pino4"/>
+            <componentRef id="pino5"/>
+            <componentRef id="pino6"/>
+            <componentRef id="pino7"/>
+            <componentRef id="pino8"/>
+        </children>
+
+    </component>
+    <component id="pino1">
+        <transformation>
+          <translate x="4" y="0" z="4" />
+        </transformation>
+        <materials>
+        </materials>
+        <texture id="none"/>
+        <children>
+            <componentRef id="cubo"/>
+        </children>
+
+    </component>
+    <component id="pino2">
+        <transformation>
+          <translate x="0" y="0" z="4" />
+        </transformation>
+        <materials>
+        </materials>
+        <texture id="none"/>
+        <children>
+            <componentRef id="cubo"/>
+        </children>
+
+    </component>
+    <component id="pino3">
+        <transformation>
+          <translate x="-4" y="0" z="4" />
+        </transformation>
+        <materials>
+        </materials>
+        <texture id="none"/>
+        <children>
+            <componentRef id="cubo"/>
+        </children>
+
+    </component>
+    <component id="pino4">
+        <transformation>
+          <translate x="4" y="0" z="0" />
+        </transformation>
+        <materials>
+        </materials>
+        <texture id="none"/>
+        <children>
+            <componentRef id="cubo"/>
+        </children>
+
+    </component>
+    <component id="pino5">
+        <transformation>
+          <translate x="-4" y="0" z="0" />
+        </transformation>
+        <materials>
+        </materials>
+        <texture id="none"/>
+        <children>
+            <componentRef id="cubo"/>
+        </children>
+
+    </component>
+    <component id="pino6">
+        <transformation>
+          <translate x="4" y="0" z="-4" />
+        </transformation>
+        <materials>
+        </materials>
+        <texture id="none"/>
+        <children>
+            <componentRef id="cubo"/>
+        </children>
+
+    </component>
+    <component id="pino7">
+        <transformation>
+          <translate x="0" y="0" z="-4" />
+        </transformation>
+        <materials>
+        </materials>
+        <texture id="none"/>
+        <children>
+            <componentRef id="cubo"/>
+        </children>
+
+    </component>
+    <component id="pino8">
+        <transformation>
+          <translate x="-4" y="0" z="-4" />
+        </transformation>
+        <materials>
+        </materials>
+        <texture id="none"/>
+        <children>
+            <componentRef id="cubo"/>
+        </children>
+
+    </component>
+    <component id="torre-base">
+        <transformation>
+          <scale x="5" y="15" z="5" />
+        </transformation>
+        <materials>
+        </materials>
+        <texture id="parede">
+        </texture>
+        <children>
+            <componentRef id="cubo"/>
+        </children>
+
+    </component>
+
+    <!-- CUBO UNITARIO -->
+    <component id="cubo">
+        <transformation>
+        </transformation>
+        <materials>
+            <material id="arvore" />
+        </materials>
+        <texture id="parede">
+        </texture>
+        <children>
+            <componentRef id="face1"/>
+            <componentRef id="face2"/>
+            <componentRef id="face3"/>
+            <componentRef id="face4"/>
+            <componentRef id="face5"/>
+            <componentRef id="face6"/>
+        </children>
+
+    </component>
+    <component id="face1">
+        <transformation>
+          <translate x="0" y="0" z="1" />
+        </transformation>
+        <materials>
+            <material id="inherit" />
+        </materials>
+        <texture id="none">
+        </texture>
+        <children>
+            <primitiveRef id="face-cubo"/>
+        </children>
+
+    </component>
+    <component id="face2">
+        <transformation>
+          <translate x="1" y="0" z="0" />
+          <rotate axis="y" angle="90" />
+        </transformation>
+        <materials>
+            <material id="inherit" />
+        </materials>
+        <texture id="none">
+        </texture>
+        <children>
+            <primitiveRef id="face-cubo"/>
+        </children>
+
+    </component>
+    <component id="face3">
+        <transformation>
+          <translate x="0" y="0" z="-1" />
+          <rotate axis="y" angle="180" />
+        </transformation>
+        <materials>
+            <material id="inherit" />
+        </materials>
+        <texture id="none">
+        </texture>
+        <children>
+            <primitiveRef id="face-cubo"/>
+        </children>
+
+    </component>
+    <component id="face4">
+        <transformation>
+          <translate x="-1" y="0" z="0" />
+          <rotate axis="y" angle="-90" />
+        </transformation>
+        <materials>
+            <material id="inherit" />
+        </materials>
+        <texture id="none">
+        </texture>
+        <children>
+            <primitiveRef id="face-cubo"/>
+        </children>
+
+    </component>
+    <component id="face5">
+        <transformation>
+          <translate x="0" y="-1" z="0" />
+          <rotate axis="x" angle="90" />
+        </transformation>
+        <materials>
+            <material id="inherit" />
+        </materials>
+        <texture id="none">
+        </texture>
+        <children>
+            <primitiveRef id="face-cubo"/>
+        </children>
+
+    </component>
+    <component id="face6">
+        <transformation>
+          <translate x="0" y="1" z="0" />
+          <rotate axis="x" angle="-90" />
+        </transformation>
+        <materials>
+            <material id="inherit" />
+        </materials>
+        <texture id="none">
+        </texture>
+        <children>
+            <primitiveRef id="face-cubo"/>
+        </children>
+
+    </component>
+
+<!--piscina-->
+
+  <component id="piscina">
+        <transformation>
+        <translate x="0" y="-20" z="0"/>
+          <scale x="2" y="2" z="2"/>
+          <rotate axis="x" angle="-90"/>
+        </transformation>
+        <materials>
+          <material id="piscina"/>
+        </materials>
+        <texture id="plastico-lateral"/>
+        <children>
+          <componentRef id="piscina-toro1"/>
+          <componentRef id="piscina-toro2"/>
+          <componentRef id="piscina-toro3"/>
+          <componentRef id="piscina-topo"/>
+          <componentRef id="piscina-botton"/>
+        </children>
+      </component>
+
+      <component id="piscina-toro1">
+        <transformation/>
+        <materials>
+          <material id="inherit"/>
+        </materials>
+        <texture id="none"/>
+        <children>
+          <primitiveRef id="piscina-torus"/>
+        </children>
+      </component>
+
+      <component id="piscina-toro2">
+        <transformation>
+          <translate x="0" y="0" z="1.8"/>
+        </transformation>
+        <materials>
+          <material id="inherit"/>
+        </materials>
+        <texture id="none"/>
+        <children>
+          <primitiveRef id="piscina-torus"/>
+        </children>
+      </component>
+
+      <component id="piscina-toro3">
+        <transformation>
+          <translate x="0" y="0" z="3.6"/>
+        </transformation>
+        <materials>
+          <material id="inherit"/>
+        </materials>
+        <texture id="none"/>
+        <children>
+          <primitiveRef id="piscina-torus"/>
+        </children>
+      </component>
+
+      <component id="piscina-topo">
+        <transformation>
+          <translate x="0" y="0" z="3.7"/>
+        </transformation>
+        <materials>
+          <material id="arvore"/>
+        </materials>
+          <texture id="agua"/>
+        <children>
+           <primitiveRef id="topo-piscina"/>
+        </children>
+      </component>
+
+      <component id="piscina-botton">
+        <transformation>
+          <translate x="0" y="0" z="-0.8"/>
+          <scale x="0.8" y="0.8" z="0.8"/>
+        </transformation>
+        <materials>
+           <material id="inherit"/>
+        </materials>
+           <texture id="plastico-base"/>
+        <children>
+           <primitiveRef id="topo-piscina"/>
+        </children>
+      </component>
+
+
+  <!--guardasol-->
+
+  <component id="guarda-sol">
+        <transformation>
+        <translate x="16" y="-20" z="16"/>
+          <scale x="4" y="4" z="4"/>
+          <rotate axis="x" angle="270"/>
+        </transformation>
+        <materials>
+          <material id="piscina"/>
+        </materials>
+        <texture id="none"/>
+        <children>
+          <componentRef id="guardatopo1"/>
+          <componentRef id="guardatopo2"/>
+          <componentRef id="guardatopo3"/>
+          <componentRef id="guardatopo4"/>
+          <componentRef id="guardabase1"/>
+          <componentRef id="guardabase2"/>
+          <componentRef id="guardabase3"/>
+          <componentRef id="guardabase4"/>
+          <componentRed id="aste"/>
+        </children>
+      </component>
+
+      <component id="guardatopo1">
+        <transformation/>
+        <materials>
+          <material id="guarda1"/>
+        </materials>
+        <texture id="none"/>
+        <children>
+          <primitiveRef id="guarda-topo"/>
+        </children>
+      </component>
+
+       <component id="guardatopo2">
+         <transformation>
+            <rotate axis="z" angle="90"/>
+         </transformation>
+            <materials>
+            <material id="inherit"/>
+         </materials>
+            <texture id="none"/>
+         <children>
+            <primitiveRef id="guarda-topo"/>
+         </children>
+       </component>
+
+
+       <component id="guardatopo3">
+          <transformation>
+             <rotate axis="z" angle="180"/>
+          </transformation>
+          <materials>
+             <material id="guarda1"/>
+          </materials>
+          <texture id="none"/>
+             <children>
+          <primitiveRef id="guarda-topo"/>
+          </children>
+       </component>
+
+
+      <component id="guardatopo4">
+        <transformation>
+           <rotate axis="z" angle="270"/>
+        </transformation>
+           <materials>
+             <material id="inherit"/>
+           </materials>
+           <texture id="none"/>
+           <children>
+              <primitiveRef id="guarda-topo"/>
+         </children>
+      </component>
+
+
+      <component id="guardabase1">
+        <transformation>
+         </transformation>
+        <materials>
+          <material id="guarda1"/>
+        </materials>
+        <texture id="none"/>
+        <children>
+           <primitiveRef id="guarda-base"/>
+        </children>
+      </component>
+
+       <component id="guardabase2">
+          <transformation>
+            <rotate axis="z" angle="90"/>
+           </transformation>
+          <materials>
+            <material id="inherit"/>
+          </materials>
+          <texture id="none"/>
+          <children>
+             <primitiveRef id="guarda-base"/>
+          </children>
+        </component>
+
+       <component id="guardabase3">
+          <transformation>
+            <rotate axis="z" angle="180"/>
+          </transformation>
+          <materials>
+            <material id="guarda1"/>
+          </materials>
+          <texture id="none"/>
+          <children>
+            <primitiveRef id="guarda-base"/>
+          </children>
+       </component>
+
+        <component id="guardabase4">
+           <transformation>
+              <rotate axis="z" angle="270"/>
+           </transformation>
+           <materials>
+              <material id="inherit"/>
+           </materials>
+             <texture id="none"/>
+           <children>
+              <primitiveRef id="guarda-base"/>
+           </children>
+        </component>
+
+
+      <component id="aste">
+        <transformation>
+           <translate x="0" y="0" z="-2.4"/>
+           <scale x="0.1" y="0.1" z ="1"/>
+        </transformation>
+        <materials>
+            <material id="aste"/>
+        </materials>
+        <texture id="none"/>
+        <children>
+        <primitiveRef id="cilindro"/>
+          </children>
+       </component>
+
+ </components>
+
+</dsx>

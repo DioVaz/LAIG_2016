@@ -1,241 +1,323 @@
 <dsx>
-
-  <scene root="root" axis_length="2.0" />
-
-  <views default="v1" >
-
-      <perspective id="v1" near="1" far="300" angle="0.5">
-          <from x="15" y="15" z="15" />
-          <to x="0" y="0" z="0" />
-      </perspective>
-      <perspective id="v2" near="1" far="300" angle="0.5">
-          <from x="15" y="15" z="-15" />
-          <to x="0" y="0" z="0" />
-      </perspective>
-      <perspective id="v3" near="1" far="300" angle="0.5">
-          <from x="-15" y="15" z="15" />
-          <to x="0" y="0" z="0" />
-      </perspective>
-      <perspective id="v4" near="1" far="300" angle="0.5">
-          <from x="-15" y="15" z="-15" />
-          <to x="0" y="0" z="0" />
-      </perspective>
-
+  <scene axis_length="2.0" root="root"/>
+  <views default="v1">
+    <perspective angle="0.5" far="300" id="v1" near="1">
+      <from x="15" y="15" z="15"/>
+      <to x="0" y="0" z="0"/>
+    </perspective>
+    <perspective angle="0.5" far="300" id="v2" near="1">
+      <from x="15" y="15" z="-15"/>
+      <to x="0" y="0" z="0"/>
+    </perspective>
+    <perspective angle="0.5" far="300" id="v3" near="1">
+      <from x="-15" y="15" z="15"/>
+      <to x="0" y="0" z="0"/>
+    </perspective>
+    <perspective angle="0.5" far="300" id="v4" near="1">
+      <from x="-15" y="15" z="-15"/>
+      <to x="0" y="0" z="0"/>
+    </perspective>
   </views>
-
-
   <!-- Illumination and clear colour -->
-  <illumination doublesided="1" local="0">
-      <ambient r="0.2" g="0.2" b="0.2" a="1" />
-      <background r="0" g="0" b="0" a="1" />
+  <illumination doublesided="1" local="1">
+    <ambient a="1" b="0.5" g="0.5" r="0.5"/>
+    <background a="1" b="0.5" g="0.2" r="0"/>
   </illumination>
-
-
   <!-- Lights -->
   <lights>
-  	<omni id="1" enabled="0">
-  		<location x="10" y="12" z="11" w="13"/>
-  		<ambient r="0.2" g="0.2" b="0.2" a="1"/>
-  		<diffuse r="0.2" g="0.2" b="0.2" a="1"/>
-  		<specular r="0.2" g="0.2" b="0.2" a="1"/>
-  	</omni>
-  	<spot id="2" enabled="0" angle="1.2" expoente="1.4">
-  		<target x="1" y="2" z="3" />
-  		<location x="10" y="12" z="11" w="13"/>
-  		<ambient r="0.2" g="0.2" b="0.2" a="1"/>
-  		<diffuse r="0.2" g="0.2" b="0.2" a="1"/>
-  		<specular r="0.2" g="0.2" b="0.2" a="1"/>
-  	</spot>
-  	<omni id="3" enabled="1">
-  		<location x="11" y="12" z="14" w="13"/>
-  		<ambient r="0.3" g="0.2" b="0.6" a="1"/>
-  		<diffuse r="0.2" g="0.2" b="0.2" a="1"/>
-  		<specular r="0.2" g="0.2" b="0.2" a="1"/>
-  	</omni>
-  	<omni id="4" enabled="1">
-  		<location x="10" y="13" z="11" w="17"/>
-  		<ambient r="0.1" g="0.2" b="0.2" a="1"/>
-  		<diffuse r="0.2" g="0.2" b="0.2" a="1"/>
-  		<specular r="0.2" g="0.2" b="0.2" a="1"/>
-  	</omni>
-  	<spot id="5" enabled="0" angle="1.5" expoente="3.4">
-  		<target x="4" y="5" z="6" />
-  		<location x="10" y="12" z="11" w="13"/>
-  		<ambient r="0.2" g="0.2" b="0.2" a="1"/>
-  		<diffuse r="0.2" g="0.2" b="0.2" a="1"/>
-  		<specular r="0.2" g="0.2" b="0.2" a="1"/>
-  	</spot>
+    <omni enabled="0" id="1">
+      <location w="13" x="10" y="12" z="11"/>
+      <ambient a="1" b="0.2" g="0.2" r="0.2"/>
+      <diffuse a="1" b="0.2" g="0.2" r="0.2"/>
+      <specular a="1" b="0.2" g="0.2" r="0.2"/>
+    </omni>
+    <spot angle="1.2" enabled="0" expoente="1.4" id="2">
+      <target x="1" y="2" z="3"/>
+      <location w="13" x="10" y="12" z="11"/>
+      <ambient a="1" b="0.2" g="0.2" r="0.2"/>
+      <diffuse a="1" b="0.2" g="0.2" r="0.2"/>
+      <specular a="1" b="0.2" g="0.2" r="0.2"/>
+    </spot>
+    <omni enabled="1" id="3">
+      <location w="13" x="11" y="12" z="14"/>
+      <ambient a="1" b="0.6" g="0.2" r="0.3"/>
+      <diffuse a="1" b="0.2" g="0.2" r="0.2"/>
+      <specular a="1" b="0.2" g="0.2" r="0.2"/>
+    </omni>
+    <omni enabled="1" id="4">
+      <location w="17" x="10" y="13" z="11"/>
+      <ambient a="1" b="0.2" g="0.2" r="0.1"/>
+      <diffuse a="1" b="0.2" g="0.2" r="0.2"/>
+      <specular a="1" b="0.2" g="0.2" r="0.2"/>
+    </omni>
+    <spot angle="1.5" enabled="0" expoente="3.4" id="5">
+      <target x="4" y="5" z="6"/>
+      <location w="13" x="10" y="12" z="11"/>
+      <ambient a="1" b="0.2" g="0.2" r="0.2"/>
+      <diffuse a="1" b="0.2" g="0.2" r="0.2"/>
+      <specular a="1" b="0.2" g="0.2" r="0.2"/>
+    </spot>
   </lights>
-
-
   <!-- textures -->
   <textures>
-  	<!-- Tree trunk -->
-      <texture id="pele" file="negro" length_s="1.0" length_t="2.0" />
-      <texture id="peleB" file="branco" length_s="1.0" length_t="2.0" />
+    <!-- Tree trunk -->
+    <texture file="textures/brick.jpg" id="parede" length_s="1.0" length_t="1.0"/>
+    <texture file="branco" id="peleB" length_s="1.0" length_t="2.0"/>
+    <texture file="textures/water.png" id="agua" length_s="1.0" length_t="2.0"/>
+    <texture file="textures/plastico-lateral.png" id="plastico-lateral" length_s="1" length_t="1"/>
+    <texture file="textures/plastico-base.png" id="plastico-base" length_s="1" length_t="1"/>
+
   </textures>
-
-
   <materials>
-    <material id="espelho" >
-        <emission r="1.0" g="1.0" b="1.0" a="1.0" />
-        <ambient r="1.0" g="1.0" b="1.0" a="1.0" />
-        <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
-        <specular r="1.0" g="1.0" b="1.0" a="1.0" />
-        <shininess value="1.0" />
+    <material id="espelho">
+      <emission a="0.5" b="0" g="1.0" r="0"/>
+      <ambient a="1.0" b="0.5" g="0.5" r="0.5"/>
+      <diffuse a="1.0" b="0.5" g="0.5" r="0.5"/>
+      <specular a="1.0" b="0.5" g="0.5" r="0.5"/>
+      <shininess value="0.7"/>
     </material>
-    <material id="arvore" >
-        <emission r="1.0" g="1.0" b="1.0" a="1.0" />
-        <ambient r="1.0" g="1.0" b="1.0" a="1.0" />
-        <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
-        <specular r="1.0" g="1.0" b="1.0" a="1.0" />
-        <shininess value="1.0" />
+    <material id="piscina">
+          <emission a="0.5" b="0" g="1.0" r="1"/>
+          <ambient a="1.0" b="0.5" g="0.5" r="0.5"/>
+          <diffuse a="1.0" b="0.5" g="0.5" r="0.5"/>
+          <specular a="1.0" b="0.5" g="0.5" r="0.5"/>
+          <shininess value="0.7"/>
     </material>
+    <material id="arvore">
+      <emission a="1.0" b="1.0" g="1.0" r="1.0"/>
+      <ambient a="1.0" b="1.0" g="1.0" r="1.0"/>
+      <diffuse a="1.0" b="1.0" g="1.0" r="1.0"/>
+      <specular a="1.0" b="1.0" g="1.0" r="1.0"/>
+      <shininess value="1.0"/>
+    </material>
+    <material id="guarda1">
+          <emission a="1.0" b="0" g="0" r="1.0"/>
+          <ambient a="1.0" b="1.0" g="1.0" r="1.0"/>
+          <diffuse a="1.0" b="1.0" g="1.0" r="1.0"/>
+          <specular a="1.0" b="1.0" g="1.0" r="1.0"/>
+          <shininess value="0.3"/>
+        </material>
+        <material id="aste">
+                  <emission a="1" b="0.5" g="0.5" r="0.5"/>
+                  <ambient a="1.0" b="1.0" g="1.0" r="1.0"/>
+                  <diffuse a="1.0" b="1.0" g="1.0" r="1.0"/>
+                  <specular a="1.0" b="1.0" g="1.0" r="1.0"/>
+                  <shininess value="0.3"/>
+                </material>
   </materials>
 
-   <transformations>
-      <transformation id="translatecopa">
-         <!-- instrucoes a usar sem limite nem ordem -->
-         <!-- deve existir pelo menos uma transformacao -->
-         <translate x="0" y="0" z="3" />
-         <scale x="0.5" y="0.5" z="0.5" />
-      </transformation>
-      <transformation id="ttronco">
-         <scale x="0.4" y="0.4" z="1" />
-  	 </transformation>
+
+  <transformations>
+    <transformation id="translatecopa">
+      <!-- instrucoes a usar sem limite nem ordem -->
+      <!-- deve existir pelo menos uma transformacao -->
+      <translate x="0" y="0" z="3"/>
+      <scale x="0.5" y="0.5" z="0.5"/>
+    </transformation>
+    <transformation id="ttronco">
+      <scale x="0.4" y="0.4" z="1"/>
+    </transformation>
+
   </transformations>
-
-
-
   <!-- The leaves -->
   <primitives>
-
-      <!-- Deve existir um ou mais blocos "primitive" -->
-      <!-- Os identificadores "id" nao podem ser repetidos -->
-      <primitive id="terra">
-          <rectangle x1="-10" y1="-10" x2="10" y2="10" />
-      </primitive>
-      <primitive id="terra-base">
-                <rectangle x1="10" y1="10" x2="-10" y2="-10" />
-      </primitive>
-      <primitive id="triangle1">
-          <triangle x1="0" y1="0" z1="0" x2="3" y2="0" z2="0" x3="0" y3="3" z3="0" />
-      </primitive>
-      <primitive id="cilindro">
-          <cylinder base="1" top="1" height="4" slices="10" stacks="10" />
-      </primitive>
-      <primitive id="copa">
-          <cylinder base="4" top="0" height="4" slices="5" stacks="5" />
-      </primitive>
-      <primitive id="copa_redonda">
-          <sphere radius="2\" slices="5" stacks="5" />
-      </primitive>
-      <primitive id="torus1">
-          <torus inner="1" outer="4" slices="10" loops="10" />
-      </primitive>
+    <!-- Deve existir um ou mais blocos "primitive" -->
+    <!-- Os identificadores "id" nao podem ser repetidos -->
+    <primitive id="terra">
+      <rectangle x1="-10" x2="10" y1="-10" y2="10"/>
+    </primitive>
+    <primitive id="face-cubo">
+      <rectangle x1="1" x2="-1" y1="1" y2="-1"/>
+    </primitive>
+    <primitive id="triangle1">
+      <triangle x1="0" x2="6" x3="0" y1="0" y2="0" y3="6" z1="0" z2="0" z3="0"/>
+    </primitive>
+    <primitive id="guarda-topo">
+          <triangle x1="0" x2="3" x3="0" y1="0" y2="0" y3="3" z1="1.5" z2="0" z3="0"/>
+    </primitive>
+    <primitive id="guarda-base">
+         <triangle x1="0" x2="3" x3="0" y1="3" y2="0" y3="0" z1="0" z2="0" z3="1.5"/>
+    </primitive>
+    <primitive id="cilindro">
+      <cylinder base="1" height="4" slices="10" stacks="10" top="1"/>
+    </primitive>
+    <primitive id="copa">
+      <cylinder base="4" height="4" slices="5" stacks="5" top="0"/>
+    </primitive>
+    <primitive id="copa_redonda">
+      <sphere radius="2" slices="5" stacks="5"/>
+    </primitive>
+    <primitive id="torus">
+      <torus inner="1" loops="10" outer="4" slices="10"/>
+    </primitive>
+    <primitive id="piscina-torus">
+      <torus inner="1" loops="10" outer="4" slices="10"/>
+    </primitive>
+    <primitive id="topo-piscina">
+       <cylinder base="4.5" height="0.5" slices="10" stacks="10" top="1"/>
+    </primitive>
   </primitives>
-
-
   <!-- The components -->
   <components>
+    <!-- ROOT -->
+    <component id="root">
+      <transformation/>
+      <materials/>
+      <texture id="none"/>
+      <children>
+        <componentRef id="guarda-sol"/>
+      </children>
+    </component>
 
-   <component id="terra">
+    <component id="guarda-sol">
       <transformation>
+        <scale x="2" y="2" z="2"/>
       </transformation>
       <materials>
-          <material id="inherit" />
+        <material id="piscina"/>
       </materials>
-      <texture id="null">
-      </texture>
-
-
-      <!-- bloco "children" obrigatorio num "component" -->
+      <texture id="none"/>
       <children>
-          <primitiveref id="terra"/>
+        <componentRef id="guardatopo1"/>
+        <componentRef id="guardatopo2"/>
+        <componentRef id="guardatopo3"/>
+        <componentRef id="guardatopo4"/>
+        <componentRef id="guardabase1"/>
+        <componentRef id="guardabase2"/>
+        <componentRef id="guardabase3"/>
+        <componentRef id="guardabase4"/>
+        <componentRed id="aste"/>
       </children>
+    </component>
 
-  </component>
+    <component id="guardatopo1">
+      <transformation/>
+      <materials>
+        <material id="guarda1"/>
+      </materials>
+      <texture id="none"/>
+      <children>
+        <primitiveRef id="guarda-topo"/>
+      </children>
+    </component>
 
-  <component id="terra-base">
-              <transformation>
-              <rotate axis="y" angle="180" />
-              </transformation>
-              <materials>
-                  <material id="inherit" />
-              </materials>
-              <texture id="null">
-              </texture>
-
-
-              <!-- bloco "children" obrigatorio num "component" -->
-              <children>
-                  <primitiveref id="terra-base"/>
-              </children>
-
-          </component>
-
-
-
-      <component id="arvore">
-          <transformation>
-          </transformation>
+     <component id="guardatopo2">
+       <transformation>
+          <rotate axis="z" angle="90"/>
+       </transformation>
           <materials>
-              <material id="arvore" />
-          </materials>
-          <texture id="null">
-          </texture>
+          <material id="inherit"/>
+       </materials>
+          <texture id="none"/>
+       <children>
+          <primitiveRef id="guarda-topo"/>
+       </children>
+     </component>
 
 
-          <!-- bloco "children" obrigatorio num "component" -->
-          <children>
-              <componentref id="copa" />
-              <componentref id="tronco" />
-          </children>
+     <component id="guardatopo3">
+        <transformation>
+           <rotate axis="z" angle="180"/>
+        </transformation>
+        <materials>
+           <material id="guarda1"/>
+        </materials>
+        <texture id="none"/>
+           <children>
+        <primitiveRef id="guarda-topo"/>
+        </children>
+     </component>
 
+
+    <component id="guardatopo4">
+      <transformation>
+         <rotate axis="z" angle="270"/>
+      </transformation>
+         <materials>
+           <material id="inherit"/>
+         </materials>
+         <texture id="none"/>
+         <children>
+            <primitiveRef id="guarda-topo"/>
+       </children>
+    </component>
+
+
+    <component id="guardabase1">
+      <transformation>
+       </transformation>
+      <materials>
+        <material id="guarda1"/>
+      </materials>
+      <texture id="none"/>
+      <children>
+         <primitiveRef id="guarda-base"/>
+      </children>
+    </component>
+
+     <component id="guardabase2">
+        <transformation>
+          <rotate axis="z" angle="90"/>
+         </transformation>
+        <materials>
+          <material id="inherit"/>
+        </materials>
+        <texture id="none"/>
+        <children>
+           <primitiveRef id="guarda-base"/>
+        </children>
       </component>
 
-      <!-- COPA -->
-      <component id="copa">
-          <transformation>
-              <transformationref id="translatecopa" />
-          </transformation>
-          <materials>
-              <material id="inherit" />
-          </materials>
+     <component id="guardabase3">
+        <transformation>
+          <rotate axis="z" angle="180"/>
+        </transformation>
+        <materials>
+          <material id="guarda1"/>
+        </materials>
+        <texture id="none"/>
+        <children>
+          <primitiveRef id="guarda-base"/>
+        </children>
+     </component>
 
-          <texture id="null">
-          </texture>
-
-
-          <!-- bloco "children" obrigatorio num "component" -->
-          <children>
-              <primitiveref id="copa" />
-          </children>
-
+      <component id="guardabase4">
+         <transformation>
+            <rotate axis="z" angle="270"/>
+         </transformation>
+         <materials>
+            <material id="inherit"/>
+         </materials>
+           <texture id="none"/>
+         <children>
+            <primitiveRef id="guarda-base"/>
+         </children>
       </component>
 
-      <!-- TRONCO -->
-      <component id="tronco">
-          <transformation>
-         	 <transformationref id="ttronco" />
-          </transformation>
-          <materials>
-              <material id="inherit" />
-          </materials>
 
-          <texture id="tronco">
-          </texture>
+    <component id="aste">
+      <transformation>
+         <translate x="0" y="0" z="-2.4"/>
+         <scale x="0.1" y="0.1" z ="1"/>
+      </transformation>
+      <materials>
+          <material id="aste"/>
+      </materials>
+      <texture id="none"/>
+      <children>
+      <primitiveRef id="cilindro"/>
+        </children>
+     </component>
 
 
-          <!-- bloco "children" obrigatorio num "component" -->
-          <children>
-              <primitiveref id="cilindro" />
-          </children>
 
-      </component>
+
+
+
+
+
+
 
 
   </components>
-
-
 </dsx>

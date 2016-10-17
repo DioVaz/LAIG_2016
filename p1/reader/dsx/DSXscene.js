@@ -23,7 +23,7 @@ DSXScene.prototype.init = function (application) {
     this.initCameras(); //Set default configuration of camera view
 
 	this.allLights = 'All'; //ID To control all lights
-    this.lightsEnabled = []; //Control every single light
+    //this.lightsEnabled = []; //Control every single light
 
 	this.primitives = [];
 
@@ -52,7 +52,7 @@ DSXScene.prototype.setInterface = function(myinterface) {
  * Create camera in default position
  */
 DSXScene.prototype.initCameras = function () {
-    this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(50, 80, 130), vec3.fromValues(0, 0, 0));
+    this.camera = new CGFcamera(1, 0.4, 400, vec3.fromValues(180,180, 1), vec3.fromValues(1, 1, 1));
 };
 
 /*
@@ -79,31 +79,38 @@ DSXScene.prototype.onGraphLoaded = function ()
 
 	this.lights = [];
 
+
+
 	//load lights from the Grahps
 	//All lights are invisible, enabled or not depends from the dsx
 
 	for (var i = 0; i < this.graph.omnis.length; ++i) {
 		this.lights.push(this.graph.omnis[i]);
-		this.lights[i].setVisible(false);
-		this.lightsEnabled[this.lights[i].id] = this.lights[i].enabled;
+		this.lights[i].setVisible(true);
+		this.lights[i].enable();
+		console.log(this.lights[i]);
 	}
-  var j = this.graph.omnis.length;
+
+	console.log(this.lights);
+
+
+ /* var j = this.graph.omnis.length;
 	for (var i = 0; i < this.graph.spots.length; ++i) {
 		this.lights.push(this.graph.spots[i]);
 		this.lights[j].setVisible(false);
 		this.lightsEnabled[this.lights[j].id] = this.lights[j].enabled;
     j++;
-	}
+	}*/
 
 
 	//controls all lights
-    this.lightsEnabled[this.allLights] = false;
+   /* this.lightsEnabled[this.allLights] = false;
 	for (i in this.lights) {
     	if(this.lights[i].enabled){
 			 this.lightsEnabled[this.allLights] = true;
 			 break;
 		}
-    }
+    }*/
 
 	//loads interface
 	if (this.myinterface != null)
@@ -134,11 +141,10 @@ DSXScene.prototype.display = function () {
 
 	if (this.loadedOk > 0)
 	{
-		console.log("entrou");
-		console.log("numero de views: "+ this.graph.views.length );
 
-		for (var i = 0; i < this.lights.length; ++i)
-			this.lights[i].update();
+
+		/*for (var i = 0; i < this.lights.length; ++i)
+			this.lights[i].update();*/
 
 
 		// Draw axis
@@ -161,7 +167,7 @@ DSXScene.prototype.display = function () {
  * Process graph starting from root
  */
 DSXScene.prototype.processScene = function() {
-	this.processNode(this.root, "clear", "null");
+	this.processNode(this.root, "none", "null");
 	//this.setDefaultAppearance();
 }
 
@@ -182,12 +188,13 @@ DSXScene.prototype.processNode = function(node, parentTexture, parentMaterial) {
 		//set texture
 		var texture;
 
-		if (parentTexture != "clear")
+		if (parentTexture != "none")
 		{
 			texture = this.graph.textures[parentTexture];
 			this.graph.primitives[node].scaleTexCoords(texture.amplifyFactor.s, texture.amplifyFactor.t);
 			texture.bind();
 		}
+
 		//get primitive to draw
 		this.graph.primitives[node].display();
 
@@ -207,7 +214,7 @@ DSXScene.prototype.processNode = function(node, parentTexture, parentMaterial) {
 		material = parentMaterial;
 
 	var texture = this.graph.components[node].texture;
-	if (texture == "null")
+	if (texture == "none")
 		texture = parentTexture;
 
 	//Process the node's children

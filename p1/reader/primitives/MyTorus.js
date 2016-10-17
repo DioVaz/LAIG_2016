@@ -88,4 +88,7 @@ MyTorus.prototype.initBuffers = function () {
 
 };
 
+MyTorus.prototype.scaleTexCoords = function(ampS, ampT) {
+    this.updateTexCoordsGLBuffers();
+}
 
