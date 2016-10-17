@@ -18,7 +18,8 @@ function GraphDSX()
 };
 
 GraphDSX.prototype.addView = function(angle, near, far, from, to, id) {
-    this.views[id] = new CGFcamera(angle,near,far,from,to);
+
+    this.views[id] = new CGFcamera(angle,near,far,vec3.fromValues(from[0],from[1],from[2]),vec3.fromValues(to[0],to[1],to[2]));
 
 };
 

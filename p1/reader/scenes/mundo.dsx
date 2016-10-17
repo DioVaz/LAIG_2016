@@ -2,19 +2,19 @@
 
   <scene root="root" axis_length="2.0" />
 
-  <views default="v1" >
+  <views default="default" >
 
-      <perspective id="v1" near="0.5" far="300" angle="0.5">
+      <perspective id="cima" near="3" far="400" angle="0.7">
+          <from x="3" y="300" z="1" />
+          <to x="1" y="1" z="1" />
+      </perspective>
+      <perspective id="default" near="1" far="600" angle="0.5">
           <from x="200" y="200" z="200" />
-          <to x="1" y="1" z="1" />
+          <to x="1" y="0" z="1" />
       </perspective>
-      <perspective id="v2" near="0.5" far="300" angle="1">
-          <from x="20" y="180" z="1" />
-          <to x="1" y="1" z="1" />
-      </perspective>
-      <perspective id="v3" near="1" far="300" angle="0.5">
-          <from x="20" y="-180" z="1" />
-          <to x="1" y="1" z="1" />
+      <perspective id="baixo" near="3" far="300" angle="1">
+            <from x="3" y="-180" z="1" />
+            <to x="1" y="1" z="1" />
       </perspective>
 
   </views>

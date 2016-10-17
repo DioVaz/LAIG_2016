@@ -52,9 +52,9 @@ DSXScene.prototype.setInterface = function(myinterface) {
  * Create camera in default position
  */
 DSXScene.prototype.initCameras = function () {
-    this.camera = new CGFcamera(1, 0.4, 400, vec3.fromValues(20, -180, 1), vec3.fromValues(1, 1, 1));
-    this.camera = new CGFcamera(1, 0.4, 400, vec3.fromValues(20, -180, 1), vec3.fromValues(1, 1, 1));
-    this.camera = new CGFcamera(1, 0.4, 400, vec3.fromValues(180,180, 1), vec3.fromValues(1, 1, 1));
+    this.camera = new CGFcamera(1, 1, 300, vec3.fromValues(3, 180, 1), vec3.fromValues(1, 1, 1));
+
+
 };
 
 /*
@@ -79,7 +79,10 @@ DSXScene.prototype.onGraphLoaded = function ()
 	this.gl.clearColor(this.graph.illumination.background[0],this.graph.illumination.background[1],this.graph.illumination.background[2],this.graph.illumination.background[3]);
 	this.setGlobalAmbientLight(this.graph.illumination.ambient[0],this.graph.illumination.ambient[1],this.graph.illumination.ambient[2],this.graph.illumination.ambient[3]);
 
+	this.updateCamera(this.graph.defaultView);
+
 	this.lights = [];
+
 
 
 
@@ -93,10 +96,11 @@ DSXScene.prototype.onGraphLoaded = function ()
 		this.lights[i].enable();
 		this.lights[i].update();
 		this.lights[i].update();
-		console.log(this.lights[i]);
+
 	}
 
-	console.log(this.lights);
+
+
 
 
  /* var j = this.graph.omnis.length;
@@ -134,6 +138,9 @@ DSXScene.prototype.display = function () {
 	this.updateProjectionMatrix();
     this.loadIdentity();
 
+
+
+
 	// Apply transformations from the camera setup
 	this.applyViewMatrix();
 
@@ -170,6 +177,7 @@ DSXScene.prototype.processScene = function() {
 	this.processNode(this.root, "none", "null");
 	//this.setDefaultAppearance();
 }
+
 
 /*
  * Process node
@@ -300,7 +308,7 @@ DSXScene.prototype.updateSpots = function(lightId,enable) {
 			enable ? light.enable() : light.disable();
 		}
 	}
-}
+};
 
 DSXScene.prototype.getSpotsBegin = function() {
 	return this.graph.omnis.length;
@@ -308,4 +316,17 @@ DSXScene.prototype.getSpotsBegin = function() {
 
 DSXScene.prototype.getSpotsEnd = function() {
 	return this.graph.omnis.length + this.graph.spots.length;
-}
+};
+
+DSXScene.prototype.updateCamera = function (idCamera) {
+
+
+	var camera = this.graph.views[idCamera];
+
+	this.camera.fov = camera.fov;
+	this.camera.near = camera.near;
+	this.camera.far =  camera.far;
+	this.camera.position = camera.position;
+	this.camera.target = camera.target;
+
+};

@@ -166,6 +166,7 @@ GraphSceneDSX.prototype.parseScene = function(rootElement) {
 GraphSceneDSX.prototype.parseViews = function (rootElement) {
 
     var viewsElement = rootElement.getElementsByTagName('views');
+    this.graph.defaultView = this.reader.getString(viewsElement[0],'default',1);
     var perspectivesCollection = viewsElement[0].getElementsByTagName('perspective');
     var perspectivesLength = perspectivesCollection.length;
 
@@ -181,7 +182,7 @@ GraphSceneDSX.prototype.parseViews = function (rootElement) {
         near = this.reader.getFloat(perspectivesCollection[i], 'near', 1);
         far = this.reader.getFloat(perspectivesCollection[i], 'far', 1);
         angle = this.reader.getFloat(perspectivesCollection[i], 'angle', 1);
-        fromTag = perspectivesCollection[0].getElementsByTagName('from');
+        fromTag = perspectivesCollection[i].getElementsByTagName('from');
 
         if(fromTag != null && fromTag.length != 0){
 
@@ -312,11 +313,11 @@ GraphSceneDSX.prototype.parseOmnis = function(omnisElement) {
         location = this.getArray(omnisElement[i].getElementsByTagName('location'),"location");
         if(location == 1 || location == 0)
             return "parseOmnis -> tag não encontrada";
-        console.log(location);
+
         ambient = this.getArray(omnisElement[i].getElementsByTagName('ambient'),"ambient");
         if(ambient == 1 || ambient == 0)
             return "parseOmnis -> tag não encontrada ou rgb invalido";
-        console.log(ambient);
+
         diffuse = this.getArray(omnisElement[i].getElementsByTagName('diffuse'),"diffuse");
         if(diffuse == 1 || diffuse == 0)
             return "parseOmnis -> tag não encontrada ou rgb invalido ";
