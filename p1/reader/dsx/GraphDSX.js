@@ -34,10 +34,11 @@ GraphDSX.prototype.getView = function(indice) {
 GraphDSX.prototype.addOmni = function(scene, id, location, ambient, diffuse, specular, enable) {
     var omni = new CGFlight(scene,id);
     omni.id=id;
-    omni.setPosition(location);
-    omni.setAmbient(ambient);
-    omni.setDiffuse(diffuse);
-    omni.setSpecular(specular);
+    omni.setPosition(location[0],location[1],location[2],location[3]);
+    omni.setAmbient(ambient[0], ambient[1], ambient[2], ambient[3]);
+    omni.setDiffuse(diffuse[0], diffuse[1], diffuse[2], diffuse[3]);
+    omni.setSpecular(specular[0],specular[1],specular[2],specular[3]);
+   // console.log(specular);
     enable ? omni.enable() : omni.disable();
     this.omnis.push(omni);
 };
@@ -56,10 +57,10 @@ GraphDSX.prototype.addSpot= function(scene, id, location, ambient, diffuse, spec
     spot.setSpotExponent(expoente);
     spot.setSpotCutOff(angle);
     spot.setSpotDirection(target);
-    spot.setPosition(location);
-    spot.setAmbient(ambient);
-    spot.setDiffuse(diffuse);
-    spot.setSpecular(specular);
+    spot.setPosition(location[0],location[1],location[2],location[3]);
+    spot.setAmbient(ambient[0], ambient[1], ambient[2], ambient[3]);
+    spot.setDiffuse(diffuse[0], diffuse[1], diffuse[2], diffuse[3]);
+    spot.setSpecular(specular[0],specular[1],specular[2],specular[3]);
     enable ? spot.enable() : spot.disable();
     this.spots.push(spot);
 

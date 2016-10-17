@@ -37,7 +37,7 @@ DSXScene.prototype.init = function (application) {
 
 	this.gl.enable(this.gl.BLEND);
 	this.gl.blendFunc(this.gl.SRC_ALPHA, this.gl.ONE_MINUS_SRC_ALPHA);
-	//this.setGlobalAmbientLight(0.5,0.5,0.5,0.5);
+	this.setGlobalAmbientLight(0.5,0.5,0.5,0.5);
 
     this.enableTextures(true);
 };
@@ -52,14 +52,14 @@ DSXScene.prototype.setInterface = function(myinterface) {
  * Create camera in default position
  */
 DSXScene.prototype.initCameras = function () {
-    this.camera = new CGFcamera(1, 0.4, 400, vec3.fromValues(180,180, 1), vec3.fromValues(1, 1, 1));
+    this.camera = new CGFcamera(1, 0.4, 400, vec3.fromValues(20, -180, 1), vec3.fromValues(1, 1, 1));
 };
 
 /*
  * Defines default apperence
  */
 DSXScene.prototype.setDefaultAppearance = function () {
-   // this.setAmbient(0.5, 0.5, 0.5, 1);
+    this.setAmbient(0.5, 0.5, 0.5, 1);
     this.setDiffuse(0.5, 0.5, 0.5, 1);
     this.setSpecular(0.5, 0.5, 0.5, 1);
     this.setShininess(10.0);
@@ -85,9 +85,11 @@ DSXScene.prototype.onGraphLoaded = function ()
 	//All lights are invisible, enabled or not depends from the dsx
 
 	for (var i = 0; i < this.graph.omnis.length; ++i) {
+
 		this.lights.push(this.graph.omnis[i]);
 		this.lights[i].setVisible(true);
 		this.lights[i].enable();
+		this.lights[i].update();
 		console.log(this.lights[i]);
 	}
 
@@ -122,6 +124,8 @@ DSXScene.prototype.onGraphLoaded = function ()
  * Draws the scene. Updates with changes
  */
 DSXScene.prototype.display = function () {
+   // this.shader.bind();
+
     this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
     this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
 
@@ -150,14 +154,15 @@ DSXScene.prototype.display = function () {
 	   		this.axis.display();
 
 	   	//Set default appearance
-        //this.setDefaultAppearance();
+		this.setDefaultAppearance();
 
 		//Draws the scene from the graph by processing all nodes starting from the root
 		this.processScene();
-		console.log(this.lights.length);
+
 	}
 
 
+   // this.shader.unbind();
 };
 
 /*
@@ -177,10 +182,10 @@ DSXScene.prototype.processNode = function(node, parentTexture, parentMaterial) {
 	//Node is leaf
 	if (node in this.graph.primitives) {
 		//set materials
-		if (parentMaterial != "null")
+		/*if (parentMaterial != "null")
 			this.graph.materials[parentMaterial].apply();
 		else
-			this.setDefaultAppearance();
+			this.setDefaultAppearance();*/
 
 		//set texture
 		var texture;

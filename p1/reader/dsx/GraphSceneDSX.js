@@ -312,11 +312,11 @@ GraphSceneDSX.prototype.parseOmnis = function(omnisElement) {
         location = this.getArray(omnisElement[i].getElementsByTagName('location'),"location");
         if(location == 1 || location == 0)
             return "parseOmnis -> tag não encontrada";
-
+        console.log(location);
         ambient = this.getArray(omnisElement[i].getElementsByTagName('ambient'),"ambient");
         if(ambient == 1 || ambient == 0)
             return "parseOmnis -> tag não encontrada ou rgb invalido";
-
+        console.log(ambient);
         diffuse = this.getArray(omnisElement[i].getElementsByTagName('diffuse'),"diffuse");
         if(diffuse == 1 || diffuse == 0)
             return "parseOmnis -> tag não encontrada ou rgb invalido ";
@@ -509,7 +509,7 @@ GraphSceneDSX.prototype.parseTransformations = function(rootElement) {
 
 
         scaleTag = transformationsElement[i].getElementsByTagName('scale')
-        console.log(scaleTag);
+       // console.log(scaleTag);
         if(scaleTag != null && scaleTag.length > 0) {
             scale = this.getArray(scaleTag, "scale");
             transformation.scale(scale[0], scale[1], scale[2]);
@@ -626,7 +626,7 @@ GraphSceneDSX.prototype.parseComponents = function(rootElement) {
 GraphSceneDSX.prototype.parseComponent = function (component) {
   //Id of node
   var id = this.reader.getString(component, "id");
-  console.log(id);
+  // console.log(id);
   var test1 = this.graph.primitives[id];
   var teste = this.graph.components[id];
   /*if (test1 != null)
@@ -851,7 +851,7 @@ GraphSceneDSX.prototype.getPrimitive = function(primitive, type)
             stacks = this.reader.getInteger(primitive, 'stacks', 1);
         else
             return error;
-        console.log(radius + " " + slices + " " + stacks);
+       // console.log(radius + " " + slices + " " + stacks);
         var sphere = new MySphere(this.scene,radius,slices,stacks);
         return sphere;
     }
