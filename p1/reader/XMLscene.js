@@ -11,7 +11,7 @@ XMLscene.prototype.init = function (application) {
 
     this.initCameras();
 
-    this.initLights();
+   // this.initLights();
     this.primitives;
     this.views;
     this.components;

@@ -37,7 +37,7 @@ DSXScene.prototype.init = function (application) {
 
 	this.gl.enable(this.gl.BLEND);
 	this.gl.blendFunc(this.gl.SRC_ALPHA, this.gl.ONE_MINUS_SRC_ALPHA);
-	this.setGlobalAmbientLight(0.5,0.5,0.5,0.5);
+	//this.setGlobalAmbientLight(0.5,0.5,0.5,0.5);
 
     this.enableTextures(true);
 };
@@ -52,14 +52,18 @@ DSXScene.prototype.setInterface = function(myinterface) {
  * Create camera in default position
  */
 DSXScene.prototype.initCameras = function () {
+<<<<<<< HEAD
     this.camera = new CGFcamera(1, 0.4, 400, vec3.fromValues(20, -180, 1), vec3.fromValues(1, 1, 1));
+=======
+    this.camera = new CGFcamera(1, 0.4, 400, vec3.fromValues(180,180, 1), vec3.fromValues(1, 1, 1));
+>>>>>>> origin/master
 };
 
 /*
  * Defines default apperence
  */
 DSXScene.prototype.setDefaultAppearance = function () {
-    this.setAmbient(0.5, 0.5, 0.5, 1);
+   // this.setAmbient(0.5, 0.5, 0.5, 1);
     this.setDiffuse(0.5, 0.5, 0.5, 1);
     this.setSpecular(0.5, 0.5, 0.5, 1);
     this.setShininess(10.0);
@@ -89,7 +93,10 @@ DSXScene.prototype.onGraphLoaded = function ()
 		this.lights.push(this.graph.omnis[i]);
 		this.lights[i].setVisible(true);
 		this.lights[i].enable();
+<<<<<<< HEAD
 		this.lights[i].update();
+=======
+>>>>>>> origin/master
 		console.log(this.lights[i]);
 	}
 
@@ -124,8 +131,11 @@ DSXScene.prototype.onGraphLoaded = function ()
  * Draws the scene. Updates with changes
  */
 DSXScene.prototype.display = function () {
+<<<<<<< HEAD
    // this.shader.bind();
 
+=======
+>>>>>>> origin/master
     this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
     this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
 
@@ -154,7 +164,7 @@ DSXScene.prototype.display = function () {
 	   		this.axis.display();
 
 	   	//Set default appearance
-		this.setDefaultAppearance();
+        //this.setDefaultAppearance();
 
 		//Draws the scene from the graph by processing all nodes starting from the root
 		this.processScene();
@@ -162,7 +172,10 @@ DSXScene.prototype.display = function () {
 	}
 
 
+<<<<<<< HEAD
    // this.shader.unbind();
+=======
+>>>>>>> origin/master
 };
 
 /*
