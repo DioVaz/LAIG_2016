@@ -279,8 +279,8 @@ GraphSceneDSX.prototype.parseLights = function (rootElement) {
         return "any omnis founded";
 
     var spots = lightsTag[0].getElementsByTagName('spot');
-    if(spots[0] == null)
-        return "any spots founded";
+   /* if(spots[0] == null)
+        return "any spots founded";*/
 
 
 
@@ -629,10 +629,10 @@ GraphSceneDSX.prototype.parseComponent = function (component) {
   console.log(id);
   var test1 = this.graph.primitives[id];
   var teste = this.graph.components[id];
-  if (test1 != null)
+  /*if (test1 != null)
     return "Copy id primitive " + id;
   if (teste != null)
-    return "Copy id node " + id;
+    return "Copy id node " + id;*/
 
   var newComponent = new Component();
   newComponent.setId(id);
@@ -701,7 +701,7 @@ GraphSceneDSX.prototype.parseComponent = function (component) {
     return "Expected TEXTURE in NODE " + id + "in 3rd child.";
   var texture = this.reader.getString(childNode, "id");
 
-  if(!(texture in this.graph.textures) && texture != "null" && texture != "clear")
+  if(!(texture in this.graph.textures) && texture != "none" && texture != "inherit")
     return "No TEXTURE " + texture +  " for NODE " + id;
 
   newComponent.setTexture(texture);

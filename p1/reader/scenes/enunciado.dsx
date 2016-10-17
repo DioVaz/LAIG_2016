@@ -79,7 +79,7 @@
         <!-- objetos respetivos podem a violar esta regra.         -->
         <!-- Nao necessario aplicar fatores de escala em  -->
         <!-- quadricas (esfera, ciclindro...) -->
-        <texture id="ss" file="ss" length_s="ff" length_t="ff" />
+        <texture id="ss" file="ss" length_s="ff" length_t="ff" />  
 
     </textures>
 
@@ -188,92 +188,3 @@
     </components>
 
 </dsx>
-
-
-
-
-<texture file="textures/plastico-lateral.jpg" id="plastico-lateral" length_s="1" length_t="1"/>
-<texture file="textures/plastico-base.jpg" id="plastico-base" length_s="1" length_t="1"/>
-<texture file="textures/water.png" id="agua" length_s="1" length_t="1"/>
-
-
-<componentRef id="piscina"/>
-
-
-<!-- PISCINA -->
-<component id="piscina">
-  <transformation>
-    <scale x="2" y="2" z="2"/>
-  </transformation>
-  <materials>
-    <material id="piscina"/>
-  </materials>
-  <texture id="plastico-lateral"/>
-  <children>
-    <componentRef id="piscina-toro1"/>
-    <componentRef id="piscina-toro2"/>
-    <componentRef id="piscina-toro3"/>
-    <componentRef id="piscina-topo"/>
-    <componentRef id="piscina-botton"/>
-  </children>
-</component>
-<component id="piscina-toro1">
-  <transformation/>
-  <materials>
-    <material id="inherit"/>
-  </materials>
-  <texture id="null"/>
-  <children>
-    <primitiveRef id="piscina-torus"/>
-  </children>
-</component>
-<component id="piscina-toro2">
-  <transformation>
-    <translate x="0" y="0" z="1.8"/>
-  </transformation>
-  <materials>
-    <material id="inherit"/>
-  </materials>
-  <texture id="null"/>
-  <children>
-    <primitiveRef id="piscina-torus"/>
-  </children>
-</component>
-<component id="piscina-toro3">
-  <transformation>
-    <translate x="0" y="0" z="3.6"/>
-  </transformation>
-  <materials>
-    <material id="inherit"/>
-  </materials>
-  <texture id="null"/>
-  <children>
-    <primitiveRef id="piscina-torus"/>
-  </children>
-</component>
-
-<component id="piscina-topo">
-  <transformation>
-    <translate x="0" y="0" z="3.7"/>
-  </transformation>
-  <materials>
-    <material id="arvore"/>
-  </materials>
-  <texture id="agua"/>
-  <children>
-     <primitiveRef id="topo-piscina"/>
-  </children>
-</component>
-<component id="piscina-botton">
-  <transformation>
-    <translate x="0" y="0" z="-0.8"/>
-    <scale x="0.8" y="0.8" z="0.8"/>
-  </transformation>
-  <materials>
-     <material id="inherit"/>
-  </materials>
-     <texture id="plastico-base"/>
-  <children>
-     <primitiveRef id="topo-piscina"/>
-  </children>
-</component>
