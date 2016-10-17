@@ -52,15 +52,9 @@ DSXScene.prototype.setInterface = function(myinterface) {
  * Create camera in default position
  */
 DSXScene.prototype.initCameras = function () {
-<<<<<<< HEAD
     this.camera = new CGFcamera(1, 0.4, 400, vec3.fromValues(20, -180, 1), vec3.fromValues(1, 1, 1));
-=======
-<<<<<<< HEAD
     this.camera = new CGFcamera(1, 0.4, 400, vec3.fromValues(20, -180, 1), vec3.fromValues(1, 1, 1));
-=======
     this.camera = new CGFcamera(1, 0.4, 400, vec3.fromValues(180,180, 1), vec3.fromValues(1, 1, 1));
->>>>>>> origin/master
->>>>>>> origin/master
 };
 
 /*
@@ -97,14 +91,8 @@ DSXScene.prototype.onGraphLoaded = function ()
 		this.lights.push(this.graph.omnis[i]);
 		this.lights[i].setVisible(true);
 		this.lights[i].enable();
-<<<<<<< HEAD
 		this.lights[i].update();
-=======
-<<<<<<< HEAD
 		this.lights[i].update();
-=======
->>>>>>> origin/master
->>>>>>> origin/master
 		console.log(this.lights[i]);
 	}
 
@@ -139,16 +127,6 @@ DSXScene.prototype.onGraphLoaded = function ()
  * Draws the scene. Updates with changes
  */
 DSXScene.prototype.display = function () {
-<<<<<<< HEAD
-   // this.shader.bind();
-
-=======
-<<<<<<< HEAD
-   // this.shader.bind();
-
-=======
->>>>>>> origin/master
->>>>>>> origin/master
     this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
     this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
 
@@ -183,16 +161,6 @@ DSXScene.prototype.display = function () {
 		this.processScene();
 
 	}
-
-
-<<<<<<< HEAD
-   // this.shader.unbind();
-=======
-<<<<<<< HEAD
-   // this.shader.unbind();
-=======
->>>>>>> origin/master
->>>>>>> origin/master
 };
 
 /*
