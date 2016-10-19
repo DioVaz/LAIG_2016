@@ -33,7 +33,7 @@ MyInterface.prototype.onGraphLoaded = function(){
 	    var controller = group.add(this.scene.lightsEnabled,key);
 	    controller.onChange(function(enable) {
 	    	if(this.property == 'All'){
-	    		
+	    		self.scene.updateLight(this.property, enable);
 	    	}
 	    	self.scene.updateLight(this.property, enable);
 	    });
@@ -72,6 +72,8 @@ MyInterface.prototype.processKeyboard = function(event)
 			case(106):        this.scene.camera.pan([-zoom/2,0,0] );  break;
 			//'l'
 			case(108):        this.scene.camera.pan([zoom/2,0,0] );  break;
+			//'m'
+			//change materials
 
 		}
 }

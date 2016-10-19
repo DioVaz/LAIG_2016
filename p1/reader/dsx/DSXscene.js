@@ -23,7 +23,7 @@ DSXScene.prototype.init = function (application) {
     this.initCameras(); //Set default configuration of camera view
 
 	this.allLights = 'All'; //ID To control all lights
-    //this.lightsEnabled = []; //Control every single light
+  this.lightsEnabled = []; //Control every single light
 
 	this.primitives = [];
 
@@ -83,48 +83,42 @@ DSXScene.prototype.onGraphLoaded = function ()
 
 	this.lights = [];
 
-
-
-
-	//load lights from the Grahps
+  //load lights from the Grahps
 	//All lights are invisible, enabled or not depends from the dsx
-
+	var j = 0;
 	for (var i = 0; i < this.graph.omnis.length; ++i) {
 
 		this.lights.push(this.graph.omnis[i]);
-		this.lights[i].setVisible(true);
-		this.lights[i].enable();
+		this.lights[i].setVisible(false);
 		this.lights[i].update();
-		this.lights[i].update();
-
+		this.lightsEnabled[this.lights[i].id] = this.lights[i].enabled;
+		j++;
 	}
 
 
 
 
-
- /* var j = this.graph.omnis.length;
 	for (var i = 0; i < this.graph.spots.length; ++i) {
 		this.lights.push(this.graph.spots[i]);
 		this.lights[j].setVisible(false);
+		this.lights[j].update();
 		this.lightsEnabled[this.lights[j].id] = this.lights[j].enabled;
-    j++;
-	}*/
+    	j++;
+	}
 
 
-	//controls all lights
-   /* this.lightsEnabled[this.allLights] = false;
+
+    this.lightsEnabled[this.allLights] = false;
 	for (i in this.lights) {
     	if(this.lights[i].enabled){
 			 this.lightsEnabled[this.allLights] = true;
 			 break;
 		}
-    }*/
+    }
 
 	//loads interface
 	if (this.myinterface != null)
 	    this.myinterface.onGraphLoaded();
-
 };
 
 /*
@@ -241,31 +235,30 @@ DSXScene.prototype.processNode = function(node, parentTexture, parentMaterial) {
  * @param enable boolean
  */
 
-/*
+
 DSXScene.prototype.updateLight = function(lightId, enable) {
+  	//Switch only one light
+  	if(lightId != this.allLights){
+  		console.log("Changing light " + lightId);
+  		for (var i = 0; i < this.lights.length; ++i) {
+  			if (this.lights[i].id == lightId) {
+  				var light = this.lights[i];
+  				enable ? light.enable() : light.disable();
+  				return;
+  			}
+  		}
+  	}else{
+  		//Switch all lights
+  		console.log("Changing all lights");
+  		for (var i = 0; i < this.lights.length; ++i) {
+  			var light = this.lights[i];
+  			enable ? light.enable() : light.disable();
 
-	//Switch only one light
-	if(lightId != this.allLights){
-		console.log("Changing light " + lightId);
-		for (var i = 0; i < this.graph.lights.length; ++i) {
-			if (this.lights[i].id == lightId) {
-				var light = this.lights[i];
-				enable ? light.enable() : light.disable();
-				return;
-			}
-		}
-	}else{
-		//Switch all lights
-		console.log("Changing all lights");
-		for (var i = 0; i < this.graph.lights.length; ++i) {
-			var light = this.lights[i];
-			enable ? light.enable() : light.disable();
+  		}
 
-		}
-
-	}
+  	}
 }
-*/
+
 
 DSXScene.prototype.updateLights = function(lightId,enable) {
 		this.updateOmnis(lightId,enable);
