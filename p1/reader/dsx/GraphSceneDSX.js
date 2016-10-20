@@ -694,6 +694,7 @@ GraphSceneDSX.prototype.parseComponent = function (component) {
       if(!(materialID in this.graph.materials) && materialID != "inherit")
         return "No MATERIAL " + materialID +  " for COMPONENT " + id;
       if(i==0)
+          this.graph.default
       newComponent.setMaterial(material);
   }
   //Get NODE TEXTURE

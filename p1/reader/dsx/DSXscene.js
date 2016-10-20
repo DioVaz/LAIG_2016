@@ -5,7 +5,7 @@
  */
 function DSXScene(application) {
     CGFscene.call(this);
-}
+};
 
 DSXScene.prototype = Object.create(CGFscene.prototype);
 DSXScene.prototype.constructor = DSXScene;
@@ -26,6 +26,13 @@ DSXScene.prototype.init = function (application) {
   this.lightsEnabled = []; //Control every single light
 
 	this.primitives = [];
+	this.textures = [];
+	this.primitives  = [];
+	this.materials;
+
+
+	this.actualTexture = null;
+	this.actualMaterial = null;
 
 
     this.gl.clearColor(0.0, 0.0, 0.0, 1.0);
@@ -37,7 +44,7 @@ DSXScene.prototype.init = function (application) {
 
 	this.gl.enable(this.gl.BLEND);
 	this.gl.blendFunc(this.gl.SRC_ALPHA, this.gl.ONE_MINUS_SRC_ALPHA);
-	this.setGlobalAmbientLight(0.5,0.5,0.5,0.5);
+	this.setGlobalAmbientLight(1,1,1,1);
 
     this.enableTextures(true);
 };
@@ -72,6 +79,12 @@ DSXScene.prototype.setDefaultAppearance = function () {
  */
 DSXScene.prototype.onGraphLoaded = function ()
 {
+
+	this.textures = this.graph.textures;
+	this.primitives = this.graph.primitives;
+	this.components = this.graph.components;
+	this.materials = this.graph.materials;
+
 
     if (this.graph.referenceLength > 0)
 	   this.axis = new CGFaxis(this, this.graph.referenceLength);
@@ -140,7 +153,7 @@ DSXScene.prototype.display = function () {
 
 
 
-	//this.setDefaultAppearance();
+	this.setDefaultAppearance();
 	//Process scene if dsx read ok
 
 	if (this.loadedOk > 0)
@@ -158,7 +171,7 @@ DSXScene.prototype.display = function () {
 	   	//Set default appearance
 		this.setDefaultAppearance();
 
-		//Draws the scene from the graph by processing all nodes starting from the root
+		//Draws the scene from the graph by processing all nodes starting from the roo
 		this.processScene();
 
 	}
@@ -168,9 +181,9 @@ DSXScene.prototype.display = function () {
  * Process graph starting from root
  */
 DSXScene.prototype.processScene = function() {
-	this.processNode(this.root, "none", "null");
+	this.processNode(this.root, "none","none");
 	//this.setDefaultAppearance();
-}
+};
 
 
 /*
@@ -180,54 +193,119 @@ DSXScene.prototype.processScene = function() {
  */
 DSXScene.prototype.processNode = function(node, parentTexture, parentMaterial) {
 	//Node is leaf
-	if (node in this.graph.primitives) {
-		//set materials
-		/*if (parentMaterial != "null")
-			this.graph.materials[parentMaterial].apply();
-		else
-			this.setDefaultAppearance();*/
+	/*console.log("componente: " + node.id);
+	console.log("textura: " + node.texture);*/
 
-		//set texture
-		var texture;
+//	this.bindTexture(parentTexture,node);
 
-		if (parentTexture != "none")
-		{
-			texture = this.graph.textures[parentTexture];
-			this.graph.primitives[node].scaleTexCoords(texture.amplifyFactor.s, texture.amplifyFactor.t);
-			texture.bind();
-		}
 
-		//get primitive to draw
-		this.graph.primitives[node].display();
-
-		if (texture)
-			texture.unbind();
+	if (node in this.primitives) {
+		//console.log(node);
+		var s = this.actualTexture.amplifyFactor.s;
+		var t  = this.actualTexture.amplifyFactor.t;
+		if(s!= null && t!=null)
+		this.primitives[node].scaleTexCoords(s,t);
+		this.primitives[node].display();
 		return;
 	}
 
-	//Applies transformations
 	this.pushMatrix();
 
 	this.multMatrix(this.graph.components[node].localTransformations);
 
+	var component = this.components[node];
+	//console.log(component);
+	var textureId = this.components[node].texture;
+	//console.log("textureId: "+ textureId);
+	var texture;
+
+
+	if(textureId == "none")
+	{
+		if(this.actualTexture != null)
+		this.actualTexture.unbind();
+		texture = textureId;
+	}
+	else if(textureId == "inherit")
+	{
+		if(parentTexture != "none" )
+		{
+			if(this.actualTexture != null)
+				this.actualTexture.unbind();
+			this.actualTexture = this.textures[parentTexture];
+			this.actualTexture.bind();
+
+		}
+		texture = parentTexture;
+	}
+	else
+	{
+		//console.log("else:" + textureId);
+		if(this.actualTexture != null)
+			this.actualTexture.unbind();
+		this.actualTexture = this.textures[textureId];
+		this.actualTexture.bind();
+		texture = textureId;
+
+	}
+
+
+
+
+	//Applies transformations
+
+
 	//Receives material and texture from parent?
-	var material = this.graph.components[node].material.id;
+	/*var material = this.graph.components[node].materialDefault;
 	if (material == "inherit")
 		material = parentMaterial;
+	else if(material != "")
 
 	var texture = this.graph.components[node].texture;
 	if (texture == "none")
-		texture = parentTexture;
+		texture = parentTexture;*/
 
 	//Process the node's children
 	var children = this.graph.components[node].children;
 	for (var i = 0; i < children.length; ++i) {
-		this.processNode(children[i], texture, material);
+		//console.log(children.length);
+		//console.log("componente:" + children[i]);
+		//console.log("textura: " + texture);
+		//console.log("material: "+ material);
+		this.processNode(children[i], texture, "none");
+
+		/*texture="none";
+		material="null";*/
+
 	}
+	//console.log("end");
+
 
 	this.popMatrix();
 }
 
+/*
+DSXScene.prototype.bindTexture = function(texture,component)
+{
+	if(component.texture != "inherit" || component.texture != "none")
+		texture = component.texture
+
+	this.actualTexture = this.textures[texture];
+	var s = this.textures[texture].s;
+	var t = this.textures[texture].t;
+
+
+	if(texture == "none")
+	{
+		if(this.actualTexture != "none")
+			this.actualTexture.unbind;
+	}
+
+
+
+
+
+};*/
 
 /*
  * Updates lights from the interface
@@ -265,7 +343,7 @@ DSXScene.prototype.updateLights = function(lightId,enable) {
 		this.updateSpots(lightId,enable);
 
 
-}
+};
 
 DSXScene.prototype.updateOmnis = function(lightId,enable) {
 	if(lightId != this.allLights) {
@@ -283,7 +361,7 @@ DSXScene.prototype.updateOmnis = function(lightId,enable) {
 				enable ? light.enable() : light.disable();
 		}
 	}
-}
+};
 
 DSXScene.prototype.updateSpots = function(lightId,enable) {
 	if(lightId != this.allLights) {
@@ -305,7 +383,7 @@ DSXScene.prototype.updateSpots = function(lightId,enable) {
 
 DSXScene.prototype.getSpotsBegin = function() {
 	return this.graph.omnis.length;
-}
+};
 
 DSXScene.prototype.getSpotsEnd = function() {
 	return this.graph.omnis.length + this.graph.spots.length;

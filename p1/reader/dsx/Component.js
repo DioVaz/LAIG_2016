@@ -9,6 +9,7 @@
 function Component() {
     this.id;
     this.material = [];
+    this.materialDefault = "";
     this.texture;
     this.transformationsRef = [];
     this.localTransformations = mat4.create();
