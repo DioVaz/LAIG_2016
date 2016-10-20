@@ -160,8 +160,8 @@ DSXScene.prototype.display = function () {
 	{
 
 
-		/*for (var i = 0; i < this.lights.length; ++i)
-			this.lights[i].update();*/
+		for (var i = 0; i < this.lights.length; ++i)
+			this.lights[i].update();
 
 
 		// Draw axis
@@ -193,10 +193,6 @@ DSXScene.prototype.processScene = function() {
  */
 DSXScene.prototype.processNode = function(node, parentTexture, parentMaterial) {
 	//Node is leaf
-	/*console.log("componente: " + node.id);
-	console.log("textura: " + node.texture);*/
-
-//	this.bindTexture(parentTexture,node);
 
 
 	if (node in this.primitives) {
@@ -214,9 +210,7 @@ DSXScene.prototype.processNode = function(node, parentTexture, parentMaterial) {
 	this.multMatrix(this.graph.components[node].localTransformations);
 
 	var component = this.components[node];
-	//console.log(component);
 	var textureId = this.components[node].texture;
-	//console.log("textureId: "+ textureId);
 	var texture;
 
 
@@ -284,28 +278,7 @@ DSXScene.prototype.processNode = function(node, parentTexture, parentMaterial) {
 	this.popMatrix();
 }
 
-/*
-DSXScene.prototype.bindTexture = function(texture,component)
-{
-	if(component.texture != "inherit" || component.texture != "none")
-		texture = component.texture
 
-	this.actualTexture = this.textures[texture];
-	var s = this.textures[texture].s;
-	var t = this.textures[texture].t;
-
-
-	if(texture == "none")
-	{
-		if(this.actualTexture != "none")
-			this.actualTexture.unbind;
-	}
-
-
-
-
-
-};*/
 
 /*
  * Updates lights from the interface
