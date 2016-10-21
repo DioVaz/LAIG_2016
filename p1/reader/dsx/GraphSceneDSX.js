@@ -446,7 +446,7 @@ GraphSceneDSX.prototype.parseMaterials = function(rootElement) {
     var specular = [];
     var diffuse = [];
     var material,data;
-    //Get each material
+    //Get each materialsRef
     for(var i = 0; i < materials.length; ++i){
 
         var materialTag = materials[i];
@@ -454,7 +454,7 @@ GraphSceneDSX.prototype.parseMaterials = function(rootElement) {
         var id = this.reader.getString(materialTag,"id");
 
         if (id in this.graph.materials)
-            return "Duplicate material id: " + id;
+            return "Duplicate materialsRef id: " + id;
 
         material = new Material(this.scene,id);
 
@@ -693,10 +693,13 @@ GraphSceneDSX.prototype.parseComponent = function (component) {
 
       if(!(materialID in this.graph.materials) && materialID != "inherit")
         return "No MATERIAL " + materialID +  " for COMPONENT " + id;
+      console.log(materialID);
       if(i==0)
-          this.graph.default
-      newComponent.setMaterial(material);
+          newComponent.materialDefault = materialID;
+
+      newComponent.addMaterialRef(material);
   }
+
   //Get NODE TEXTURE
   childNode = component.children[2];
   if (childNode.nodeName != "texture")

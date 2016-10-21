@@ -182,7 +182,7 @@ DSXScene.prototype.processScene = function() {
 /*
  * Process node
  * @param parentTexture receives the texture from the parent
- * @param parentMaterial receives the material from the parent
+ * @param parentMaterial receives the materialsRef from the parent
  */
 DSXScene.prototype.processNode = function(node, parentTexture, parentMaterial) {
 	//Node is leaf
@@ -221,7 +221,7 @@ DSXScene.prototype.processNode = function(node, parentTexture, parentMaterial) {
 
 	this.multMatrix(this.graph.components[node].localTransformations);
 
-	//Receives material and texture from parent?
+	//Receives materialsRef and texture from parent?
 	var material = this.graph.components[node].materialDefault;
 	if (material == "inherit")
 		material = parentMaterial;
@@ -236,7 +236,7 @@ DSXScene.prototype.processNode = function(node, parentTexture, parentMaterial) {
 	for (var i = 0; i < children.length; ++i) {
 		console.log("componente:" + children[i]);
 		console.log("textura: " + texture);
-		console.log("material: "+ material);
+		console.log("materialsRef: "+ material);
 		this.processNode(children[i], texture, material);
 		texture="none";
 		material="null";

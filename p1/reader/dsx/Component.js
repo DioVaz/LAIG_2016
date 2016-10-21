@@ -8,7 +8,7 @@
  */
 function Component() {
     this.id;
-    this.material = [];
+    this.materialsRef = [];
     this.materialDefault = "";
     this.texture;
     this.transformationsRef = [];
@@ -27,12 +27,12 @@ Component.prototype.setId = function(id) {
 };
 
 /*
- * Sets the material of the node
- * @param material
+ * Sets the materialsRef of the node
+ * @param materialsRef
  */
 
-Component.prototype.setMaterial = function(material) {
-    this.material = material;
+Component.prototype.addMaterialRef = function(material) {
+    this.materialsRef.push(material);
 };
 
 /*

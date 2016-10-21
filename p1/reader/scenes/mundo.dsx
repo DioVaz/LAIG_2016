@@ -87,23 +87,51 @@
                       <emission a="0.5" b="0" g="1.0" r="1"/>
                       <ambient a="1.0" b="0.5" g="0.5" r="0.5"/>
                       <diffuse a="1.0" b="0.5" g="0.5" r="0.5"/>
-                      <specular a="1.0" b="0.5" g="0.5" r="0.5"/>
-                      <shininess value="0.7"/>
+                      <specular a="1.0" b="0.2" g="0.2" r="0.2"/>
+                      <shininess value="0.2"/>
                 </material>
-                <material id="guarda1">
+                <material id="vermelho">
                      <emission a="1.0" b="0" g="0" r="1.0"/>
-                     <ambient a="1.0" b="1.0" g="1.0" r="1.0"/>
+                     <ambient a="1.0" b="0" g="0" r="0.7"/>
                      <diffuse a="1.0" b="1.0" g="1.0" r="1.0"/>
-                     <specular a="1.0" b="1.0" g="1.0" r="1.0"/>
+                     <specular a="1.0" b="0.2" g="0.2" r="0.2"/>
                      <shininess value="0.3"/>
                 </material>
-                <material id="aste">
-                    <emission a="1" b="0.5" g="0.5" r="0.5"/>
-                    <ambient a="1.0" b="1.0" g="1.0" r="1.0"/>
+                <material id="branco">
+                     <emission a="1.0" b="0.5" g="0.5" r="0.5"/>
+                     <ambient a="1.0" b="0.5" g="0.5" r="0.5"/>
+                     <diffuse a="1.0" b="0.8" g="0.8" r="0.8"/>
+                     <specular a="1.0" b="0.2" g="0.2" r="0.2"/>
+                     <shininess value="0.1"/>
+                </material>
+                <material id="amarelo">
+                     <emission a="1.0" b="0" g="1" r="1"/>
+                     <ambient a="1.0" b="0" g="1" r="1"/>
+                     <diffuse a="1.0" b="1.0" g="1.0" r="1.0"/>
+                     <specular a="1.0" b="0.2" g="0.2" r="0.2"/>
+                     <shininess value="0.3"/>
+                </material>
+                <material id="azul">
+                    <emission a="1" b="1" g="0.3" r="0.1"/>
+                    <ambient a="1.0" b="0.5" g="0.5" r="0.5"/>
                     <diffuse a="1.0" b="1.0" g="1.0" r="1.0"/>
-                    <specular a="1.0" b="1.0" g="1.0" r="1.0"/>
+                    <specular a="1.0" b="0.2" g="0.2" r="0.2"/>
                     <shininess value="0.3"/>
                 </material>
+                 <material id="pedra">
+                     <emission a="1" b="0.3" g="0.4" r="0.4"/>
+                     <ambient a="0.5" b="0.5" g="0.5" r="0.5"/>
+                     <diffuse a="1.0" b="0.7" g="0.7" r="0.7"/>
+                     <specular a="1.0" b="0.1" g="0.1" r="0.1"/>
+                     <shininess value="0.3"/>
+                 </material>
+                 <material id="base">
+                     <emission a="1" b="0.2" g="0.2" r="0.2"/>
+                     <ambient a="1.0" b="0" g="0" r="0"/>
+                     <diffuse a="1.0" b="0.7" g="0.7" r="0.7"/>
+                     <specular a="1.0" b="0.1" g="0.1" r="0.1"/>
+                     <shininess value="0"/>
+                 </material>
               </materials>
 
                <transformations>
@@ -142,10 +170,10 @@
                       <torus inner="1" outer="4" slices="10" loops="10" />
                   </primitive>
                   <primitive id="piscina-torus">
-                    <torus inner="1" loops="10" outer="4" slices="10"/>
+                    <torus inner="0.5" loops="10" outer="4" slices="10"/>
                   </primitive>
                   <primitive id="topo-piscina">
-                     <cylinder base="4.5" height="0.5" slices="10" stacks="10" top="1"/>
+                     <cylinder base="4" height="0.5" slices="10" stacks="10" top="1"/>
                   </primitive>
                   <primitive id="guarda-topo">
                     <triangle x1="0" x2="3" x3="0" y1="0" y2="0" y3="3" z1="1.5" z2="0" z3="0"/>
@@ -163,13 +191,14 @@
                     <transformation>
                     </transformation>
                     <materials>
+                        <material id="espelho"/>
                     </materials>
                     <texture id="none">
                     </texture>
                     <children>
                         <componentRef id="castelo"/>
-                        <!--componentRef id="piscina"/-->
-                        <!--componentRef id="guarda-sol"/-->
+                        <componentRef id="piscina"/>
+                        <componentRef id="guarda-sol"/>
                         <!--componentRed id="boia"-->
                     </children>
 
@@ -182,7 +211,7 @@
                       <rotate axis="x" angle="-90" />
                     </transformation>
                     <materials>
-                        <material id="espelho" />
+                        <material id="inherit" />
                     </materials>
                     <texture id="none">
                     </texture>
@@ -199,6 +228,7 @@
                     <scale x="30" y="20" z="30" />
                     </transformation>
                     <materials>
+                        <material id="pedra"/>
                     </materials>
                     <texture id="pedra">
                     </texture>
@@ -220,6 +250,7 @@
                       <translate x="2" y="0" z="0"/>
                     </transformation>
                     <materials>
+                        <material id="inherit"/>
                     </materials>
                     <texture id="inherit">
                     </texture>
@@ -233,6 +264,7 @@
                       <translate x="-2" y="0" z="0"/>
                     </transformation>
                     <materials>
+                        <material id="inherit"/>
                     </materials>
                     <texture id="inherit">
                     </texture>
@@ -247,6 +279,7 @@
                       <rotate axis="y" angle="-90" />
                     </transformation>
                     <materials>
+                        <material id="inherit"/>
                     </materials>
                     <texture id="inherit">
                     </texture>
@@ -261,6 +294,7 @@
                       <rotate axis="y" angle="-90" />
                     </transformation>
                     <materials>
+                        <material id="inherit"/>
                     </materials>
                     <texture id="inherit">
                     </texture>
@@ -275,6 +309,7 @@
                       <scale x="0.5" y="2" z="3.3" />
                     </transformation>
                     <materials>
+                        <material id="inherit"/>
                     </materials>
                     <texture id="inherit"/>
                     <children>
@@ -289,6 +324,7 @@
                       <translate x="2" y="0" z="2"/>
                     </transformation>
                     <materials>
+                        <material id="inherit"/>
                     </materials>
                     <texture id="inherit">
                     </texture>
@@ -302,6 +338,7 @@
                       <translate x="-2" y="0" z="-2"/>
                     </transformation>
                     <materials>
+                        <material id="inherit"/>
                     </materials>
                     <texture id="inherit">
                     </texture>
@@ -315,6 +352,7 @@
                       <translate x="-2" y="0" z="2"/>
                     </transformation>
                     <materials>
+                        <material id="inherit"/>
                     </materials>
                     <texture id="inherit">
                     </texture>
@@ -328,6 +366,7 @@
                       <translate x="2" y="0" z="-2"/>
                     </transformation>
                     <materials>
+                        <material id="inherit"/>
                     </materials>
                     <texture id="inherit">
                     </texture>
@@ -343,6 +382,7 @@
                     <scale x="0.7" y="1" z="0.7"/>
                     </transformation>
                     <materials>
+                        <material id="inherit"/>
                     </materials>
                     <texture id="pedra-torre">
                     </texture>
@@ -358,6 +398,7 @@
                       <scale x="0.2" y="0.2" z="0.2"/>
                     </transformation>
                     <materials>
+                        <material id="inherit"/>
                     </materials>
                     <texture id="inherit">
                     </texture>
@@ -378,6 +419,7 @@
                       <translate x="2" y="0" z="2" />
                     </transformation>
                     <materials>
+                        <material id="inherit"/>
                     </materials>
                     <texture id="inherit"/>
                     <children>
@@ -390,6 +432,7 @@
                       <translate x="0" y="0" z="2" />
                     </transformation>
                     <materials>
+                        <material id="inherit"/>
                     </materials>
                     <texture id="inherit"/>
                     <children>
@@ -402,6 +445,7 @@
                       <translate x="-2" y="0" z="2" />
                     </transformation>
                     <materials>
+                        <material id="inherit"/>
                     </materials>
                     <texture id="inherit"/>
                     <children>
@@ -414,6 +458,7 @@
                       <translate x="2" y="0" z="0" />
                     </transformation>
                     <materials>
+                        <material id="inherit"/>
                     </materials>
                     <texture id="inherit"/>
                     <children>
@@ -426,6 +471,7 @@
                       <translate x="-2" y="0" z="0" />
                     </transformation>
                     <materials>
+                        <material id="inherit"/>
                     </materials>
                     <texture id="inherit"/>
                     <children>
@@ -438,6 +484,7 @@
                       <translate x="2" y="0" z="-2" />
                     </transformation>
                     <materials>
+                        <material id="inherit"/>
                     </materials>
                     <texture id="inherit"/>
                     <children>
@@ -450,6 +497,7 @@
                       <translate x="0" y="0" z="-2" />
                     </transformation>
                     <materials>
+                        <material id="inherit"/>
                     </materials>
                     <texture id="inherit"/>
                     <children>
@@ -462,6 +510,7 @@
                       <translate x="-2" y="0" z="-2" />
                     </transformation>
                     <materials>
+                        <material id="inherit"/>
                     </materials>
                     <texture id="inherit"/>
                     <children>
@@ -474,6 +523,7 @@
                       <scale x="1" y="3" z="1" />
                     </transformation>
                     <materials>
+                        <material id="inherit"/>
                     </materials>
                     <texture id="inherit">
                     </texture>
@@ -594,9 +644,9 @@
                       <rotate axis="x" angle="90" />
                     </transformation>
                     <materials>
-                        <material id="inherit" />
+                        <material id="base" />
                     </materials>
-                    <texture id="inherit">
+                    <texture id="none">
                     </texture>
                     <children>
                         <primitiveRef id="face-cubo"/>
@@ -608,8 +658,8 @@
 
               <component id="piscina">
                     <transformation>
-                    <translate x="0" y="-20" z="0"/>
-                      <scale x="2" y="2" z="2"/>
+                    <translate x="4" y="-20" z="16"/>
+                      <scale x="6" y="3" z="6"/>
                       <rotate axis="x" angle="-90"/>
                     </transformation>
                     <materials>
@@ -630,7 +680,7 @@
                     <materials>
                       <material id="inherit"/>
                     </materials>
-                    <texture id="none"/>
+                    <texture id="inherit"/>
                     <children>
                       <primitiveRef id="piscina-torus"/>
                     </children>
@@ -638,12 +688,12 @@
 
                   <component id="piscina-toro2">
                     <transformation>
-                      <translate x="0" y="0" z="1.8"/>
+                      <translate x="0" y="0" z="1"/>
                     </transformation>
                     <materials>
                       <material id="inherit"/>
                     </materials>
-                    <texture id="none"/>
+                    <texture id="inherit"/>
                     <children>
                       <primitiveRef id="piscina-torus"/>
                     </children>
@@ -651,12 +701,12 @@
 
                   <component id="piscina-toro3">
                     <transformation>
-                      <translate x="0" y="0" z="3.6"/>
+                      <translate x="0" y="0" z="2"/>
                     </transformation>
                     <materials>
                       <material id="inherit"/>
                     </materials>
-                    <texture id="none"/>
+                    <texture id="inherit"/>
                     <children>
                       <primitiveRef id="piscina-torus"/>
                     </children>
@@ -664,7 +714,7 @@
 
                   <component id="piscina-topo">
                     <transformation>
-                      <translate x="0" y="0" z="3.7"/>
+                      <translate x="0" y="0" z="2"/>
                     </transformation>
                     <materials>
                       <material id="arvore"/>
@@ -677,8 +727,8 @@
 
                   <component id="piscina-botton">
                     <transformation>
-                      <translate x="0" y="0" z="-0.8"/>
-                      <scale x="0.8" y="0.8" z="0.8"/>
+                      <translate x="0" y="0" z="0"/>
+                      <scale x="1" y="1" z="1"/>
                     </transformation>
                     <materials>
                        <material id="inherit"/>
@@ -694,12 +744,29 @@
 
               <component id="guarda-sol">
                     <transformation>
-                    <translate x="16" y="-20" z="16"/>
-                      <scale x="4" y="4" z="4"/>
+                    <translate x="35" y="-20" z="10"/>
+                      <scale x="8" y="8" z="8"/>
                       <rotate axis="x" angle="270"/>
+                      <rotate axis="z" angle="45"/>
                     </transformation>
                     <materials>
-                      <material id="piscina"/>
+                      <material id="amarelo"/>
+                    </materials>
+                    <texture id="none"/>
+                    <children>
+                      <componentRef id="guarda-sol-topo"/>
+                      <componentRef id="aste"/>
+                      <componentRef id="guarda-sol-base"/>
+                    </children>
+                  </component>
+
+              <component id="guarda-sol-topo">
+                    <transformation>
+                    <translate x="0" y="0" z="7"/>
+                      <scale x="1.5" y="1.5" z="1"/>
+                    </transformation>
+                    <materials>
+                      <material id="amarelo"/>
                     </materials>
                     <texture id="none"/>
                     <children>
@@ -711,14 +778,13 @@
                       <componentRef id="guardabase2"/>
                       <componentRef id="guardabase3"/>
                       <componentRef id="guardabase4"/>
-                      <componentRed id="aste"/>
                     </children>
                   </component>
 
                   <component id="guardatopo1">
                     <transformation/>
                     <materials>
-                      <material id="guarda1"/>
+                      <material id="vermelho"/>
                     </materials>
                     <texture id="none"/>
                     <children>
@@ -745,7 +811,7 @@
                          <rotate axis="z" angle="180"/>
                       </transformation>
                       <materials>
-                         <material id="guarda1"/>
+                         <material id="vermelho"/>
                       </materials>
                       <texture id="none"/>
                          <children>
@@ -772,7 +838,7 @@
                     <transformation>
                      </transformation>
                     <materials>
-                      <material id="guarda1"/>
+                      <material id="vermelho"/>
                     </materials>
                     <texture id="none"/>
                     <children>
@@ -798,7 +864,7 @@
                         <rotate axis="z" angle="180"/>
                       </transformation>
                       <materials>
-                        <material id="guarda1"/>
+                        <material id="vermelho"/>
                       </materials>
                       <texture id="none"/>
                       <children>
@@ -822,11 +888,10 @@
 
                   <component id="aste">
                     <transformation>
-                       <translate x="0" y="0" z="-2.4"/>
-                       <scale x="0.1" y="0.1" z ="1"/>
+                       <scale x="0.1" y="0.1" z ="2.25"/>
                     </transformation>
                     <materials>
-                        <material id="aste"/>
+                        <material id="azul"/>
                     </materials>
                     <texture id="none"/>
                     <children>
@@ -834,9 +899,25 @@
                       </children>
                    </component>
 
+
+                 <component id="guarda-sol-base">
+                   <transformation>
+                      <scale x="1" y="1" z ="0.2"/>
+                   </transformation>
+                   <materials>
+                       <material id="branco"/>
+                   </materials>
+                   <texture id="none"/>
+                   <children>
+                   <componentRef id="cubo"/>
+                   </children>
+                  </component>
+
+
+
                     <component id="boia">
                       <transformation>
-                     <translate x="0" y="0" z="2.4"/>
+                     <translate x="0" y="0" z="0"/>
                      <scale x="1" y="1" z ="1"/>
                      </transformation>
                      <materials>

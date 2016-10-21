@@ -173,7 +173,7 @@ DSXScene.prototype.display = function () {
 
 		//Draws the scene from the graph by processing all nodes starting from the roo
 		this.processScene();
-
+		//console.log("fim de processar cena");
 	}
 };
 
@@ -189,14 +189,20 @@ DSXScene.prototype.processScene = function() {
 /*
  * Process node
  * @param parentTexture receives the texture from the parent
- * @param parentMaterial receives the material from the parent
+ * @param parentMaterial receives the materialsRef from the parent
  */
 DSXScene.prototype.processNode = function(node, parentTexture, parentMaterial) {
 	//Node is leaf
-
+	/*console.log();
+	console.log("componente"+node);
+	console.log("parentMaterial"+ parentMaterial);*/
 
 	if (node in this.primitives) {
 		//console.log(node);
+
+
+		//this.materials[material].apply();
+
 		var s = this.actualTexture.amplifyFactor.s;
 		var t  = this.actualTexture.amplifyFactor.t;
 		if(s!= null && t!=null)
@@ -205,14 +211,27 @@ DSXScene.prototype.processNode = function(node, parentTexture, parentMaterial) {
 		return;
 	}
 
+
 	this.pushMatrix();
 
 	this.multMatrix(this.graph.components[node].localTransformations);
 
 	var component = this.components[node];
 	var textureId = this.components[node].texture;
+
 	var texture;
 
+	var materialDefault = this.components[node].materialDefault;
+	//console.log(materialDefault);
+	var material;
+	if(materialDefault == "inherit")
+		material = parentMaterial;
+	else
+		material = materialDefault;
+	this.materials[material].apply();
+
+	/*console.log(material);
+	console.log(this.materials[material]);*/
 
 	if(textureId == "none")
 	{
@@ -234,7 +253,6 @@ DSXScene.prototype.processNode = function(node, parentTexture, parentMaterial) {
 	}
 	else
 	{
-		//console.log("else:" + textureId);
 		if(this.actualTexture != null)
 			this.actualTexture.unbind();
 		this.actualTexture = this.textures[textureId];
@@ -249,11 +267,11 @@ DSXScene.prototype.processNode = function(node, parentTexture, parentMaterial) {
 	//Applies transformations
 
 
-	//Receives material and texture from parent?
-	/*var material = this.graph.components[node].materialDefault;
-	if (material == "inherit")
-		material = parentMaterial;
-	else if(material != "")
+	//Receives materialsRef and texture from parent?
+	/*var materialsRef = this.graph.components[node].materialDefault;
+	if (materialsRef == "inherit")
+		materialsRef = parentMaterial;
+	else if(materialsRef != "")
 
 	var texture = this.graph.components[node].texture;
 	if (texture == "none")
@@ -265,11 +283,11 @@ DSXScene.prototype.processNode = function(node, parentTexture, parentMaterial) {
 		//console.log(children.length);
 		//console.log("componente:" + children[i]);
 		//console.log("textura: " + texture);
-		//console.log("material: "+ material);
-		this.processNode(children[i], texture, "none");
+		//console.log("materialsRef: "+ materialsRef);
+		this.processNode(children[i], texture, material);
 
 		/*texture="none";
-		material="null";*/
+		materialsRef="null";*/
 
 	}
 	//console.log("end");
