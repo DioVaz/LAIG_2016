@@ -2,7 +2,7 @@
 
               <scene root="root" axis_length="2.0" />
 
-              <views default="default" >
+              <views default="cima" >
 
                   <perspective id="cima" near="3" far="400" angle="0.7">
                       <from x="3" y="300" z="1" />
@@ -54,10 +54,11 @@
                 <!-- Tree trunk -->
                   <texture file="textures/plastico-lateral.png" id="plastico-lateral" length_s="1" length_t="1"/>
                   <texture file="textures/plastico-base.png" id="plastico-base" length_s="1" length_t="1"/>
-                  <texture file="textures/water.png" id="agua" length_s="1" length_t="1"/>
+                  <texture file="textures/pool.png" id="agua" length_s="1" length_t="1"/>
                   <texture file="textures/brick.png" id="pedra" length_s="1" length_t="1"/>
                   <texture file="textures/wallstone.png" id="pedra-torre" length_s="3" length_t="1"/>
-
+                  <texture file="textures/azulejos.png" id="azulejos" length_s="1" length_t="1"/>
+                  <texture file="textures/portugal.png" id="bandeira" length_s="1" length_t="1"/>
               </textures>
 
 
@@ -74,7 +75,7 @@
                     <ambient r="0.5" g="0.5" b="0.5" a="1.0" />
                     <diffuse r="0.5" g="0.5" b="0.5" a="1.0" />
                     <specular r="0.5" g="0.5" b="0.5" a="1.0" />
-                    <shininess value="0.7" />
+                    <shininess value="0.1" />
                 </material>
                 <material id="arvore" >
                     <emission r="1.0" g="1.0" b="1.0" a="1.0" />
@@ -91,9 +92,9 @@
                       <shininess value="0.2"/>
                 </material>
                 <material id="vermelho">
-                     <emission a="1.0" b="0" g="0" r="1.0"/>
+                     <emission a="1.0" b="0" g="0" r="0.6"/>
                      <ambient a="1.0" b="0" g="0" r="0.7"/>
-                     <diffuse a="1.0" b="1.0" g="1.0" r="1.0"/>
+                     <diffuse a="1.0" b="0.1" g="0.1" r="0.6"/>
                      <specular a="1.0" b="0.2" g="0.2" r="0.2"/>
                      <shininess value="0.3"/>
                 </material>
@@ -105,8 +106,8 @@
                      <shininess value="0.1"/>
                 </material>
                 <material id="amarelo">
-                     <emission a="1.0" b="0" g="1" r="1"/>
-                     <ambient a="1.0" b="0" g="1" r="1"/>
+                     <emission a="1.0" b="0" g="0.7" r="0.7"/>
+                     <ambient a="1.0" b="0" g="0.5" r="0.5"/>
                      <diffuse a="1.0" b="1.0" g="1.0" r="1.0"/>
                      <specular a="1.0" b="0.2" g="0.2" r="0.2"/>
                      <shininess value="0.3"/>
@@ -117,6 +118,20 @@
                     <diffuse a="1.0" b="1.0" g="1.0" r="1.0"/>
                     <specular a="1.0" b="0.2" g="0.2" r="0.2"/>
                     <shininess value="0.3"/>
+                </material>
+                <material id="preto">
+                    <emission a="1" b="0.1" g="0.1" r="0.1"/>
+                    <ambient a="1.0" b="0.1" g="0.1" r="0.1"/>
+                    <diffuse a="1.0" b="1.0" g="1.0" r="1.0"/>
+                    <specular a="1.0" b="0.2" g="0.2" r="0.2"/>
+                    <shininess value="0.3"/>
+                </material>
+                <material id="agua">
+                    <emission a="0.5" b="1" g="0.7" r="0.1"/>
+                    <ambient a="0.5" b="0.5" g="0.5" r="0.5"/>
+                    <diffuse a="0.5" b="0.6" g="0.6" r="0.6"/>
+                    <specular a="0.8" b="0.8" g="0.8" r="0.8"/>
+                    <shininess value="1"/>
                 </material>
                  <material id="pedra">
                      <emission a="1" b="0.3" g="0.4" r="0.4"/>
@@ -150,6 +165,9 @@
               <primitives>
                   <primitive id="terra">
                       <rectangle x1="-2" y1="-2" x2="2" y2="2" />
+                  </primitive>
+                  <primitive id="bandeirap">
+                      <rectangle x1="0.5" y1="0.5" x2="-0.5" y2="-0.5" />
                   </primitive>
                   <primitive id="face-cubo">
                             <rectangle x1="-0.5" y1="-0.5" x2="0.5" y2="0.5" />
@@ -199,6 +217,11 @@
                         <componentRef id="castelo"/>
                         <componentRef id="piscina"/>
                         <componentRef id="guarda-sol"/>
+                        <componentRef id="bandeira-completa1"/>
+                        <componentRef id="bandeira-completa2"/>
+                        <componentRef id="bandeira-completa3"/>
+                        <componentRef id="bandeira-completa4"/>
+
                         <!--componentRed id="boia"-->
                     </children>
 
@@ -213,7 +236,7 @@
                     <materials>
                         <material id="inherit" />
                     </materials>
-                    <texture id="none">
+                    <texture id="azulejos">
                     </texture>
                     <children>
                         <primitiveRef id="terra"/>
@@ -659,7 +682,7 @@
               <component id="piscina">
                     <transformation>
                     <translate x="4" y="-20" z="16"/>
-                      <scale x="6" y="3" z="6"/>
+                      <scale x="6" y="4.5" z="6"/>
                       <rotate axis="x" angle="-90"/>
                     </transformation>
                     <materials>
@@ -717,7 +740,7 @@
                       <translate x="0" y="0" z="2"/>
                     </transformation>
                     <materials>
-                      <material id="arvore"/>
+                      <material id="agua"/>
                     </materials>
                       <texture id="agua"/>
                     <children>
@@ -929,6 +952,123 @@
                        </children>
                   </component>
 
-             </components>
 
-            </dsx>
+            <component id="bandeira-completa1">
+               <transformation>
+                 <translate x="50" y="50" z="50"/>
+               </transformation>
+               <materials>
+                 <material id="plastico"/>
+               </materials>
+                 <texture id="none"/>
+               <children>
+                 <componentRef id="bandeira"/>
+                 <componentRef id="aste-bandeira"/>
+               </children>
+            </component>
+
+            <component id="bandeira-completa2">
+               <transformation>
+                 <translate x="-70" y="50" z="50"/>
+               </transformation>
+               <materials>
+                 <material id="plastico"/>
+               </materials>
+                 <texture id="none"/>
+               <children>
+                 <componentRef id="bandeira"/>
+                 <componentRef id="aste-bandeira"/>
+               </children>
+            </component>
+
+            <component id="bandeira-completa3">
+               <transformation>
+                 <translate x="-70" y="50" z="-70"/>
+               </transformation>
+               <materials>
+                 <material id="plastico"/>
+               </materials>
+                 <texture id="none"/>
+               <children>
+                 <componentRef id="bandeira"/>
+                 <componentRef id="aste-bandeira"/>
+               </children>
+            </component>
+
+            <component id="bandeira-completa4">
+               <transformation>
+                 <translate x="50" y="50" z="-70"/>
+               </transformation>
+               <materials>
+                 <material id="plastico"/>
+               </materials>
+                 <texture id="none"/>
+               <children>
+                 <componentRef id="bandeira"/>
+                 <componentRef id="aste-bandeira"/>
+               </children>
+            </component>
+
+            <component id="bandeira">
+                <transformation>
+                  <translate x="0" y="2.5" z="10"/>
+                  <scale x="20" y="15" z="0"/>
+                </transformation>
+                <materials>
+                  <material id="plastico"/>
+                </materials>
+                <texture id="bandeira"/>
+                <children>
+                  <componentRef id="bandeira-lado-1"/>
+                  <componentRef id="bandeira-lado-2"/>
+                </children>
+            </component>
+
+            <component id="bandeira-lado-1">
+                <transformation>
+                  <translate x="0" y="0" z="0"/>
+                </transformation>
+                <materials>
+                  <material id="plastico"/>
+                </materials>
+                <texture id="inherit"/>
+                <children>
+                  <primitiveRef id="bandeirap"/>
+                </children>
+            </component>
+
+            <component id="bandeira-lado-2">
+                <transformation>
+                    <rotate axis="y" angle="180"/>
+                    <rotate axis="z" angle="180"/>
+                </transformation>
+                <materials>
+                    <material id="plastico"/>
+                </materials>
+                <texture id="inherit"/>
+                <children>
+                    <primitiveRef id="bandeirap"/>
+                </children>
+            </component>
+
+          <component id="aste-bandeira">
+            <transformation>
+               <translate x="10" y="10" z="10"/>
+               <scale x="0.25" y="6" z ="0.25"/>
+               <rotate axis="x" angle="90"/>
+            </transformation>
+            <materials>
+                <material id="preto"/>
+            </materials>
+            <texture id="none"/>
+            <children>
+            <primitiveRef id="cilindro"/>
+              </children>
+           </component>
+
+
+
+
+      </components>
+
+</dsx>
