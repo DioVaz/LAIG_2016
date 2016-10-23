@@ -107,9 +107,7 @@ DSXScene.prototype.onGraphLoaded = function ()
 		this.lightsEnabled[this.lights[i].id] = this.lights[i].enabled;
 		j++;
 	}
-
-
-
+	
 
 	for (var i = 0; i < this.graph.spots.length; ++i) {
 		this.lights.push(this.graph.spots[i]);
@@ -153,7 +151,6 @@ DSXScene.prototype.display = function () {
 
 
 
-	this.setDefaultAppearance();
 	//Process scene if dsx read ok
 
 	if (this.loadedOk > 0)
@@ -168,8 +165,7 @@ DSXScene.prototype.display = function () {
 		if (this.axis)
 	   		this.axis.display();
 
-	   	//Set default appearance
-		this.setDefaultAppearance();
+
 
 		//Draws the scene from the graph by processing all nodes starting from the roo
 		this.processScene();
