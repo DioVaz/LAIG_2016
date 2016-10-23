@@ -11,7 +11,6 @@ function GraphSceneDSX(filename, scene) {
     scene.graph = this.graph;
     this.reader = new CGFXMLreader();
     this.filename = 'scenes/'+filename;
-
     this.reader.open('scenes/'+filename, this);
 
 };
@@ -203,7 +202,7 @@ GraphSceneDSX.prototype.parseViews = function (rootElement) {
         }
 
         this.graph.addView(angle,near,far,from,to,id);
-
+        this.graph.viewsID[id] = false;
         fromTag = null;
         toTag = null;
         from = [];

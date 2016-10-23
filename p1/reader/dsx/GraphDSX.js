@@ -6,6 +6,7 @@ function GraphDSX()
 {
     this.views = [];
     this.defaultView;
+    this.viewsID = [];
     //this.illumination = new Illumination();
     this.omnis = [];
     this.spots = [];

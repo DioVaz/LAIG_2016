@@ -38,6 +38,16 @@ MyInterface.prototype.onGraphLoaded = function(){
 	    	self.scene.updateLight(this.property, enable);
 	    });
 	}
+
+	var group = this.gui.addFolder('Views');
+    group.open();
+
+    for(key in this.scene.graph.viewsID){
+	    var controller = group.add(this.scene.graph.viewsID,key);
+	    controller.onChange(function(enable) {
+	    	self.scene.updateCamera(this.property);
+	    });
+	}
 }
 
 
