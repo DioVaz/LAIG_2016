@@ -203,7 +203,7 @@ GraphSceneDSX.prototype.parseViews = function (rootElement) {
         }
 
         this.graph.addView(angle,near,far,from,to,id);
-
+        this.graph.viewsID[id]=false;
         fromTag = null;
         toTag = null;
         from = [];

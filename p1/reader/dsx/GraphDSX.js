@@ -14,7 +14,7 @@ function GraphDSX()
     this.transformations = [];
     this.primitives = [];
     this.components = [];
-
+    this.viewsID = [];
 };
 
 GraphDSX.prototype.addView = function(angle, near, far, from, to, id) {

@@ -358,3 +358,31 @@ DSXScene.prototype.updateCamera = function (idCamera) {
 	this.camera.target = camera.target;
 
 };
+
+/*
+ * switch materials default
+ * @param materialsID boolean
+ */
+
+
+DSXScene.prototype.changeMaterials = function(materialsID) {
+	this.changeNodeMaterial(this.root, materialsID);
+}
+/*
+ * switch materials default
+ * @param lightId
+ * @param enable boolean
+ */
+
+
+DSXScene.prototype.changeNodeMaterial = function(node, materialsID) {
+	if (node in this.primitives) {return;}
+	else if(this.components[node].materialsRef.length>1){
+		this.components[node].materialDefault=this.components[node].materialsRef[materialsID].id;
+	}
+	var children = this.graph.components[node].children;
+	for (var i = 0; i < children.length; ++i) {
+		this.changeNodeMaterial(children[i], materialsID);
+
+	}
+}

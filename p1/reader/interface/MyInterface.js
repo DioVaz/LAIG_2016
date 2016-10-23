@@ -19,6 +19,7 @@ MyInterface.prototype.init = function(application) {
 	// call CGFinterface init
 	CGFinterface.prototype.init.call(this, application);
 	this.gui = new dat.GUI();
+	this.materialsID =0;
 };
 
 /**
@@ -36,6 +37,16 @@ MyInterface.prototype.onGraphLoaded = function(){
 	    		self.scene.updateLight(this.property, enable);
 	    	}
 	    	self.scene.updateLight(this.property, enable);
+	    });
+	}
+
+	var group = this.gui.addFolder('Views');
+    group.open();
+
+    for(key in this.scene.graph.viewsID){
+	    var controller = group.add(this.scene.graph.viewsID,key);
+	    controller.onChange(function(enable) {
+	    	self.scene.updateCamera(this.property);
 	    });
 	}
 }
@@ -73,7 +84,12 @@ MyInterface.prototype.processKeyboard = function(event)
 			//'l'
 			case(108):        this.scene.camera.pan([zoom/2,0,0] );  break;
 			//'m'
-			//change materials
+			case(109):	
+				if(this.materialsID==0) this.materialsID=1;
+				else this.materialsID=0;	
+				this.scene.changeMaterials(this.materialsID);
+				
+				break;
 
 		}
 }

@@ -250,6 +250,7 @@
                     </transformation>
                     <materials>
                         <material id="pedra"/>
+                        <material id="espelho"/>
                     </materials>
                     <texture id="pedra">
                     </texture>
