@@ -50,7 +50,7 @@ MyTorus.prototype.initBuffers = function () {
             this.vertices.push(y);
             this.vertices.push(z);
 
-            //as normais não estão correctas, é só mesmo para as ter
+
             this.normals.push(x);
             this.normals.push(y);
             this.normals.push(z);

@@ -59,6 +59,7 @@
                   <texture file="textures/wallstone.png" id="pedra-torre" length_s="3" length_t="1"/>
                   <texture file="textures/azulejos.png" id="azulejos" length_s="1" length_t="1"/>
                   <texture file="textures/portugal.png" id="bandeira" length_s="1" length_t="1"/>
+                  <texture file="textures/bola.png" id="bola" length_s="1" length_t="1"/>
               </textures>
 
 
@@ -178,11 +179,8 @@
                   <primitive id="cilindro">
                       <cylinder base="1" top="1" height="4" slices="10" stacks="10" />
                   </primitive>
-                  <primitive id="copa">
-                      <cylinder base="4" top="0" height="4" slices="5" stacks="5" />
-                  </primitive>
-                  <primitive id="copa_redonda">
-                      <sphere radius="2" slices="5" stacks="5" />
+                  <primitive id="sphere">
+                      <sphere radius="1" slices="10" stacks="10" />
                   </primitive>
                   <primitive id="torus">
                       <torus inner="1" outer="4" slices="10" loops="10" />
@@ -221,8 +219,8 @@
                         <componentRef id="bandeira-completa2"/>
                         <componentRef id="bandeira-completa3"/>
                         <componentRef id="bandeira-completa4"/>
-
-                        <!--componentRed id="boia"-->
+                        <componentRed id="bola"/>
+                        <componentRed id="boia"/>
                     </children>
 
                 </component>
@@ -940,17 +938,33 @@
 
                     <component id="boia">
                       <transformation>
-                     <translate x="0" y="0" z="0"/>
-                     <scale x="1" y="1" z ="1"/>
+                     <translate x="6" y="-12" z="-14"/>
+                     <scale x="2" y="2" z ="2"/>
+                     <rotate axis="x" angle="45"/>
                      </transformation>
                      <materials>
                        <material id="plastico"/>
                     </materials>
-                     <texture id="plastico-lateral"/>
+                     <texture id="plastico-base"/>
                      <children>
                        <primitiveRef id="torus"/>
                        </children>
                   </component>
+
+                    <component id="bola">
+                      <transformation>
+                     <translate x="-30" y="-14" z="-24"/>
+                     <scale x="5" y="5" z ="5"/>
+                     </transformation>
+                     <materials>
+                       <material id="plastico"/>
+                    </materials>
+                     <texture id="bola"/>
+                     <children>
+                       <primitiveRef id="sphere"/>
+                       </children>
+                  </component>
+
 
 
             <component id="bandeira-completa1">
