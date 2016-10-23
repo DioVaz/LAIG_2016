@@ -173,7 +173,7 @@ DSXScene.prototype.display = function () {
 
 		//Draws the scene from the graph by processing all nodes starting from the roo
 		this.processScene();
-		//console.log("fim de processar cena");
+
 	}
 };
 
@@ -182,7 +182,6 @@ DSXScene.prototype.display = function () {
  */
 DSXScene.prototype.processScene = function() {
 	this.processNode(this.root, "none","none");
-	//this.setDefaultAppearance();
 };
 
 
@@ -193,15 +192,8 @@ DSXScene.prototype.processScene = function() {
  */
 DSXScene.prototype.processNode = function(node, parentTexture, parentMaterial) {
 	//Node is leaf
-	/*console.log();
-	console.log("componente"+node);
-	console.log("parentMaterial"+ parentMaterial);*/
 
 	if (node in this.primitives) {
-		//console.log(node);
-
-
-		//this.materials[material].apply();
 
 		var s = this.actualTexture.amplifyFactor.s;
 		var t  = this.actualTexture.amplifyFactor.t;
@@ -222,7 +214,7 @@ DSXScene.prototype.processNode = function(node, parentTexture, parentMaterial) {
 	var texture;
 
 	var materialDefault = this.components[node].materialDefault;
-	//console.log(materialDefault);
+
 	var material;
 	if(materialDefault == "inherit")
 		material = parentMaterial;
@@ -230,8 +222,6 @@ DSXScene.prototype.processNode = function(node, parentTexture, parentMaterial) {
 		material = materialDefault;
 	this.materials[material].apply();
 
-	/*console.log(material);
-	console.log(this.materials[material]);*/
 
 	if(textureId == "none")
 	{
@@ -264,33 +254,13 @@ DSXScene.prototype.processNode = function(node, parentTexture, parentMaterial) {
 
 
 
-	//Applies transformations
-
-
-	//Receives materialsRef and texture from parent?
-	/*var materialsRef = this.graph.components[node].materialDefault;
-	if (materialsRef == "inherit")
-		materialsRef = parentMaterial;
-	else if(materialsRef != "")
-
-	var texture = this.graph.components[node].texture;
-	if (texture == "none")
-		texture = parentTexture;*/
-
 	//Process the node's children
 	var children = this.graph.components[node].children;
 	for (var i = 0; i < children.length; ++i) {
-		//console.log(children.length);
-		//console.log("componente:" + children[i]);
-		//console.log("textura: " + texture);
-		//console.log("materialsRef: "+ materialsRef);
+
 		this.processNode(children[i], texture, material);
 
-		/*texture="none";
-		materialsRef="null";*/
-
 	}
-	//console.log("end");
 
 
 	this.popMatrix();

@@ -1,5 +1,5 @@
 /**
- * Created by ruben on 12/10/2016.
+ * Para guardar dados retirados do dsx.
  */
 
 function GraphDSX()

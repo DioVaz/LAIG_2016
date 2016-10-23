@@ -1,5 +1,6 @@
 /**
- * Created by ruben on 12/10/2016.
+ * Para guardar a informação
+ * sobre um componente.
  */
 
 /**
@@ -21,7 +22,9 @@ Component.prototype = Object.create(Object.prototype);
 Component.prototype.constructor = Component;
 
 
-
+/*
+Get id do componentt
+ */
 Component.prototype.setId = function(id) {
     this.id = id;
 };
