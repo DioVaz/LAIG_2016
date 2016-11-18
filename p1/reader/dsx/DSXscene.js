@@ -294,58 +294,6 @@ DSXScene.prototype.updateLight = function(lightId, enable) {
   	}
 }
 
-
-DSXScene.prototype.updateLights = function(lightId,enable) {
-		this.updateOmnis(lightId,enable);
-		this.updateSpots(lightId,enable);
-
-
-};
-
-DSXScene.prototype.updateOmnis = function(lightId,enable) {
-	if(lightId != this.allLights) {
-	for (var i = 0; i < this.graph.omnis.length; ++i) {
-		if (this.lights[i].id == lightId) {
-			var light = this.lights[i];
-			enable ? light.enable() : light.disable();
-			return ;
-		}
-	}
-	}else
-	{
-		for (var i = 0; i < this.graph.omnis.length; ++i) {
-				var light = this.lights[i];
-				enable ? light.enable() : light.disable();
-		}
-	}
-};
-
-DSXScene.prototype.updateSpots = function(lightId,enable) {
-	if(lightId != this.allLights) {
-		for (var i = this.getSpotsBegin() ; i < this.graph.spots.length; ++i) {
-			if (this.lights[i].id == lightId) {
-				var light = this.lights[i];
-				enable ? light.enable() : light.disable();
-				return ;
-			}
-		}
-	}else
-	{
-		for (var i = this.getSpotsBegin() ; i < this.getSpotsEnd(); ++i) {
-			var light = this.lights[i];
-			enable ? light.enable() : light.disable();
-		}
-	}
-};
-
-DSXScene.prototype.getSpotsBegin = function() {
-	return this.graph.omnis.length;
-};
-
-DSXScene.prototype.getSpotsEnd = function() {
-	return this.graph.omnis.length + this.graph.spots.length;
-};
-
 DSXScene.prototype.updateCamera = function (idCamera) {
 
 

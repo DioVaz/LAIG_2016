@@ -66,8 +66,9 @@ GraphSceneDSX.prototype.parseSceneGraph = function(rootElement) {
         rootElement.children[4].nodeName != "textures" ||
         rootElement.children[5].nodeName != "materials" ||
         rootElement.children[6].nodeName != "transformations" ||
-        rootElement.children[7].nodeName != "primitives" ||
-        rootElement.children[8].nodeName != "components"){
+        rootElement.children[7].nodeName != "animations" ||
+        rootElement.children[8].nodeName != "primitives" ||
+        rootElement.children[9].nodeName != "components"){
         error = "The order of the TAGS is wrong";
         return error;
     }
@@ -112,6 +113,12 @@ GraphSceneDSX.prototype.parseSceneGraph = function(rootElement) {
 
     console.log("*******TRANSFORMATIONS*******");
     error = this.parseTransformations(rootElement);
+    if (error) {
+        return error;
+    }
+
+    console.log("*******ANIMATIONS*******");
+    error = this.parseAnimations(rootElement);
     if (error) {
         return error;
     }
@@ -547,6 +554,47 @@ GraphSceneDSX.prototype.parseTransformations = function(rootElement) {
     return 0;
 };
 
+GraphSceneDSX.prototype.parseAnimations = function(rootElement)
+{
+  var animationElement = rootElement.getElementsByTagName('animations');
+  var animationsCollection = (animationElement[0].getElementsByTagName('animation'));
+  var animationsLength = animationsCollection.length;
+
+  for(var i=0; i<animationsLength; i++){
+    var animation = animationsCollection[i];
+    var id = this.reader.getString(animation,'id',1);
+    /*if (id in this.graph.animations)
+        return "Duplicate animation id: " + id;  IMPLEMENTAR DEPOIS */
+    var type = this.reader.getString(animation,'type',1);
+    var span = this.reader.getFloat(animation,'span',1);
+
+    switch(type){
+      case "linear":
+        var controlPoints = (animation.children);
+        var numberOfPoints = controlPoints.length;
+
+        for(var j =0; j<numberOfPoints; j++){
+          var controlpoint = controlPoints[j];
+          var xx = this.reader.getFloat(controlpoint,'xx',1);
+          var yy = this.reader.getFloat(controlpoint,'yy',1);
+          var zz = this.reader.getFloat(controlpoint,'zz',1);
+          /*guardar control point IMPLEMENTAR DEPOIS */
+        }
+        /*guardar animation IMPLEMENTAR DEPOIS */
+        break;
+      case "circular":
+        var centerx = this.reader.getFloat(animation,'centerx',1);
+        var centery = this.reader.getFloat(animation,'centery',1);
+        var centerz = this.reader.getFloat(animation,'centerz',1);
+        var radius = this.reader.getFloat(animation,'radius',1);
+        var startang = this.reader.getFloat(animation,'startang',1);
+        var rotang = this.reader.getFloat(animation,'rotang',1);
+        /*guardar animation IMPLEMENTAR DEPOIS */
+        break;
+    }
+  }
+}
+
 GraphSceneDSX.prototype.parsePrimitives = function(rootElement)
 {
     var primitiveElement = rootElement.getElementsByTagName('primitives');
@@ -683,13 +731,19 @@ GraphSceneDSX.prototype.parseComponent = function (component) {
       }
     }
   }
+
+  //get NODE ANIMATIONS
+  var animationsCollection = (component.getElementsByTagName('animation'));
+  for(var i = 0; i<animationsCollection.length; i++){
+    var animationID = this.reader.getString(animationsCollection[i], "id",1);
+    newComponent.animations[i] = animationID;
+  }
+
   //Get NODE MATERIALS
-  var childNode = component.children[1];
-  if (childNode.nodeName != "materials")
-    return "Expected MATERIAL in COMPONENT " + id + "in 2st child.";
-  for (var i = 0; i < childNode.children.length; ++i) {
-     var material = childNode.children[i];
-     var materialID = this.reader.getString(material, "id");
+  var childNode = (component.getElementsByTagName('materials'));
+  for (var i = 0; i < childNode.length; ++i) {
+     var material = childNode[i];
+     var materialID = material.children[i].id;
 
       if(!(materialID in this.graph.materials) && materialID != "inherit")
         return "No MATERIAL " + materialID +  " for COMPONENT " + id;
@@ -701,10 +755,8 @@ GraphSceneDSX.prototype.parseComponent = function (component) {
   }
 
   //Get NODE TEXTURE
-  childNode = component.children[2];
-  if (childNode.nodeName != "texture")
-    return "Expected TEXTURE in NODE " + id + "in 3rd child.";
-  var texture = this.reader.getString(childNode, "id");
+  childNode = (component.getElementsByTagName('texture'));
+  var texture = childNode[0].id;
 
   if(!(texture in this.graph.textures) && texture != "none" && texture != "inherit")
     return "No TEXTURE " + texture +  " for NODE " + id;
@@ -712,14 +764,12 @@ GraphSceneDSX.prototype.parseComponent = function (component) {
   newComponent.setTexture(texture);
 
   //Get children of NODE
-  var new_children = component.children[3];
-  if (new_children.nodeName != "children")
-    return "Expected CHILDREN tag in NODE " + id;
+  var new_children = (component.getElementsByTagName('children'));
 
-  if (new_children.children.length == 0)
+  if (new_children.length == 0)
     return "COMPONENT " + id + " as no children";
-  for (var i = 0; i < new_children.children.length; ++i) {
-    var new_child = this.reader.getString(new_children.children[i], "id");
+  for (var i = 0; i < new_children[0].children.length; ++i) {
+    var new_child = new_children[0].children[i].id;
     newComponent.addChild(new_child);
   }
   this.graph.components[id] = newComponent;
