@@ -16,6 +16,8 @@ function Component() {
     this.localTransformations = mat4.create();
     mat4.identity(this.localTransformations);
     this.children = [];
+    this.animations = [];
+    this.currentAnimation = 0;
 };
 
 Component.prototype = Object.create(Object.prototype);
@@ -138,3 +140,25 @@ Component.prototype.paint = function () {
 Component.prototype.isPainte = function () {
     return this.painted;
 };
+
+Component.prototype.addAnimation = function(newAnimation){    
+    var idA = this.animations.length;
+    this.animations[idA] = newAnimation;
+}
+
+Component.prototype.update = function(currTime){
+    if (this.animations.length == 0)
+		return 'null';
+
+	var time = currTime;
+	var i;
+
+
+	for (i = 0; i < this.animations.length - 1 ; i++) {
+		if (currTime < this.animations[i].timeSpan)
+			break;
+		time -= this.animations[i].timeSpan;
+	}
+
+	 return animateTransformation = this.animations[i].update(time);
+}

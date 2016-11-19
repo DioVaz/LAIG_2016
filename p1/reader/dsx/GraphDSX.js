@@ -6,7 +6,6 @@ function GraphDSX()
 {
     this.views = [];
     this.defaultView;
-    //this.illumination = new Illumination();
     this.omnis = [];
     this.spots = [];
     this.textures = [];
@@ -15,6 +14,7 @@ function GraphDSX()
     this.primitives = [];
     this.components = [];
     this.viewsID = [];
+    this.animations = [];
 };
 
 GraphDSX.prototype.addView = function(angle, near, far, from, to, id) {

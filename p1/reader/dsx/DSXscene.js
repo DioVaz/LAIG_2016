@@ -47,6 +47,9 @@ DSXScene.prototype.init = function (application) {
 	this.setGlobalAmbientLight(1,1,1,1);
 
     this.enableTextures(true);
+
+    this.timer = 0;
+    this.setUpdatePeriod(100/6);
 };
 /*
  * Sets the interface of the scene
@@ -199,9 +202,12 @@ DSXScene.prototype.processNode = function(node, parentTexture, parentMaterial) {
 		return;
 	}
 
-
+	animation = this.components[node].update(this.timer);
+	this.components[node].update(this.timer);
 	this.pushMatrix();
-
+	if(animation != 'null')
+		this.multMatrix(animation);
+	
 	this.multMatrix(this.graph.components[node].localTransformations);
 
 	var component = this.components[node];
@@ -263,6 +269,10 @@ DSXScene.prototype.processNode = function(node, parentTexture, parentMaterial) {
 }
 
 
+DSXScene.prototype.update = function(currTime) {
+	if (this.lastUpdate != 0)
+		this.timer += (currTime - this.lastUpdate) / 1000;
+}
 
 /*
  * Updates lights from the interface

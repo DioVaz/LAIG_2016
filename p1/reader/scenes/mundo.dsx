@@ -969,6 +969,10 @@
                      <translate x="-30" y="-14" z="-24"/>
                      <scale x="5" y="5" z ="5"/>
                      </transformation>
+                     <animation>
+                        <animationref id="teste1" />
+                        <animationref id="teste2" />
+                     </animation>
                      <materials>
                        <material id="plastico"/>
                     </materials>

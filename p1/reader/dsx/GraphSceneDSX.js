@@ -563,8 +563,8 @@ GraphSceneDSX.prototype.parseAnimations = function(rootElement)
   for(var i=0; i<animationsLength; i++){
     var animation = animationsCollection[i];
     var id = this.reader.getString(animation,'id',1);
-    /*if (id in this.graph.animations)
-        return "Duplicate animation id: " + id;  IMPLEMENTAR DEPOIS */
+    if (id in this.graph.animations)
+        return "Duplicate animation id: " + id;
     var type = this.reader.getString(animation,'type',1);
     var span = this.reader.getFloat(animation,'span',1);
 
@@ -572,15 +572,15 @@ GraphSceneDSX.prototype.parseAnimations = function(rootElement)
       case "linear":
         var controlPoints = (animation.children);
         var numberOfPoints = controlPoints.length;
-
+        var controlPointsA = [];
         for(var j =0; j<numberOfPoints; j++){
-          var controlpoint = controlPoints[j];
+          var controlpoint = controlPoints[j];          
           var xx = this.reader.getFloat(controlpoint,'xx',1);
           var yy = this.reader.getFloat(controlpoint,'yy',1);
           var zz = this.reader.getFloat(controlpoint,'zz',1);
-          /*guardar control point IMPLEMENTAR DEPOIS */
+          controlPointsA.push(vec3.fromValues(xx,yy,zz));
         }
-        /*guardar animation IMPLEMENTAR DEPOIS */
+        this.graph.animations[id] = new LinearAnimation(id, span, controlPointsA);
         break;
       case "circular":
         var centerx = this.reader.getFloat(animation,'centerx',1);
@@ -589,8 +589,10 @@ GraphSceneDSX.prototype.parseAnimations = function(rootElement)
         var radius = this.reader.getFloat(animation,'radius',1);
         var startang = this.reader.getFloat(animation,'startang',1);
         var rotang = this.reader.getFloat(animation,'rotang',1);
-        /*guardar animation IMPLEMENTAR DEPOIS */
+        this.graph.animations[id] = new CircularAnimation(id, span, vec3.fromValues(centerx, centery, centerz), radius, startang, rotang);
         break;
+       default:
+			return "Animation type unknown: " + type;
     }
   }
 }
@@ -734,9 +736,12 @@ GraphSceneDSX.prototype.parseComponent = function (component) {
 
   //get NODE ANIMATIONS
   var animationsCollection = (component.getElementsByTagName('animation'));
-  for(var i = 0; i<animationsCollection.length; i++){
-    var animationID = this.reader.getString(animationsCollection[i], "id",1);
-    newComponent.animations[i] = animationID;
+  if (animationsCollection.length != 0){
+    for(var i = 0; i<animationsCollection[0].children.length; i++){
+      var animationID = this.reader.getString(animationsCollection[0].children[i], "id",1);
+      if(animationID in this.graph.animations)
+      newComponent.addAnimation(this.graph.animations[animationID]);
+    }
   }
 
   //Get NODE MATERIALS
