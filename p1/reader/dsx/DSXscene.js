@@ -193,11 +193,13 @@ DSXScene.prototype.processNode = function(node, parentTexture, parentMaterial) {
 	//Node is leaf
 
 	if (node in this.primitives) {
-
-		var s = this.actualTexture.amplifyFactor.s;
-		var t  = this.actualTexture.amplifyFactor.t;
+		if(this.actualTexture != null)
+		{
+			var s = this.actualTexture.amplifyFactor.s;
+			var t  = this.actualTexture.amplifyFactor.t;
 		if(s!= null && t!=null)
-		this.primitives[node].scaleTexCoords(s,t);
+			this.primitives[node].scaleTexCoords(s,t);
+		}
 		this.primitives[node].display();
 		return;
 	}

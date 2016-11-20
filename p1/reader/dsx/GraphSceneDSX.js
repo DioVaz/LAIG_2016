@@ -1,6 +1,3 @@
-/**
- * Created by ruben on 27/09/2016.
- */
 
 function GraphSceneDSX(filename, scene) {
     this.loadedOk = null;
@@ -622,7 +619,13 @@ GraphSceneDSX.prototype.parsePrimitives = function(rootElement)
 
 
     }
-
+    var chessboardCollection = (primitiveElement[0].getElementsByTagName('chessboard'));
+    if (chessboardCollection != null){
+      primitive = this.getPrimitive(chessboardCollection[0],'chessboard');
+      if(primitive == "getting primitive atributes")
+          return "error parsing " + id;
+      this.graph.primitives['chessboard'] = primitive;
+    }
 
     return 0;
 
@@ -943,7 +946,34 @@ GraphSceneDSX.prototype.getPrimitive = function(primitive, type)
         var torus = new MyTorus(this.scene,inner,outer,slices,loops);
         return torus;
     }
-
+    if(type == "chessboard"){
+      var du, dv, textureref, su, sv;
+      if (primitive.getAttribute('du') != null)
+            du = this.reader.getInteger(primitive, 'du', 1);
+      else
+          return error;
+      if (primitive.getAttribute('dv') != null)
+            dv = this.reader.getInteger(primitive, 'dv', 1);
+      else
+          return error;
+      if (primitive.getAttribute('textureref') != null)
+            textureref = this.reader.getString(primitive, 'textureref', 1);
+      else
+          return error;
+      if (primitive.getAttribute('su') != null)
+            su = this.reader.getInteger(primitive, 'su', 1);
+      else
+          return error;
+      if (primitive.getAttribute('sv') != null)
+            sv = this.reader.getInteger(primitive, 'sv', 1);
+      else
+          return error;
+      var c1 = this.getRGBA(primitive.children[0]);      
+      var c2 = this.getRGBA(primitive.children[1]);
+      var cs = this.getRGBA(primitive.children[2]);
+      var chessboard = new MyChessBoard (this.scene, du,dv,textureref,su,sv,c1,c2,cs);
+      return chessboard;
+    }
 
 };
 

@@ -15,10 +15,14 @@ deg2rad = Math.PI / 180;
 
 serialInclude(['../lib/CGF.js',
 'primitives/MyTriangle.js',
+'primitives/MyChessboard.js',
 'primitives/MyRectangle.js',
 'primitives/MyCylinder.js',
 'primitives/MyCircle.js',
 'primitives/MyCylinderAux.js',
+'primitives/MyPatch.js',
+'primitives/Patch.js',
+'primitives/MyPlane.js',
 'primitives/MySphere.js',
 'primitives/MyTorus.js',
 'interface/MyInterface.js',
@@ -33,10 +37,6 @@ serialInclude(['../lib/CGF.js',
 'animations/Animation.js',
 'animations/CircularAnimation.js',
 'animations/LinearAnimation.js',
-
-
-
-
 
 
 main=function()
