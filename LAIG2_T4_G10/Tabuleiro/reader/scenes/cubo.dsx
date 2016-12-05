@@ -1,0 +1,251 @@
+<dsx>
+
+  <scene root="cubo" axis_length="2.0" />
+
+  <views default="v1" >
+
+      <perspective id="v1" near="1" far="300" angle="0.5">
+          <from x="15" y="15" z="15" />
+          <to x="0" y="0" z="0" />
+      </perspective>
+      <perspective id="v2" near="1" far="300" angle="0.5">
+          <from x="15" y="15" z="-15" />
+          <to x="0" y="0" z="0" />
+      </perspective>
+      <perspective id="v3" near="1" far="300" angle="0.5">
+          <from x="-15" y="15" z="15" />
+          <to x="0" y="0" z="0" />
+      </perspective>
+      <perspective id="v4" near="1" far="300" angle="0.5">
+          <from x="-15" y="15" z="-15" />
+          <to x="0" y="0" z="0" />
+      </perspective>
+
+  </views>
+
+
+  <!-- Illumination and clear colour -->
+  <illumination doublesided="1" local="0">
+      <ambient r="0.5" g="0.5" b="0.5" a="1" />
+      <background r="0" g="0" b="1" a="0.4" />
+  </illumination>
+
+
+  <!-- Lights -->
+  <lights>
+  	<omni id="1" enabled="0">
+  		<location x="10" y="12" z="11" w="13"/>
+  		<ambient r="0.2" g="0.2" b="0.2" a="1"/>
+  		<diffuse r="0.2" g="0.2" b="0.2" a="1"/>
+  		<specular r="0.2" g="0.2" b="0.2" a="1"/>
+  	</omni>
+  	<spot id="2" enabled="0" angle="1.2" expoente="1.4">
+  		<target x="1" y="2" z="3" />
+  		<location x="10" y="12" z="11" w="13"/>
+  		<ambient r="0.2" g="0.2" b="0.2" a="1"/>
+  		<diffuse r="0.2" g="0.2" b="0.2" a="1"/>
+  		<specular r="0.2" g="0.2" b="0.2" a="1"/>
+  	</spot>
+  	<omni id="3" enabled="1">
+  		<location x="11" y="12" z="14" w="13"/>
+  		<ambient r="0.3" g="0.2" b="0.6" a="1"/>
+  		<diffuse r="0.2" g="0.2" b="0.2" a="1"/>
+  		<specular r="0.2" g="0.2" b="0.2" a="1"/>
+  	</omni>
+  	<omni id="4" enabled="1">
+  		<location x="10" y="13" z="11" w="17"/>
+  		<ambient r="0.1" g="0.2" b="0.2" a="1"/>
+  		<diffuse r="0.2" g="0.2" b="0.2" a="1"/>
+  		<specular r="0.2" g="0.2" b="0.2" a="1"/>
+  	</omni>
+  	<spot id="5" enabled="0" angle="1.5" expoente="3.4">
+  		<target x="4" y="5" z="6" />
+  		<location x="10" y="12" z="11" w="13"/>
+  		<ambient r="0.2" g="0.2" b="0.2" a="1"/>
+  		<diffuse r="0.2" g="0.2" b="0.2" a="1"/>
+  		<specular r="0.2" g="0.2" b="0.2" a="1"/>
+  	</spot>
+  </lights>
+
+
+  <!-- textures -->
+  <textures>
+  	<!-- Tree trunk -->
+      <texture id="pele" file="negro" length_s="1.0" length_t="2.0" />
+      <texture id="peleB" file="branco" length_s="1.0" length_t="2.0" />
+  </textures>
+
+
+  <materials>
+    <material id="espelho" >
+        <emission r="1.0" g="1.0" b="1.0" a="1.0" />
+        <ambient r="1.0" g="1.0" b="1.0" a="1.0" />
+        <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
+        <specular r="1.0" g="1.0" b="1.0" a="1.0" />
+        <shininess value="1.0" />
+    </material>
+    <material id="arvore" >
+        <emission r="1.0" g="1.0" b="1.0" a="1.0" />
+        <ambient r="1.0" g="1.0" b="1.0" a="1.0" />
+        <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
+        <specular r="1.0" g="1.0" b="1.0" a="1.0" />
+        <shininess value="1.0" />
+    </material>
+  </materials>
+
+   <transformations>
+      <transformation id="translatecopa">
+         <!-- instrucoes a usar sem limite nem ordem -->
+         <!-- deve existir pelo menos uma transformacao -->
+         <translate x="0" y="0" z="3" />
+         <scale x="0.5" y="0.5" z="0.5" />
+      </transformation>
+      <transformation id="ttronco">
+         <scale x="0.4" y="0.4" z="1" />
+  	 </transformation>
+  </transformations>
+
+
+
+  <!-- The leaves -->
+  <primitives>
+
+      <!-- Deve existir um ou mais blocos "primitive" -->
+      <!-- Os identificadores "id" nao podem ser repetidos -->
+      <primitive id="terra">
+          <rectangle x1="-10" y1="-10" x2="10" y2="10" />
+      </primitive>
+      <primitive id="face-cubo">
+                <rectangle x1="1" y1="1" x2="-1" y2="-1" />
+      </primitive>
+      <primitive id="triangle1">
+          <triangle x1="0" y1="0" z1="0" x2="3" y2="0" z2="0" x3="0" y3="3" z3="0" />
+      </primitive>
+      <primitive id="cilindro">
+          <cylinder base="1" top="1" height="4" slices="20" stacks="10" />
+      </primitive>
+      <primitive id="copa">
+          <cylinder base="4" top="-0.01" height="10" slices="10" stacks="9" />
+      </primitive>
+      <primitive id="copa_redonda">
+          <sphere radius="2\" slices="5" stacks="5" />
+      </primitive>
+      <primitive id="torus1">
+          <torus inner="1" outer="4" slices="10" loops="10" />
+      </primitive>
+  </primitives>
+
+
+  <!-- The components -->
+  <components>
+
+
+  <component id="cubo">
+      <transformation>
+      </transformation>
+      <materials>
+          <material id="inherit" />
+      </materials>
+      <texture id="null">
+      </texture>
+
+
+      <!-- bloco "children" obrigatorio num "component" -->
+      <children>
+          <componentRef id="face1"/>
+          <componentRef id="face2"/>
+          <componentRef id="face3"/>
+          <componentRef id="face4"/>
+          <componentRef id="face5"/>
+          <componentRef id="face6"/>
+      </children>
+
+  </component>
+  <component id="terra-base">
+              <transformation>
+              <rotate axis="y" angle="180" />
+              </transformation>
+              <materials>
+                  <material id="inherit" />
+              </materials>
+              <texture id="null">
+              </texture>
+
+
+              <!-- bloco "children" obrigatorio num "component" -->
+              <children>
+                  <primitiveref id="terra-base"/>
+              </children>
+
+          </component>
+
+
+
+      <component id="arvore">
+          <transformation>
+          </transformation>
+          <materials>
+              <material id="arvore" />
+          </materials>
+          <texture id="null">
+          </texture>
+
+
+          <!-- bloco "children" obrigatorio num "component" -->
+          <children>
+              <componentref id="copa" />
+              <componentref id="tronco" />
+          </children>
+
+      </component>
+
+      <!-- COPA -->
+      <component id="copa">
+          <transformation>
+              <transformationref id="translatecopa" />
+          </transformation>
+          <materials>
+              <material id="inherit" />
+          </materials>
+
+          <texture id="null">
+          </texture>
+
+
+          <!-- bloco "children" obrigatorio num "component" -->
+          <children>
+              <primitiveref id="copa" />
+          </children>
+
+      </component>
+
+      <!-- TRONCO -->
+      <component id="tronco">
+          <transformation>
+         	 <transformationref id="ttronco" />
+          </transformation>
+          <materials>
+              <material id="inherit" />
+          </materials>
+
+          <texture id="tronco">
+          </texture>
+
+
+          <!-- bloco "children" obrigatorio num "component" -->
+          <children>
+              <primitiveref id="cilindro" />
+          </children>
+
+      </component>
+
+
+
+
+
+
+
+  </components>
+
+
+</dsx>
