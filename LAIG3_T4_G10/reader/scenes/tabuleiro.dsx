@@ -1,0 +1,110 @@
+<dsx>
+  <scene root="root" axis_length="0.1" />
+  <views default="white" >
+      <perspective id="white" near="3" far="40" angle="0.7">
+          <from x="15" y="15" z="0" />
+          <to x="0" y="0" z="0" />
+      </perspective>
+
+      <perspective id="black" near="3" far="40" angle="0.7">
+          <from x="-15" y="15" z="0" />
+          <to x="0" y="0" z="0" />
+      </perspective>
+  </views>
+  <illumination doublesided="1" local="1">
+      <ambient r="0.8" g="0.8" b="0.8" a="1" />
+      <background r="0" g="0" b="0.4" a="1" />
+  </illumination>
+
+
+  <!-- Lights -->
+  <lights>
+    <spot id="2" enabled="1" angle="10" expoente="0.1">
+        <target x="0" y="0" z="0" />
+        <location x="0" y="1" z="0" w="10"/>
+        <ambient r="1" g="1" b="1" a="1"/>
+        <diffuse r="0.9" g="0.9" b="0.9" a="1"/>
+        <specular r="0.8" g="0.8" b="0.8" a="0.8"/>
+    </spot>
+    <omni id="3" enabled="0">
+        <location x="0" y="4" z="0" w="13"/>
+        <ambient r="1" g="1" b="1" a="1"/>
+        <diffuse r="0.2" g="0.2" b="0.2" a="1"/>
+        <specular r="0.8" g="0.8" b="0.8" a="1"/>
+    </omni>
+  </lights>
+
+
+  <!-- textures -->
+  <textures>
+    <!-- Tree trunk -->
+      <texture file="textures/texture_wood.jpg" id="board-wood" length_s="1" length_t="1"/>
+  </textures>
+
+
+  <materials>
+    <material id="espelho" >
+        <emission r="0" g="1.0" b="0" a="0.5" />
+        <ambient r="0.5" g="0.5" b="0.5" a="1.0" />
+        <diffuse r="0.5" g="0.5" b="0.5" a="1.0" />
+        <specular r="0.5" g="0.5" b="0.5" a="1.0" />
+        <shininess value="0.7" />
+    </material>
+  </materials>
+
+   <transformations>
+  </transformations>
+
+  <animations>
+    <animation id="teste1" span="4" type="linear">
+      <controlpoint xx="1" yy="2" zz="3" />
+      <controlpoint xx="4" yy="5" zz="6" />
+    </animation>
+
+    <animation id="teste2" span="500" type="circular" centerx="1" centery="2" centerz="3" radius="17" startang="50" rotang="180" />
+  </animations>
+
+  <!-- The primitives -->
+  <primitives>
+      <chessboard du="8" dv="8" textureref="board-wood" su="" sv="">
+        <c1 r="1" g="1" b="1" a="1" />
+        <c2 r="0" g="0" b="0" a="0.5" />
+        <cs r="1" g="0" b="0" a="1" />
+      </chessboard>
+  </primitives>
+
+  <!-- The components -->
+  <components>
+    <!-- ROOT -->
+    <component id="root">
+        <transformation>
+        </transformation>
+        <materials>
+            <material id="espelho"/>
+        </materials>
+        <texture id="none">
+        </texture>
+        <children>
+            <primitiveRef id="splay"/>
+        </children>
+
+    </component>
+
+    <!-- board -->
+    <component id="board">
+        <transformation>
+          <translate x="0" y="1.0" z="0"/>
+          <scale x="1" y="1" z ="1"/>
+
+        </transformation>
+        <materials>
+            <material id="inherit" />
+        </materials>
+        <texture id="none">
+        </texture>
+        <children>
+            <primitiveRef id="chessboard"/>
+        </children>
+    </component>
+  </components>
+</dsx>
