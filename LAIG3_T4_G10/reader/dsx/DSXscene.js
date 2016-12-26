@@ -50,6 +50,12 @@ DSXScene.prototype.init = function (application) {
 
     this.timer = 0;
     this.setUpdatePeriod(100/6);
+
+    //splay related
+    this.setPickEnabled(true);
+    this.gameOn = false;
+    this.playerToMove = 0; //white = 0; black = 1
+    this.playMode = 'move'; //move or splay, change on interface
 };
 /*
  * Sets the interface of the scene
@@ -139,6 +145,7 @@ DSXScene.prototype.onGraphLoaded = function ()
  * Draws the scene. Updates with changes
  */
 DSXScene.prototype.display = function () {
+    this.logPicking();
     this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
     this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
 
@@ -360,5 +367,22 @@ DSXScene.prototype.changeNodeMaterial = function(node, materialsID) {
 	for (var i = 0; i < children.length; ++i) {
 		this.changeNodeMaterial(children[i], materialsID);
 
+	}
+}
+
+DSXScene.prototype.logPicking = function ()
+{
+	if (this.pickMode == false) {
+		if (this.pickResults != null && this.pickResults.length > 0) {
+			for (var i=0; i< this.pickResults.length; i++) {
+				var obj = this.pickResults[i][0];
+				if (obj)
+				{
+					var customId = this.pickResults[i][1];
+					console.log("Picked object: " + obj + ", with pick id " + customId);
+				}
+			}
+			this.pickResults.splice(0,this.pickResults.length);
+		}
 	}
 }

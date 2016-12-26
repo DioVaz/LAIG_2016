@@ -53,22 +53,11 @@
  };
 
  MyChecker.prototype.change_coords = function(new_x, new_z, new_y){
-		 var xdesl = new_x-this.x;
-		 var zdesl = new_z- this.z;
-     var ydesl = new_y- this.y;
-     //acrescentar deslocamento y para subir antes de mover na horizontal
-     //ponto de subida
-     //deslocamento horizontal
-     //ponto de descida
-     //mudar para offboard a peça em caso de captura
-		 if(xdesl==0 && zdesl!=0)
-			 var PCs = [[0,0,0], [0,3,0], [0,3,zdesl*2], [0,0,zdesl*2]];
-		 else if(xdesl != 0 && zdesl==0)
-			 var PCs = [[0,0,0], [0,3,0], [xdesl*2,3,0], [xdesl*2,0,0]];
-		 else if(xdesl == 0 && zdesl==0)
-			 var PCs = [[0,0,0], [0,3,0], [0,0,0]];
-		 else
-			var PCs = [[0,0,0], [0,3,0], [xdesl*2, 3, 0], [xdesl*2, 3, zdesl*2], [xdesl*2, 0, zdesl*2]];
+     var new_x_coord = -7 + (new_x * 2);
+     var new_z_coord = -7 + (new_z * 2);
+     var new_y_coord = 0.7 + (new_y * 0.5);
+     //PC's = [[origem],[subir em y],[deslocamento xz],[descer em y]]
+     var PCs = [[this.x_coord,this.y_coord,this.z_coord],[this.x_coord,5.7,this.z_coord],[new_x_coord,5.7,new_z_coord],[new_x_coord,new_y_coord,new_z_coord]];
 		 var llinAnim = new LinearAnimation(this.scene, 2, PCs);
 		 this.addAnimation(llinAnim);
 		 this.nextx = new_x;
