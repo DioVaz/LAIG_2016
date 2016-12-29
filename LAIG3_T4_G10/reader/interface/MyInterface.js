@@ -19,6 +19,8 @@ MyInterface.prototype.init = function(application) {
 	// call CGFinterface init
 	CGFinterface.prototype.init.call(this, application);
 	this.gui = new dat.GUI();
+	this.playModes = [];
+	this.playModes['Splay']=false;
 	this.materialsID =0;
 	this.activeView = 0;
 };
@@ -31,15 +33,22 @@ MyInterface.prototype.onGraphLoaded = function(){
     group.open();
 	var self = this;
 
-	for(key in this.scene.lightsEnabled){
-	    var controller = group.add(this.scene.lightsEnabled,key);
-	    controller.onChange(function(enable) {
-	    	if(this.property == 'All'){
-	    		self.scene.updateLight(this.property, enable);
-	    	}
-	    	self.scene.updateLight(this.property, enable);
-	    });
-	}
+	var controller = group.add(this.scene.lightsEnabled,"All");
+	controller.onChange(function(enable) {
+		if(this.property == 'All'){
+			self.scene.updateLight(this.property, enable);
+		}
+		self.scene.updateLight(this.property, enable);
+	});
+
+	var group = this.gui.addFolder('PLAY MODE');
+    group.open();
+  	
+	var controller = group.add(this.playModes,'Splay');
+	controller.onChange(function(enable) {
+		self.scene.updatePlayMode();
+	});
+	
 
 	
 }

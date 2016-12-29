@@ -11,13 +11,13 @@
 	this.where_at = 0; // Board = 0; OffBoard = 1;
 	this.x = x;
 	this.z = z;
-  this.y = y;
+  	this.y = y;
 	this.x_coord;
 	this.z_coord;
-  this.y_coord;
+  	this.y_coord;
 	this.nextx;
 	this.nextz;
-  this.nexty;
+  	this.nexty;
 	this.LinAnim;
  	this.piece = new  MyCylinder(scene, 0.5, 0.8, 0.8, 10, 20);
  };
@@ -26,7 +26,6 @@
  MyChecker.prototype.constructor = MyChecker;
 
  MyChecker.prototype.display = function() {
-
 	 //if it is in board
 	 this.tex.apply();
 	 if(this.where_at == 0){
@@ -58,10 +57,11 @@
      var new_y_coord = 0.7 + (new_y * 0.5);
      //PC's = [[origem],[subir em y],[deslocamento xz],[descer em y]]
      var PCs = [[this.x_coord,this.y_coord,this.z_coord],[this.x_coord,5.7,this.z_coord],[new_x_coord,5.7,new_z_coord],[new_x_coord,new_y_coord,new_z_coord]];
-		 var llinAnim = new LinearAnimation(this.scene, 2, PCs);
+		 var llinAnim = new LinearAnimation(this.scene, 7, PCs);
 		 this.addAnimation(llinAnim);
-		 this.nextx = new_x;
-		 this.nextz = new_z;
+		 this.x = new_x;
+		 this.z = new_z;
+		 this.y = new_y;
  };
 
  MyChecker.prototype.addAnimation = function(Anim){

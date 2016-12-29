@@ -83,24 +83,37 @@ GraphDSX.prototype.addTransformations = function(transformation)
 }
 
 GraphDSX.prototype.addNewCheckers = function(scene, appW, appB){
-  var idW = 0;
-  var idB = 0;
+  var idW = 65;
+  var idB = 83;
   //por colunas
   for(var i = 1; i<7 ;i++){
     //whiteCheckers
     var Wchecker1 = new MyChecker (scene, appW, 0, 1, i, 0);
     var Wchecker2 = new MyChecker (scene, appW, 0, 1, i, 1);
     var Wchecker3 = new MyChecker (scene, appW, 0, 2, i, 0);
-    this.whiteCheckers[idW] = Wchecker1; idW++;
-    this.whiteCheckers[idW] = Wchecker2; idW++;
-    this.whiteCheckers[idW] = Wchecker3; idW++;
+    this.whiteCheckers[idW] = Wchecker1; 
+    this.splayBoard.addCheckerToDB(idW,1,i);
+    idW++;
+    this.whiteCheckers[idW] = Wchecker2; 
+    this.splayBoard.addCheckerToDB(idW,1,i);
+    idW++;
+    this.whiteCheckers[idW] = Wchecker3; 
+    this.splayBoard.addCheckerToDB(idW,2,i);
+    idW++;
 
     //whiteCheckers
     var Bchecker1 = new MyChecker (scene, appB, 1, 6, i, 0);
     var Bchecker2 = new MyChecker (scene, appB, 1, 6, i, 1);
     var Bchecker3 = new MyChecker (scene, appB, 1, 5, i, 0);
-    this.blackCheckers[idB] = Bchecker1; idB++;
-    this.blackCheckers[idB] = Bchecker2; idB++;
-    this.blackCheckers[idB] = Bchecker3; idB++;
+    this.blackCheckers[idB] = Bchecker1; 
+    this.splayBoard.addCheckerToDB(idB,6,i);
+    idB++;
+    this.blackCheckers[idB] = Bchecker2; 
+    this.splayBoard.addCheckerToDB(idB,6,i);
+    idB++;
+    this.blackCheckers[idB] = Bchecker3; 
+    this.splayBoard.addCheckerToDB(idB,5,i);
+    idB++;
   }
 }
+

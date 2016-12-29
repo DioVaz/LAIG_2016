@@ -55,7 +55,14 @@ DSXScene.prototype.init = function (application) {
     this.setPickEnabled(true);
     this.gameOn = false;
     this.playerToMove = 0; //white = 0; black = 1
-    this.playMode = 'move'; //move or splay, change on interface
+    this.playMode = 0; //move = 0 or splay = 1, change on interface
+    this.playModes = [];
+
+    //click related
+    this.x1;
+    this.z1;
+    this.x2;
+    this.z2;
 };
 /*
  * Sets the interface of the scene
@@ -198,10 +205,12 @@ DSXScene.prototype.splayDisplay = function() {
   //whiteCheckers
   for(id in this.graph.whiteCheckers){
     this.graph.whiteCheckers[id].display();
+    this.registerForPick(id, this.graph.whiteCheckers[id]);
   }
   //blackCheckers
   for(id in this.graph.blackCheckers){
     this.graph.blackCheckers[id].display();
+    this.registerForPick(id, this.graph.blackCheckers[id]);
   }
 }
 
@@ -275,22 +284,12 @@ DSXScene.prototype.processNode = function(node, parentTexture, parentMaterial) {
 		texture = textureId;
 
 	}
-
-
-
-
-
-
-	//Process the node's children
+//Process the node's children
 	var children = this.graph.components[node].children;
 	for (var i = 0; i < children.length; ++i) {
 
 		this.processNode(children[i], texture, material);
-
 	}
-
-
-
 }
 
 
@@ -326,6 +325,21 @@ DSXScene.prototype.updateLight = function(lightId, enable) {
 
   		}
 
+  	}
+}
+
+/*
+ * Updates play mode from the interface
+ * @param splay boolean
+ */
+
+
+DSXScene.prototype.updatePlayMode = function() {
+  	//Switch only one light
+  	if(this.playMode==0){
+  		this.playMode = 1;
+  	}else{
+  		this.playMode = 0;
   	}
 }
 
@@ -379,10 +393,101 @@ DSXScene.prototype.logPicking = function ()
 				if (obj)
 				{
 					var customId = this.pickResults[i][1];
-					console.log("Picked object: " + obj + ", with pick id " + customId);
+					if(customId>63){customId++;}
+					console.log("Picked object: " + customId);
+					this.logPickingAux(customId,obj);
 				}
 			}
 			this.pickResults.splice(0,this.pickResults.length);
 		}
 	}
+}
+
+DSXScene.prototype.logPickingAux=function (idObject,obj){
+	//tranlate to board position
+	var x = this.getXpos(idObject,obj);
+	var z = this.getZpos(idObject,obj);
+	console.log(x+','+z);
+	if(this.graph.splayBoard.selected==0){
+		//first click
+		var chekers = this.graph.splayBoard.getCheckers(x,z);
+		if(chekers.length == 0){}//if empty dont select
+		//else if (checkColor(checkers)){}//dont select if not valid pick
+		else{
+			var houseID =z+ (x*8)+1;
+			this.graph.splayBoard.selected = houseID;
+			this.x1 = x;
+			this.z1 = z;
+		}
+	}
+	else{
+		//second click
+		this.graph.splayBoard.selected = 0;
+		this.x2 = x;
+		this.z2 = z;
+		var valid = this.sendMove();
+		if(valid){
+			var checkers = this.graph.splayBoard.getCheckers(this.x1,this.z1);
+			//change databoard and moveCheckers
+			this.changeBoard(checkers);
+			//checkwinner
+			//change player and camera
+		}
+	}
+}
+
+DSXScene.prototype.sendMove= function(){
+	if(this.x1==this.x2 && this.z1==this.z2){
+		return false;
+	}
+	return true;
+}
+
+DSXScene.prototype.getXpos=function(idObject,obj){
+	if(idObject>82){return this.graph.blackCheckers[idObject].x;}
+	else if(idObject>64){return this.graph.whiteCheckers[idObject].x;}
+	else
+	 return obj.x;
+}
+
+DSXScene.prototype.getZpos=function(idObject,obj){
+	if(idObject>82){return this.graph.blackCheckers[idObject].z;}
+	else if(idObject>64){return this.graph.whiteCheckers[idObject].z;}
+	else
+	 return obj.z;
+}
+
+DSXScene.prototype.changeBoard=function(checkers){
+	//save board to undo play
+	//TODO
+	//move
+	if(this.playMode==0){
+		for(var i =0; i<checkers.length;i++){
+			var y = this.graph.splayBoard.addCheckerToDB(checkers[i],this.x2,this.z2);
+			this.moveChecker(checkers[i],this.x2,this.z2,y);
+		}
+	}
+	//splay
+	else{
+    var deslX = this.x2-this.x1;
+    var deslZ = this.z2-this.z1;
+    numpecas= checkers.length;
+    var deslUX = deslX/numpecas;
+    var deslUZ = deslZ/numpecas;
+    for(var i=0;i<checkers.length;i++){
+      var new_x = this.x1+deslUX*(i+1);
+      var new_z = this.z1+deslUZ*(i+1);
+      var j = numpecas-i-1;
+      var y = this.graph.splayBoard.addCheckerToDB(checkers[j],new_x,new_z);
+      this.moveChecker(checkers[j],new_x,new_z,y);
+    }
+	}
+	//empty house
+	this.graph.splayBoard.emptyHouse(this.x1,this.z1);
+}
+
+DSXScene.prototype.moveChecker=function(checkerID,x,z,y){
+	if(checkerID>82){this.graph.blackCheckers[checkerID].change_coords(x,z,y);}
+	else
+	this.graph.whiteCheckers[checkerID].change_coords(x,z,y);
 }

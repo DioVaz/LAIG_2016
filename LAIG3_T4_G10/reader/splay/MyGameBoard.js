@@ -8,11 +8,23 @@
 	for(var i=0; i<8; i++) {
 		this.quad_vec[i] = new Array(8);
 	}
+	this.selected = 0;
 	this.initBoard();
 	this.x = -7;
 	this.z = -7;
 	this.boardtex = new CGFappearance(scene);
 	this.boardtex.loadTexture("scenes/textures/post.png");
+	this.selectedtex = new CGFappearance(scene);
+	this.selectedtex.loadTexture("scenes/textures/quad_selected.jpg");
+
+  this.dataBoard= [[[],[],[],[],[],[],[],[]],
+	                 [[],[],[],[],[],[],[],[]],
+                   [[],[],[],[],[],[],[],[]],
+                   [[],[],[],[],[],[],[],[]],
+                   [[],[],[],[],[],[],[],[]],
+                   [[],[],[],[],[],[],[],[]],
+                   [[],[],[],[],[],[],[],[]],
+                   [[],[],[],[],[],[],[],[]]];
  };
 
  MyGameBoard.prototype = Object.create(CGFobject.prototype);
@@ -23,7 +35,8 @@
  	for(i=0; i < 8; i++){
 		for(j=0;j<8;j++){
 			this.scene.pushMatrix();
-				this.boardtex.apply();
+				if (p == this.selected){this.selectedtex.apply();}
+				else{this.boardtex.apply();}
 				this.scene.translate(this.x, 0.2,this.z);
 				this.scene.rotate(-Math.PI/2, 1,0,0);
 				this.scene.scale(2,2,2);
@@ -48,4 +61,22 @@
 			this.quad_vec[i][j] = quad;
 		}
 	}
+ }
+
+ MyGameBoard.prototype.changeSelected=function(selectedID){
+ 	this.selected = selectedID;
+ }
+
+ MyGameBoard.prototype.addCheckerToDB=function(checkerID,x,z){
+   var y = this.dataBoard[x][z].length;
+   this.dataBoard[x][z][y] = checkerID;
+   return y;
+ }
+
+ MyGameBoard.prototype.getCheckers=function(x,z){
+   return this.dataBoard[x][z];
+ }
+
+ MyGameBoard.prototype.emptyHouse=function(x,z){
+   this.dataBoard[x][z] = [];
  }
