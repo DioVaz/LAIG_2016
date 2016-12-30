@@ -431,7 +431,7 @@ DSXScene.prototype.logPickingAux=function (idObject,obj){
 			//change databoard and moveCheckers
 			this.changeBoard(checkers);
 			//checkwinner
-			//change player and camera
+			this.switchPlayer();
 		}
 	}
 }
@@ -490,4 +490,16 @@ DSXScene.prototype.moveChecker=function(checkerID,x,z,y){
 	if(checkerID>82){this.graph.blackCheckers[checkerID].change_coords(x,z,y);}
 	else
 	this.graph.whiteCheckers[checkerID].change_coords(x,z,y);
+}
+
+DSXScene.prototype.switchPlayer = function (){
+	this.playerToMove++;
+	var views = [];
+	var i = 0;
+	for(id in this.graph.viewsID){
+		views[i] = id;
+		i++;
+	}
+	if(this.playerToMove==2) this.playerToMove=0;
+	this.updateCamera(views[this.playerToMove]);
 }
