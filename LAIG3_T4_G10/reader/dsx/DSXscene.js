@@ -53,10 +53,12 @@ DSXScene.prototype.init = function (application) {
 
     //splay related
     this.setPickEnabled(true);
-    this.gameOn = false;
+    this.gameOn = true;
     this.playerToMove = 0; //white = 0; black = 1
     this.playMode = 0; //move = 0 or splay = 1, change on interface
     this.playModes = [];
+    this.whiteCaptures = [];
+    this.blackCaptures = [];
 
     //click related
     this.x1;
@@ -395,6 +397,7 @@ DSXScene.prototype.logPicking = function ()
 					var customId = this.pickResults[i][1];
 					if(customId>63){customId++;}
 					console.log("Picked object: " + customId);
+					if(this.gameOn)
 					this.logPickingAux(customId,obj);
 				}
 			}
@@ -412,7 +415,7 @@ DSXScene.prototype.logPickingAux=function (idObject,obj){
 		//first click
 		var chekers = this.graph.splayBoard.getCheckers(x,z);
 		if(chekers.length == 0){}//if empty dont select
-		//else if (checkColor(checkers)){}//dont select if not valid pick
+		else if (this.graph.splayBoard.checkColor(x,z)!=this.playerToMove){}//dont select if not valid pick
 		else{
 			var houseID =z+ (x*8)+1;
 			this.graph.splayBoard.selected = houseID;
@@ -430,8 +433,10 @@ DSXScene.prototype.logPickingAux=function (idObject,obj){
 			var checkers = this.graph.splayBoard.getCheckers(this.x1,this.z1);
 			//change databoard and moveCheckers
 			this.changeBoard(checkers);
-			//checkwinner
-			this.switchPlayer();
+			if(this.checkWinner()){this.gameOn=false;}
+			else{
+				this.switchPlayer();
+				}
 		}
 	}
 }
@@ -460,11 +465,15 @@ DSXScene.prototype.getZpos=function(idObject,obj){
 DSXScene.prototype.changeBoard=function(checkers){
 	//save board to undo play
 	//TODO
+	//
 	//move
 	if(this.playMode==0){
 		for(var i =0; i<checkers.length;i++){
-			var y = this.graph.splayBoard.addCheckerToDB(checkers[i],this.x2,this.z2);
-			this.moveChecker(checkers[i],this.x2,this.z2,y);
+			if(this.checkCapture(checkers[i])){}
+			else{
+				var y = this.graph.splayBoard.addCheckerToDB(checkers[i],this.x2,this.z2);
+				this.moveChecker(checkers[i],this.x2,this.z2,y);
+			}
 		}
 	}
 	//splay
@@ -474,16 +483,46 @@ DSXScene.prototype.changeBoard=function(checkers){
     numpecas= checkers.length;
     var deslUX = deslX/numpecas;
     var deslUZ = deslZ/numpecas;
-    for(var i=0;i<checkers.length;i++){
-      var new_x = this.x1+deslUX*(i+1);
-      var new_z = this.z1+deslUZ*(i+1);
-      var j = numpecas-i-1;
-      var y = this.graph.splayBoard.addCheckerToDB(checkers[j],new_x,new_z);
-      this.moveChecker(checkers[j],new_x,new_z,y);
-    }
+		for(var i=0;i<checkers.length;i++){
+		  var new_x = this.x1+deslUX*(i+1);
+		  var new_z = this.z1+deslUZ*(i+1);
+		  var j = numpecas-i-1;
+		  var y = this.graph.splayBoard.addCheckerToDB(checkers[j],new_x,new_z);
+		  if(i==checkers.length-1 && this.checkCapture(checkers[0])){}
+		  else{
+		   this.moveChecker(checkers[j],new_x,new_z,y);
+		  }
+		}
 	}
 	//empty house
 	this.graph.splayBoard.emptyHouse(this.x1,this.z1);
+}
+
+DSXScene.prototype.checkCapture = function(checkerID){
+	if(checkerID>82 && this.x2==7){
+		var y = this.graph.blackCheckers[checkerID].y;
+		var pos = this.blackCaptures.length;
+		this.blackCaptures[pos]=checkerID;
+		this.graph.blackCheckers[checkerID].change_coords(7-pos,-1,0);
+		this.graph.blackCheckers[checkerID].captureC();
+		return true;
+		}
+	else if(checkerID<83 && this.x2==0){
+		var y = this.graph.whiteCheckers[checkerID].y;
+		var pos = this.whiteCaptures.length;
+		this.whiteCaptures[pos]=checkerID;
+		this.graph.whiteCheckers[checkerID].change_coords(pos,8,0);
+		this.graph.whiteCheckers[checkerID].captureC();
+		return true;
+		}
+	else
+	return false;
+}
+
+DSXScene.prototype.moveChecker=function(checkerID,x,z,y){
+	if(checkerID>82){this.graph.blackCheckers[checkerID].change_coords(x,z,y);}
+	else
+	this.graph.whiteCheckers[checkerID].change_coords(x,z,y);
 }
 
 DSXScene.prototype.moveChecker=function(checkerID,x,z,y){
@@ -502,4 +541,9 @@ DSXScene.prototype.switchPlayer = function (){
 	}
 	if(this.playerToMove==2) this.playerToMove=0;
 	this.updateCamera(views[this.playerToMove]);
+}
+
+DSXScene.prototype.checkWinner = function (){
+	if(this.whiteCaptures.length>7 || this.blackCaptures.length>7) return true;
+	else return false;
 }

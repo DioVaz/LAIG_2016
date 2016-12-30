@@ -2,12 +2,12 @@
   <scene root="root" axis_length="0.1" />
   <views default="white" >
       <perspective id="white" near="3" far="40" angle="0.7">
-          <from x="15" y="15" z="0" />
+          <from x="-15" y="15" z="0" />
           <to x="0" y="0" z="0" />
       </perspective>
 
       <perspective id="black" near="3" far="40" angle="0.7">
-          <from x="-15" y="15" z="0" />
+          <from x="15" y="15" z="0" />
           <to x="0" y="0" z="0" />
       </perspective>
   </views>

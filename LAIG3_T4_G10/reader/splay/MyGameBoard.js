@@ -80,3 +80,26 @@
  MyGameBoard.prototype.emptyHouse=function(x,z){
    this.dataBoard[x][z] = [];
  }
+
+  MyGameBoard.prototype.getCheckers=function(x,z){
+   return this.dataBoard[x][z];
+ }
+
+  MyGameBoard.prototype.deleteChecker=function(x,z,y){
+   var checkerSize = this.dataBoard[x][z].length;
+   var newtop = [];
+   var j=0;
+   for (var i = y;i<checkerSize-1;i++){
+   	this.dataBoard[x][z][i] = this.dataBoard[x][z][i+1];
+   	newtop[j] = this.dataBoard[x][z][i+1];
+   	j++;
+
+   }
+   this.dataBoard[x][z][checkerSize-1] = [];
+   return newtop;
+ }
+
+	MyGameBoard.prototype.checkColor=function(x,z){
+		if(this.dataBoard[x][z][this.dataBoard[x][z].length-1]>82) return 1;
+		return 0;
+	}

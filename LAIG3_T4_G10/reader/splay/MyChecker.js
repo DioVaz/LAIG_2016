@@ -20,6 +20,7 @@
   	this.nexty;
 	this.LinAnim;
  	this.piece = new  MyCylinder(scene, 0.5, 0.8, 0.8, 10, 20);
+ 	this.capture = 0;
  };
 
  MyChecker.prototype = Object.create(CGFobject.prototype);
@@ -66,4 +67,8 @@
 
  MyChecker.prototype.addAnimation = function(Anim){
 	 this.LinAnim = Anim;
+ };
+
+  MyChecker.prototype.captureC= function(){
+	 this.capture = 1;
  };
