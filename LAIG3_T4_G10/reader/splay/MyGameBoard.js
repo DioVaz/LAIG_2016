@@ -103,3 +103,16 @@
 		if(this.dataBoard[x][z][this.dataBoard[x][z].length-1]>82) return 1;
 		return 0;
 	}
+
+	MyGameBoard.prototype.getBoardInString=function(){
+		var boardinstring = "[";
+			for(var z = 0;z<this.dataBoard[x].length;z++){
+				}
+			}
+		return boardinstring;
+	}
+
+	MyGameBoard.prototype.getColor=function(x,z,y){
+		if(this.dataBoard[x][z][y]>82) return 1;
+		else if(this.dataBoard[x][z][y]<83) return 0;
+	}

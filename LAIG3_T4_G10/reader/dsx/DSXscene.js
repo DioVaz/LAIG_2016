@@ -449,7 +449,7 @@ DSXScene.prototype.sendMove= function(){
 	if(this.x1==this.x2 && this.z1==this.z2){
 		return false;
 	}
-	
+
 	var okfunc = function(data){
 		console.log(2);
 		console.log(data);
@@ -460,14 +460,14 @@ DSXScene.prototype.sendMove= function(){
 		}
 		else{
 			this.valid = false;
-		}	
+		}
 	}
 
 	var failfunc = function(){
 		console.log("fail");
 	};
-	
-	 this.getPrologRequest(okfunc,failfunc,this.z1+1,this.x1+1,this.z2+1,this.x2+1);	
+
+	 this.getPrologRequest(okfunc,failfunc,this.z1+1,this.x1+1,this.z2+1,this.x2+1);
 }
 
 function myFunction() {
@@ -573,3 +573,37 @@ DSXScene.prototype.checkWinner = function (){
 	if(this.whiteCaptures.length>7 || this.blackCaptures.length>7) return true;
 	else return false;
 }
+
+DSXScene.prototype.getPrologRequest =function(/*requestString, */onSuccess, onError,x1,z1,x2,z2)
+			{
+				var boardDB = this.graph.splayBoard.getBoardInString();
+				console.log(boardDB);
+				var requestPort = 8081;
+				var request = new XMLHttpRequest();
+
+				requestString = "step("+boardDB+","+this.playerToMove +","+x1+","+z1+","+x2+","+z2+")";
+				request.open('GET', 'http://localhost:'+requestPort+'/'+requestString, true);
+
+				request.onload = onSuccess || function(data){console.log("Request successful. Reply: " + data.target.response);};
+				request.onerror = onError || function(){console.log("Error waiting for response");};
+
+			//	console.log(data);
+				request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
+				request.send();
+
+
+			}
+
+			function makeRequest()
+			{
+				// Get Parameter Values
+				var requestString = document.querySelector("#query_field").value;
+
+				// Make Request
+				getPrologRequest(requestString, handleReply);
+			}
+
+			//Handle the Reply
+			function handleReply(data){
+				document.querySelector("#query_result").innerHTML=data.target.response;
+			}
