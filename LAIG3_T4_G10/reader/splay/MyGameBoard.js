@@ -106,9 +106,19 @@
 
 	MyGameBoard.prototype.getBoardInString=function(){
 		var boardinstring = "[";
+		for(var x = 0;x<this.dataBoard.length;x++){
+			boardinstring= boardinstring+"[";
 			for(var z = 0;z<this.dataBoard[x].length;z++){
+				boardinstring=boardinstring+"[";
+				for(var y = 0;y<this.dataBoard[x][z].length;y++){
+					boardinstring=boardinstring+this.getColor(x,z,y);
+					if(y+1<this.dataBoard[x][z].length) boardinstring=boardinstring+",";
 				}
+				boardinstring=boardinstring+"]";
 			}
+			boardinstring=boardinstring+"]";
+		}
+		boardinstring=boardinstring+"]";
 		return boardinstring;
 	}
 
