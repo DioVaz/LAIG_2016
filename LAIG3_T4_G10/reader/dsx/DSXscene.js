@@ -65,6 +65,9 @@ DSXScene.prototype.init = function (application) {
     this.z1;
     this.x2;
     this.z2;
+
+    //comunication related
+    this.valid =false;
 };
 /*
  * Sets the interface of the scene
@@ -155,6 +158,15 @@ DSXScene.prototype.onGraphLoaded = function ()
  */
 DSXScene.prototype.display = function () {
     this.logPicking();
+    if(this.valid){
+		var checkers = this.graph.splayBoard.getCheckers(this.x1,this.z1);
+		//change databoard and moveCheckers
+		this.changeBoard(checkers);
+		if(this.checkWinner()){this.gameOn=false;}
+		else{
+			this.switchPlayer();
+			}
+	}
     this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
     this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
 
@@ -428,24 +440,38 @@ DSXScene.prototype.logPickingAux=function (idObject,obj){
 		this.graph.splayBoard.selected = 0;
 		this.x2 = x;
 		this.z2 = z;
-		var valid = this.sendMove();
-		if(valid){
-			var checkers = this.graph.splayBoard.getCheckers(this.x1,this.z1);
-			//change databoard and moveCheckers
-			this.changeBoard(checkers);
-			if(this.checkWinner()){this.gameOn=false;}
-			else{
-				this.switchPlayer();
-				}
-		}
+		this.valid = this.sendMove();
 	}
 }
 
 DSXScene.prototype.sendMove= function(){
+	//check diferent houses
 	if(this.x1==this.x2 && this.z1==this.z2){
 		return false;
 	}
-	return true;
+	
+	var okfunc = function(data){
+		console.log(2);
+		console.log(data);
+		thisScene.valid =false;
+		if(data.target.response == 1){
+			console.log("entrou");
+			this.valid= true;
+		}
+		else{
+			this.valid = false;
+		}	
+	}
+
+	var failfunc = function(){
+		console.log("fail");
+	};
+	
+	 this.getPrologRequest(okfunc,failfunc,this.z1+1,this.x1+1,this.z2+1,this.x2+1);	
+}
+
+function myFunction() {
+    alert('Hello');
 }
 
 DSXScene.prototype.getXpos=function(idObject,obj){
