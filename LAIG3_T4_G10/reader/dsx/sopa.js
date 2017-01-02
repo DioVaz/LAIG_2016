@@ -159,7 +159,6 @@ DSXScene.prototype.onGraphLoaded = function ()
 DSXScene.prototype.display = function () {
     this.logPicking();
     if(this.valid){
-		console.log("entrou2");
 		var checkers = this.graph.splayBoard.getCheckers(this.x1,this.z1);
 		//change databoard and moveCheckers
 		this.changeBoard(checkers);
@@ -167,7 +166,6 @@ DSXScene.prototype.display = function () {
 		else{
 			this.switchPlayer();
 			}
-		this.valid = false;
 	}
     this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
     this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
@@ -246,7 +244,7 @@ DSXScene.prototype.processNode = function(node, parentTexture, parentMaterial) {
       this.primitives[node].display();
     }
 
-
+    this.popMatrix();
     return;
   }
 
@@ -306,7 +304,6 @@ DSXScene.prototype.processNode = function(node, parentTexture, parentMaterial) {
 
 		this.processNode(children[i], texture, material);
 	}
-	this.popMatrix();
 }
 
 
@@ -443,7 +440,7 @@ DSXScene.prototype.logPickingAux=function (idObject,obj){
 		this.graph.splayBoard.selected = 0;
 		this.x2 = x;
 		this.z2 = z;
-		this.sendMove();
+		this.valid = this.sendMove();
 	}
 }
 
@@ -454,16 +451,17 @@ DSXScene.prototype.sendMove= function(){
 	}
 
 	var okfunc = function(data){
+		console.log(2);
+		console.log(data);
 		thisScene.valid =false;
 		if(data.target.response == 1){
 			console.log("entrou");
-			thisScene.valid= true;
+			this.valid= true;
 		}
 		else{
-			thisScene.valid = false;
+			this.valid = false;
 		}
 	}
-	var thisScene = this;
 
 	var failfunc = function(){
 		console.log("fail");
@@ -576,16 +574,15 @@ DSXScene.prototype.checkWinner = function (){
 	else return false;
 }
 
-
-	//Example Plog
 DSXScene.prototype.getPrologRequest =function(/*requestString, */onSuccess, onError,x1,z1,x2,z2)
 			{
-        var boardDB = this.graph.splayBoard.getBoardInString();
+				var boardDB = this.graph.splayBoard.getBoardInString();
+				console.log(boardDB);
 				var requestPort = 8081;
 				var request = new XMLHttpRequest();
 
-        requestString = "step("+boardDB+","+this.playerToMove +","+x1+","+z1+","+x2+","+z2+")";
-        request.open('GET', 'http://localhost:'+requestPort+'/'+requestString, true);
+				requestString = "step("+boardDB+","+this.playerToMove +","+x1+","+z1+","+x2+","+z2+")";
+				request.open('GET', 'http://localhost:'+requestPort+'/'+requestString, true);
 
 				request.onload = onSuccess || function(data){console.log("Request successful. Reply: " + data.target.response);};
 				request.onerror = onError || function(){console.log("Error waiting for response");};
@@ -595,4 +592,18 @@ DSXScene.prototype.getPrologRequest =function(/*requestString, */onSuccess, onEr
 				request.send();
 
 
+			}
+
+			function makeRequest()
+			{
+				// Get Parameter Values
+				var requestString = document.querySelector("#query_field").value;
+
+				// Make Request
+				getPrologRequest(requestString, handleReply);
+			}
+
+			//Handle the Reply
+			function handleReply(data){
+				document.querySelector("#query_result").innerHTML=data.target.response;
 			}
