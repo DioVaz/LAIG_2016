@@ -102,8 +102,8 @@ retira_pecas(Stack,Peca,New_stack):-
 	delete(Stack,Peca,New_stack),
 	length(New_stack,N2).
 
-get_y(0,1).
-get_y(1,8).
+get_y(0,8).
+get_y(1,1).
 
 
 

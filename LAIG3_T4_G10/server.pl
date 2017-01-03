@@ -119,23 +119,26 @@ parse_input(quit, goodbye).
 
 parse_input(put_piece_test(Tab, X, Z), Bool):- put_piece_test(Tab, X, Z, Bool).
 
-parse_input(step(Tab,Tipo,Xi,Yi,Xf,Yf),Valida):- move_adicional(Tab,Tipo,Xi,Yi,Xf,Yf,Valida,Tabuleiro_final).
-parse_input(splay(Tab,X,Y,Xf,Yf),Ntab):- splay(Tab,X,Y,Xf,Yf,Ntab).
+parse_input(step(Tab,Tipo,Player,Xi,Yi,Xf,Yf),Valida):- step_adicional(Tab,Tipo,Player,Xi,Yi,Xf,Yf,Valida,Tabuleiro_final).
 
 
-move_adicional(Tabuleiro,Tipo,Xi,Yi,Xf,Yf,Valida,Tabuleiro_move):-
+
+step_adicional(Tabuleiro,Tipo,Player,Xi,Yi,Xf,Yf,Valida,Tabuleiro_move):-
 	inbounds(Xf,Yf),
 	get_linha(Tabuleiro,Yi,Linha),
 	get_stack(Linha,Xi,Elemento),
 	get_topo(Elemento,Topo),
 	write(Topo),
-	pertence_jogador(Tipo,Topo),
+	pertence_jogador(Player,Topo),
 	valida_input(Xi,Yi,Xf,Yf),
 	move(Tabuleiro,Xi,Yi,Xf,Yf,Tipo,Tabuleiro_move),
 	Valida is 1.
 	
-move_adicional(Tabuleiro,Tipo,Xi,Yi,Xf,Yf,Valida,Tabuleiro_move):-
+step_adicional(Tabuleiro,Tipo,Xi,Yi,Xf,Yf,Valida,Tabuleiro_move):-
 Valida is 0.
+
+
+
 
 pushi([H|Res], Var) :-
 Var is H.
