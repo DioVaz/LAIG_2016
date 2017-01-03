@@ -125,10 +125,17 @@ parse_input(splay(Tab,X,Y,Xf,Yf),Ntab):- splay(Tab,X,Y,Xf,Yf,Ntab).
 
 move_adicional(Tabuleiro,Tipo,Xi,Yi,Xf,Yf,Valida,Tabuleiro_move):-
 	inbounds(Xf,Yf),
+	get_linha(Tabuleiro,Yi,Linha),
+	get_stack(Linha,Xi,Elemento),
+	get_topo(Elemento,Topo),
+	write(Topo),
+	pertence_jogador(Tipo,Topo),
 	valida_input(Xi,Yi,Xf,Yf),
 	move(Tabuleiro,Xi,Yi,Xf,Yf,Tipo,Tabuleiro_move),
 	Valida is 1.
-
+	
+move_adicional(Tabuleiro,Tipo,Xi,Yi,Xf,Yf,Valida,Tabuleiro_move):-
+Valida is 0.
 
 pushi([H|Res], Var) :-
 Var is H.

@@ -133,6 +133,7 @@ move_adicional(Tabuleiro,Tipo,Xi,Yi,Xf,Yf,Valida,Tabuleiro_move):-
 	valida_input(Xi,Yi,Xf,Yf),
 	move(Tabuleiro,Xi,Yi,Xf,Yf,Tipo,Tabuleiro_move),
 	Valida is 1.
+	
 move_adicional(Tabuleiro,Tipo,Xi,Yi,Xf,Yf,Valida,Tabuleiro_move):-
 Valida is 0.
 

@@ -583,7 +583,7 @@ DSXScene.prototype.getPrologRequest =function(/*requestString, */onSuccess, onEr
         var boardDB = this.graph.splayBoard.getBoardInString();
 				var requestPort = 8081;
 				var request = new XMLHttpRequest();
-
+		console.log(boardDB);
         requestString = "step("+boardDB+","+this.playerToMove +","+x1+","+z1+","+x2+","+z2+")";
         request.open('GET', 'http://localhost:'+requestPort+'/'+requestString, true);
 

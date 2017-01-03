@@ -114,9 +114,15 @@
 					boardinstring=boardinstring+this.getColor(x,z,y);
 					if(y+1<this.dataBoard[x][z].length) boardinstring=boardinstring+",";
 				}
-				boardinstring=boardinstring+"]";
+				if(z != this.dataBoard[x].length-1)
+					boardinstring=boardinstring+"],";
+				else
+					boardinstring=boardinstring+"]";
 			}
-			boardinstring=boardinstring+"]";
+			if(x!=this.dataBoard.length-1)
+				boardinstring=boardinstring+"],";
+			else
+				boardinstring=boardinstring+"]";
 		}
 		boardinstring=boardinstring+"]";
 		return boardinstring;
