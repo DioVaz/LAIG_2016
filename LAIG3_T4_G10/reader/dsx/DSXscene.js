@@ -81,7 +81,9 @@ DSXScene.prototype.setInterface = function(myinterface) {
  */
 DSXScene.prototype.initCameras = function () {
     this.camera = new CGFcamera(1, 1, 300, vec3.fromValues(3, 180, 1), vec3.fromValues(1, 1, 1));
-
+	  this.cameraDestination = [];
+    this.cameraTransition = false;
+    this.transitionTime = 2000;
 
 };
 
@@ -114,7 +116,7 @@ DSXScene.prototype.onGraphLoaded = function ()
 	this.setGlobalAmbientLight(this.graph.illumination.ambient[0],this.graph.illumination.ambient[1],this.graph.illumination.ambient[2],this.graph.illumination.ambient[3]);
 
 	this.updateCamera(this.graph.defaultView);
-
+	this.Game_Mode();
 	this.lights = [];
 
   //load lights from the Grahps
@@ -313,6 +315,30 @@ DSXScene.prototype.processNode = function(node, parentTexture, parentMaterial) {
 DSXScene.prototype.update = function(currTime) {
 	if (this.lastUpdate != 0)
 		this.timer += (currTime - this.lastUpdate) / 1000;
+	
+	  // Camera transition to other angles
+        if (this.cameraTransition) {
+            // BEGINNING
+            if (!this.transitionBeg)
+                this.transitionBeg = currTime;
+            else 
+            {
+                var runningTime = currTime - this.transitionBeg;
+                if (runningTime >= this.transitionTime) {
+                    // END
+                    this.camera.setPosition(this.cameraDestination);
+                    this.transitionBeg = null ;
+                    this.cameraTransition = false;
+                } 
+                else {
+                    var time_perc = runningTime / this.transitionTime;
+                    var newPosition = [this.cameraOrigin[0] + (this.transitionVec[0] * time_perc), 
+                    this.cameraOrigin[1] + (this.transitionVec[1] * time_perc), 
+                    this.cameraOrigin[2] + (this.transitionVec[2] * time_perc)];
+                    this.camera.setPosition(newPosition);
+                }
+            }
+        }
 }
 
 /*
@@ -362,14 +388,18 @@ DSXScene.prototype.updatePlayMode = function() {
 
 DSXScene.prototype.updateCamera = function (idCamera) {
 
-
+	/*
 	var camera = this.graph.views[idCamera];
 
 	this.camera.fov = camera.fov;
 	this.camera.near = camera.near;
 	this.camera.far =  camera.far;
 	this.camera.position = camera.position;
-	this.camera.target = camera.target;
+	this.camera.target = camera.target;*/
+	if(this.playerToMove == 0)
+		this.White_PlayerView();
+	else
+		this.Black_PlayerView();
 
 };
 
@@ -568,7 +598,7 @@ DSXScene.prototype.switchPlayer = function (){
 		i++;
 	}
 	if(this.playerToMove==2) this.playerToMove=0;
-	this.updateCamera(views[this.playerToMove]);
+	this.updateCamera(/*views[this.playerToMove]*/);
 }
 
 DSXScene.prototype.checkWinner = function (){
@@ -584,7 +614,8 @@ DSXScene.prototype.getPrologRequest =function(/*requestString, */onSuccess, onEr
 				var requestPort = 8081;
 				var request = new XMLHttpRequest();
 		console.log(boardDB);
-        requestString = "step("+boardDB+","+this.playerToMove +","+x1+","+z1+","+x2+","+z2+")";
+	
+        requestString = "step("+boardDB+","+this.playMode+","+this.playerToMove +","+x1+","+z1+","+x2+","+z2+")";
         request.open('GET', 'http://localhost:'+requestPort+'/'+requestString, true);
 
 				request.onload = onSuccess || function(data){console.log("Request successful. Reply: " + data.target.response);};
@@ -596,3 +627,71 @@ DSXScene.prototype.getPrologRequest =function(/*requestString, */onSuccess, onEr
 
 
 			}
+
+			
+///--------------------------------- CAMERA RELATED FUNCTIONS --------------------///
+
+// Camera transition to Game Mode
+DSXScene.prototype.Game_Mode = function() {
+    if (!this.cameraTransition) {
+        this.cameraOrigin = [this.camera.position[0], this.camera.position[1], this.camera.position[2]];
+        this.cameraDestination = [0, 0, 8];
+        if (!compareArrays(this.cameraDestination, this.cameraOrigin)) {
+            this.calcTransition();
+        }
+    }
+}
+
+
+// Camera transition to Whites View
+DSXScene.prototype.White_PlayerView = function() {
+    if (!this.cameraTransition) {
+        this.cameraOrigin = [this.camera.position[0], this.camera.position[1], this.camera.position[2]];
+        this.cameraDestination = [-4, 4, 0];
+        if (!compareArrays(this.cameraDestination, this.cameraOrigin)) {
+            this.calcTransition();
+        }
+    }
+}
+
+
+// Camera transition to Blacks View
+DSXScene.prototype.Black_PlayerView = function() {
+    if (!this.cameraTransition) {
+        this.cameraOrigin = [this.camera.position[0], this.camera.position[1], this.camera.position[2]];
+        this.cameraDestination = [4, 4, 0];
+        if (!compareArrays(this.cameraDestination, this.cameraOrigin)) {
+            this.calcTransition();
+        }
+    }
+}
+
+
+// Calculates Camera Transition
+DSXScene.prototype.calcTransition = function() {
+    this.transitionVec = [this.cameraDestination[0] - this.cameraOrigin[0], 
+    this.cameraDestination[1] - this.cameraOrigin[1], 
+    this.cameraDestination[2] - this.cameraOrigin[2]];
+    
+    this.cameraTransition = true;
+}
+
+///-------------------------------- AUX FUNCTIONS------------------------///
+
+// AUX function. Needed for Camera Transition
+function compareArrays(a, b) {
+    if (a === b)
+        return true;
+    if (a == null  || b == null )
+        return false;
+    if (a.length != b.length)
+        return false;
+    
+    for (var i = 0; i < a.length; ++i) {
+        if (a[i] !== b[i])
+            return false;
+    }
+    return true;
+}
+
+
